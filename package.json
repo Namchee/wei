@@ -1,30 +1,35 @@
 {
-  "name": "ppk-template",
+  "name": "wei",
   "version": "1.0.0",
-  "description": "Template repository untuk mata kuliah Pemrograman Permainan Komputer",
-  "main": "",
+  "description": "Mario, but it's Wei",
+  "main": "dist/index.js",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "submit": "npm run build && tar --exclude=node_modules --exclude=*.zip --exclude=*.tar.gz -cvf 2017730017@$npm_package_name.zip ../$npm_package_name"
+    "submit": "yarn run build && tar --exclude=node_modules --exclude=*.zip --exclude=*.tar.gz -cvf 2017730017@$npm_package_name.zip ../$npm_package_name"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Namchee/ppk-template.git"
+    "url": "git+https://github.com/Namchee/wei.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Namchee/ppk-template/issues"
+  "author": {
+    "name": "Cristopher Namchee",
+    "email": "cristophernamchee12@gmail.com"
   },
-  "homepage": "https://github.com/Namchee/ppk-template#readme",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Namchee/wei/issues"
+  },
+  "homepage": "https://github.com/Namchee/wei#readme",
   "dependencies": {
     "phaser": "^3.53.1",
     "vite": "^2.0.5"
   },
   "devDependencies": {
+    "@types/node": "^15.6.1",
     "cross-env": "^7.0.3",
     "rimraf": "^3.0.2",
     "typescript": "^4.2.3"

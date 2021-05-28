@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 
+import theme from '../utils/theme';
+
 export class PreloaderScene extends Phaser.Scene {
   public constructor() {
     super('PreloaderScene');
@@ -16,7 +18,7 @@ export class PreloaderScene extends Phaser.Scene {
     const progressBox = this.add.graphics();
     const progressBar = this.add.graphics();
 
-    progressBox.fillStyle(0x313131, 0.8);
+    progressBox.fillStyle(theme.COLORS.GRAY[600], 0.8);
     progressBox.fillRect(width / 7, 220, width * 0.75, 40);
 
     const loadingText = this.add.text(
@@ -80,13 +82,17 @@ export class PreloaderScene extends Phaser.Scene {
 
           this.scene.sendToBack();
 
-          // start your scene here
+          this.scene.start('GameScene');
         },
       });
     });
   }
 
   private loadAssets() {
-    // load your assets here
+    // parallax background
+    this.load.image('cliff', 'background/cliff.png');
+    this.load.image('cloud', 'background/cloud.png');
+    this.load.image('ground', 'background/ground.png');
+    this.load.image('sky', 'background/sky.png');
   }
 }

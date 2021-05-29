@@ -89,10 +89,18 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   private loadAssets() {
-    // parallax background
-    this.load.image('cliff', 'background/cliff.png');
-    this.load.image('cloud', 'background/cloud.png');
-    this.load.image('ground', 'background/ground.png');
-    this.load.image('sky', 'background/sky.png');
+    this.load.image('sky', 'background/1.png');
+    this.load.image('cloud', 'background/2.png');
+    this.load.image('cliff', 'background/3.png');
+    this.load.image('ground', 'background/4.png');
+    this.load.spritesheet('char', 'char.png', { frameWidth: 24, frameHeight: 24 });
+
+    this.load.image('cloud1', 'background/cloud1.png');
+    this.load.image('cloud2', 'background/cloud2.png');
+    this.load.image('cloud3', 'background/cloud3.png');
+    this.load.image('cloud4', 'background/cloud4.png');
+    this.load.image('cloud5', 'background/cloud5.png');
+    this.load.image('cloud6', 'background/cloud6.png');
+    this.load.image('cloud7', 'background/cloud7.png');
   }
 }

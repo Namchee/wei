@@ -1,13 +1,18 @@
-export const BACKGROUND_SPEED = {
-  CLOUD: 0.5,
-  CLIFF: 0.75,
-  GROUND: 0.85,
+export const BACKGROUND = {
+  CLOUD_COUNT: 3,
+  SPEED_LOW: 0.15,
+  SPEED_MAX: 0.4,
+  Y_MIN: 0.05,
+  Y_MAX: 0.35,
 };
 
 export const COLORS = {
   GRAY: {
     600: 0x313131,
   },
+  BLUE: {
+    400: 0x00A3E0,
+  }
 }
 
-export default { BACKGROUND_SPEED, COLORS };
+export default { BACKGROUND, COLORS };

@@ -1,9 +1,9 @@
 export const BACKGROUND = {
-  CLOUD_COUNT: 3,
-  SPEED_LOW: 0.15,
-  SPEED_MAX: 0.4,
-  Y_MIN: 0.05,
-  Y_MAX: 0.35,
+  HEIGHT: 176,
+  CLOUD_IDLE: 0.05,
+  CLOUD_SPEED: 0.75,
+  CLIFF_SPEED: 1.5,
+  GROUND_SPEED: 2,
 };
 
 export const COLORS = {
@@ -11,7 +11,7 @@ export const COLORS = {
     600: 0x313131,
   },
   BLUE: {
-    400: 0x00A3E0,
+    400: 0x5BC2E7,
   }
 }
 

@@ -1,18 +1,12 @@
 import Phaser from 'phaser';
-import { CloudManager } from '../utils/cloud';
 
-import theme from '../utils/theme';
+import { BackgroundManager, createBackgroundManager } from '../utils/background';
 
 export class GameScene extends Phaser.Scene {
   private keys!: Phaser.Types.Input.Keyboard.CursorKeys;
 
-  private background!: Phaser.GameObjects.RenderTexture;
-  private environment!: Phaser.GameObjects.Group;
-  private playa!: Phaser.GameObjects.Sprite;
-  private cloud!: Phaser.GameObjects.TileSprite;
-  private cliff!: Phaser.GameObjects.TileSprite;
-
-  // private bgManager!: CloudManager;
+  private backgroundManager!: BackgroundManager;
+  private player!: Phaser.GameObjects.Sprite;
 
   public constructor() {
     super('GameScene');
@@ -22,62 +16,26 @@ export class GameScene extends Phaser.Scene {
     this.initializeBackground();
 
     this.keys = this.input.keyboard.createCursorKeys();
-    this.playa = this.add.sprite(0, 0, 'char');
-
-    this.cameras.main.startFollow(this.playa);
+    this.player = this.add.sprite(0, Number(this.scene.scene.game.config.height) - 48, 'char');
+    this.player.setOrigin(0, 0);
+    this.cameras.main.setFollowOffset(0, 300)
   }
 
   public update() {
-    const cam = this.cameras.main;
-    this.physics.world.bounds.setPosition(this.playa.x, this.playa.y);
+    this.physics.world.bounds.setPosition(this.player.x, this.player.y);
 
     if (this.keys.right.isDown) {
-      this.playa.x += 5;
-      this.cloud.tilePositionX += 0.5;
-      this.cliff.tilePositionX += 1;
+      this.player.x += 2.5;
+      this.backgroundManager.scrollLeft();
     } else if (this.keys.left.isDown) { 
-      this.playa.x -= 5;
-      this.cloud.tilePositionX -= 0.5;
-      this.cliff.tilePositionX -= 1;
-      
+      this.player.x -= 2.5;
+      this.backgroundManager.scrollRight();
+    } else {
+      this.backgroundManager.idle();
     }
   }
 
   private initializeBackground(): void {
-    const { width, height } = this.game.config;
-
-    this.add.tileSprite(0, 0, Number(width) * 2, Number(height) * 2, 'sky')
-      .setScrollFactor(0);
-    this.cloud = this.add.tileSprite(0, Number(height) - 200, Number(width), 176, 'cloud')
-      .setDisplayOrigin(0, 1)
-      .setScrollFactor(0);
-    this.cliff = this.add.tileSprite(0, 0, Number(width), 176, 'cliff')
-      .setOrigin(0, -1.2)  
-      .setScrollFactor(0);
-    /*
-    // background color
-    this.background = this.add.renderTexture(0, 0, Number(width), Number(height))
-      .setScrollFactor(0);
-    this.background.setAlpha(1);
-    this.background.fill(theme.COLORS.BLUE[400]);
-
-    /*
-    this.bgManager = CloudManager.initialize(this);
-
-    /*
-    // initialize the clouds
-    this.environment = this.add.group();
-
-    this.environment.addMultiple(
-      [
-        this.add.image(Number(width) * .3, Number(height) * .33, 'cloud1')
-          .setScrollFactor(0.5),
-        this.add.image(Number(width) * .85, Number(height) * .25, 'cloud2')
-          .setScrollFactor(0.65),
-        this.add.image(Number(width) * .7, Number(height) * .1, 'cloud3')
-          .setScrollFactor(0.85),
-      ],
-    );
-    */
+    this.backgroundManager = createBackgroundManager(this, 'Forest');
   }
 }

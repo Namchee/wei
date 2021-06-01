@@ -1,9 +1,9 @@
 export const BACKGROUND = {
   HEIGHT: 176,
   CLOUD_IDLE: 0.05,
-  CLOUD_SPEED: 0.75,
-  CLIFF_SPEED: 1.5,
-  GROUND_SPEED: 2,
+  CLOUD_SPEED: 0.5,
+  CLIFF_SPEED: 1,
+  GROUND_SPEED: 1.5,
 };
 
 export const COLORS = {

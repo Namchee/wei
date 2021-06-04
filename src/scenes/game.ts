@@ -1,12 +1,15 @@
 import Phaser from 'phaser';
 
+import { Player } from '../objects/player';
+
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
+import { Difficulty } from '../utils/theme';
 
 export class GameScene extends Phaser.Scene {
   private keys!: Phaser.Types.Input.Keyboard.CursorKeys;
 
   private backgroundManager!: BackgroundManager;
-  private player!: Phaser.Physics.Arcade.Sprite;
+  private player!: Player;
 
   public constructor() {
     super('GameScene');
@@ -15,10 +18,10 @@ export class GameScene extends Phaser.Scene {
   public create() {
     this.initializeBackground();
 
+    const { width, height } = this.game.config;
+
     this.keys = this.input.keyboard.createCursorKeys();
-    this.player = this.physics.add.sprite(0, Number(this.scene.scene.game.config.height) - 48, 'char');
-    this.player.setOrigin(0, 0);
-    this.player.setCollideWorldBounds(true);
+    this.player = Player.initialize(this, Difficulty.NORMAL, { x: 0, y: Number(height) - 8 });
     
     this.initializeCamera();
   }

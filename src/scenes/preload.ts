@@ -89,9 +89,33 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   private loadAssets() {
+    // load background assets
     this.load.image('cloud', 'background/cloud.png');
     this.load.image('cliff', 'background/cliff.png');
     this.load.image('ground', 'background/ground.png');
-    this.load.spritesheet('char', 'char.png', { frameWidth: 32, frameHeight: 32 });
+
+    // load main character assets
+    this.load.spritesheet(
+      'char-idle',
+      'char/idle.png',
+      { frameWidth: 32, frameHeight: 32 },
+    );
+    this.load.spritesheet(
+      'char-double-jump',
+      'char/double-jump.png',
+      { frameWidth: 32, frameHeight: 32 },
+    );
+    this.load.spritesheet(
+      'char-hit',
+      'char/hit.png',
+      { frameWidth: 32, frameHeight: 32 },
+    );
+    this.load.spritesheet(
+      'char-run',
+      'char/run.png',
+      { frameWidth: 32, frameHeight: 32 },
+    )
+    this.load.image('char-jump', 'char/jump.png');
+    this.load.image('char-fall', 'char/fall.png');
   }
 }

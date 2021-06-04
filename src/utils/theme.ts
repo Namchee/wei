@@ -6,6 +6,12 @@ export const BACKGROUND = {
   GROUND_SPEED: 1.5,
 };
 
+export enum Difficulty {
+  EASY = 3,
+  NORMAL = 2,
+  HARD = 1
+};
+
 export const COLORS = {
   GRAY: {
     600: 0x313131,
@@ -15,4 +21,4 @@ export const COLORS = {
   }
 }
 
-export default { BACKGROUND, COLORS };
+export default { BACKGROUND, COLORS, DIFFICULTY: Difficulty };

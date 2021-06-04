@@ -3,7 +3,6 @@ import Phaser from 'phaser';
 import { UnimplementedFeatureException } from '../exceptions/unimplemented';
 import { BACKGROUND, COLORS } from './theme';
 
-
 export interface BackgroundManager {
   scrollLeft: () => void;
   scrollRight: () => void;
@@ -44,10 +43,6 @@ export class ForestBackgroundManager implements BackgroundManager {
   private applyLayers(): void {
     const scene = this.layerGroup.scene;
     const { width, height } = scene.game.config;
-
-    // scene.add
-      // .tileSprite(0, Number(height) - 176, Number(width), 176, 'cloud')
-      // .setOrigin(0, 0);
   
     const cloud = scene.add.tileSprite(
       0,

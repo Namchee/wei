@@ -18,13 +18,13 @@ export class PreloaderScene extends Phaser.Scene {
     const progressBox = this.add.graphics();
     const progressBar = this.add.graphics();
 
-    progressBox.fillStyle(theme.COLORS.GRAY[600], 0.8);
-    progressBox.fillRect(width / 7, 220, width * 0.75, 40);
+    progressBox.fillStyle(theme.COLORS.GRAY[600], 0.75);
+    progressBox.fillRect(width / 4, height / 2.375, width / 2, height / 10);
 
     const loadingText = this.add.text(
       Number(width) / 2,
-      Number(height) / 2 - 50,
-      'Loading...',
+      Number(height) / 3,
+      'Loading Game',
       {
         fontFamily: 'Consolas, "Courier New"',
         fontSize: '24px',
@@ -35,7 +35,7 @@ export class PreloaderScene extends Phaser.Scene {
 
     const percentText = this.add.text(
       Number(width) / 2,
-      Number(height) / 2,
+      Number(height) / 2.375 + Number(height) / 20,
       '0%',
       {
         fontFamily: 'Consolas, "Courier New"',
@@ -47,11 +47,11 @@ export class PreloaderScene extends Phaser.Scene {
 
     const assetText = this.add.text(
       Number(width) / 2,
-      Number(height) / 2 + 40,
+      Number(height) / 1.825,
       '',
       {
         fontFamily: 'Consolas, "Courier New"',
-        fontSize: '16px',
+        fontSize: '12px',
       },
     );
 
@@ -61,11 +61,11 @@ export class PreloaderScene extends Phaser.Scene {
       percentText.setText(`${(Number(value) * 100).toFixed(2)}%`);
       progressBar.clear();
       progressBar.fillStyle(0xF4F4F5, 0.25);
-      progressBar.fillRect(width / 6, 227.5, Number(value) * width * 0.7, 25);
+      progressBar.fillRect(width / 3.825, height / 2.275, Number(value) * width * 0.7 * 0.6875, height / 15);
     });
 
     this.load.on('fileprogress', (file: Phaser.Loader.File) => {
-      assetText.setText('Loading asset: ' + file.key);
+      assetText.setText(`Loaded assets: ${file.key}`);
     });
 
     this.load.on('complete', () => {

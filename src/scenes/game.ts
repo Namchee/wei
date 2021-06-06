@@ -17,8 +17,9 @@ export class GameScene extends Phaser.Scene {
 
   public create() {
     this.initializeBackground();
+    this.initializeWorld();
 
-    const { width, height } = this.game.config;
+    const { height } = this.game.config;
 
     this.keys = this.input.keyboard.createCursorKeys();
     this.player = Player.initialize(this, Difficulty.NORMAL, { x: 0, y: Number(height) - 8 });
@@ -51,5 +52,10 @@ export class GameScene extends Phaser.Scene {
       Number(height) / 2 - this.player.displayHeight * 1.1,
     );
     this.cameras.main.setBounds(0, 0, Number(width) * 1.5, Number(height));
+  }
+
+  private initializeWorld() {
+    const map = this.make.tilemap({ key: 'world' });
+    const tileset = map.addTilesetImage('tileset', 'terrain', 16, 16);
   }
 }

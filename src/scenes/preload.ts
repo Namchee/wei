@@ -117,5 +117,10 @@ export class PreloaderScene extends Phaser.Scene {
     )
     this.load.image('char-jump', 'char/jump.png');
     this.load.image('char-fall', 'char/fall.png');
+
+    // load terrain asset
+    this.load.image('terrain', 'terrain/terrain.png');
+    this.load.image('spikes', 'platforms/spikes.png');
+    this.load.tilemapTiledJSON('world', 'tilemap/world.json');
   }
 }

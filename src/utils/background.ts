@@ -9,6 +9,11 @@ export interface BackgroundManager {
   idle: () => void;
 }
 
+export interface Dimension {
+  width: number;
+  height: number;
+}
+
 export class ForestBackgroundManager implements BackgroundManager {
   private readonly layerGroup: Phaser.GameObjects.Group;
 
@@ -16,10 +21,13 @@ export class ForestBackgroundManager implements BackgroundManager {
     this.layerGroup = scene.add.group();
   }
 
-  public static initalize(scene: Phaser.Scene): ForestBackgroundManager {
+  public static initalize(
+    scene: Phaser.Scene,
+    dimension: Dimension,
+  ): ForestBackgroundManager {
     const manager = new ForestBackgroundManager(scene);
     manager.applyBackground();
-    manager.applyLayers();
+    manager.applyLayers(dimension);
 
     return manager;
   }
@@ -40,14 +48,13 @@ export class ForestBackgroundManager implements BackgroundManager {
     bg.fill(COLORS.BLUE[400]);
   }
 
-  private applyLayers(): void {
+  private applyLayers({ width, height }: Dimension): void {
     const scene = this.layerGroup.scene;
-    const { width, height } = scene.game.config;
   
     const cloud = scene.add.tileSprite(
       0,
-      Number(height) - (1.25 * BACKGROUND.HEIGHT),
-      Number(width),
+      height - (1.25 * BACKGROUND.HEIGHT),
+      width,
       BACKGROUND.HEIGHT,
       'cloud',
     )
@@ -55,8 +62,8 @@ export class ForestBackgroundManager implements BackgroundManager {
       .setName('cloud');
     const cliff = scene.add.tileSprite(
       0,
-      Number(height) - (1.1 * BACKGROUND.HEIGHT),
-      Number(width),
+      height - (1.1 * BACKGROUND.HEIGHT),
+      width,
       BACKGROUND.HEIGHT,
       'cliff',
     )
@@ -64,8 +71,8 @@ export class ForestBackgroundManager implements BackgroundManager {
       .setName('cliff');
     const ground = scene.add.tileSprite(
       0,
-      Number(height) - BACKGROUND.HEIGHT,
-      Number(width),
+      height - BACKGROUND.HEIGHT,
+      width,
       BACKGROUND.HEIGHT,
       'ground',
     )
@@ -131,9 +138,10 @@ export class ForestBackgroundManager implements BackgroundManager {
 export function createBackgroundManager(
   scene: Phaser.Scene,
   key: string,
+  dimension: Dimension,
 ): BackgroundManager {
   if (key === 'Forest') {
-    return ForestBackgroundManager.initalize(scene);
+    return ForestBackgroundManager.initalize(scene, dimension);
   }
 
   throw new UnimplementedFeatureException(`${key}BackgroundManager`);

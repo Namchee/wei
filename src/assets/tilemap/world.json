@@ -846,7 +846,7 @@
         {
          "columns":22,
          "firstgid":1,
-         "image":"tiled\/terrain.png",
+         "image":"terrain\/terrain.png",
          "imageheight":176,
          "imagewidth":352,
          "margin":0,
@@ -859,7 +859,7 @@
         {
          "columns":1,
          "firstgid":243,
-         "image":"tiled\/spikes.png",
+         "image":"platforms\/spikes.png",
          "imageheight":16,
          "imagewidth":16,
          "margin":0,

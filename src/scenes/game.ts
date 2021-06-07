@@ -34,15 +34,15 @@ export class GameScene extends Phaser.Scene {
 
   public update() {
     if (this.keys.up.isDown) {
-      this.player.y -= 1;
+      this.player.y -= 10;
     }
 
     if (this.keys.right.isDown) {
-      this.player.x += 3.5;
-      this.backgroundManager.scrollLeft();
-    } else if (this.keys.left.isDown) { 
-      this.player.x -= 3.5;
+      this.player.x += 2.5;
       this.backgroundManager.scrollRight();
+    } else if (this.keys.left.isDown) { 
+      this.player.x -= 2.5;
+      this.backgroundManager.scrollLeft();
     } else {
       this.backgroundManager.idle();
     }
@@ -57,18 +57,18 @@ export class GameScene extends Phaser.Scene {
   }
 
   private initializeCamera(): void {
-    const { width, height } = this.game.config;
+    const { height } = this.game.config;
   
     this.cameras.main.startFollow(this.player);
     this.cameras.main.setFollowOffset(
       0,
-      Number(height) / 2 - this.player.displayHeight * 1.1,
+      Number(height),
     );
     this.cameras.main.setBounds(
       0,
       0,
       this.map.widthInPixels,
-      Number(height),
+      1024,
     );
   }
 
@@ -81,7 +81,7 @@ export class GameScene extends Phaser.Scene {
       0,
       0,
       this.map.widthInPixels,
-      this.map.heightInPixels,
+      1024,
     );
 
     this.map.createLayer('Terrain', 'terrain', 0, 0);

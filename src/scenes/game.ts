@@ -1,3 +1,4 @@
+import { spawn } from 'child_process';
 import Phaser from 'phaser';
 
 import { Player } from '../objects/player';
@@ -19,22 +20,21 @@ export class GameScene extends Phaser.Scene {
   public create() {
     this.initializeWorld();
     this.initializeBackground();
-    
-    const { height } = this.game.config;
+    this.initializePlayer();
+    this.initializeCamera();
 
     this.keys = this.input.keyboard.createCursorKeys();
-    this.player = Player.initialize(
-      this,
-      Difficulty.NORMAL,
-      { x: this.map.tileWidth * 3, y: Number(height) - this.map.tileHeight },
-    );
     
-    this.initializeCamera();
   }
 
   public update() {
+    // temporary tester code
     if (this.keys.up.isDown) {
       this.player.y -= 10;
+    }
+
+    if (this.keys.down.isDown) {
+      this.player.y += 10;
     }
 
     if (this.keys.right.isDown) {
@@ -56,20 +56,30 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
-  private initializeCamera(): void {
-    const { height } = this.game.config;
-  
-    this.cameras.main.startFollow(this.player);
+  private initializePlayer(): void {
+    const spawnPoint = {
+      x: this.map.tileWidth * 3,
+      y: this.map.heightInPixels - this.map.tileHeight,
+    };
+
+    this.player = Player.initialize(
+      this,
+      Difficulty.NORMAL,
+      spawnPoint,
+    )
+  }
+
+  private initializeCamera(): void {  
+    this.cameras.main.startFollow(this.player, true);
     this.cameras.main.setFollowOffset(
-      0,
-      Number(height),
+      -this.player.displayWidth / 2,
     );
     this.cameras.main.setBounds(
       0,
-      0,
+      -this.map.heightInPixels / 2,
       this.map.widthInPixels,
-      1024,
-    );
+      this.map.heightInPixels * 1.5,
+    )
   }
 
   private initializeWorld() {
@@ -79,9 +89,9 @@ export class GameScene extends Phaser.Scene {
 
     this.physics.world.setBounds(
       0,
-      0,
+      -this.map.heightInPixels / 2,
       this.map.widthInPixels,
-      1024,
+      this.map.heightInPixels * 1.5,
     );
 
     this.map.createLayer('Terrain', 'terrain', 0, 0);

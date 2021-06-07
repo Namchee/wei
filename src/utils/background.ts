@@ -59,7 +59,7 @@ export class ForestBackgroundManager implements BackgroundManager {
       'cloud',
     )
       .setOrigin(0, 0)
-      .setScrollFactor(BACKGROUND.CLOUD_SCROLL)
+      .setScrollFactor(BACKGROUND.CLOUD_SCROLL, BACKGROUND.CLOUD_SCROLL * 1.25)
       .setName('cloud');
     const cliff = scene.add.tileSprite(
       0,
@@ -69,7 +69,7 @@ export class ForestBackgroundManager implements BackgroundManager {
       'cliff',
     )
       .setOrigin(0, 0)
-      .setScrollFactor(BACKGROUND.CLIFF_SCROLL)
+      .setScrollFactor(BACKGROUND.CLIFF_SCROLL, BACKGROUND.CLIFF_SCROLL)
       .setName('cliff');
     const ground = scene.add.tileSprite(
       0,
@@ -79,7 +79,7 @@ export class ForestBackgroundManager implements BackgroundManager {
       'ground',
     )
       .setOrigin(0, 0)
-      .setScrollFactor(BACKGROUND.GROUND_SCROLL)
+      .setScrollFactor(BACKGROUND.GROUND_SCROLL, BACKGROUND.GROUND_SCROLL / 2)
       .setName('ground');
 
     this.layerGroup.addMultiple([cloud, cliff, ground]);

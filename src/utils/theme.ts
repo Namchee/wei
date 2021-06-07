@@ -4,9 +4,9 @@ export const BACKGROUND = {
   CLOUD_SPEED: 0.5,
   CLOUD_SCROLL: 0.1,
   CLIFF_SPEED: 0.9,
-  CLIFF_SCROLL: 0.15,
+  CLIFF_SCROLL: 0.135,
   GROUND_SPEED: 1.125,
-  GROUND_SCROLL: 0.25,
+  GROUND_SCROLL: 0.235,
 };
 
 export enum Difficulty {

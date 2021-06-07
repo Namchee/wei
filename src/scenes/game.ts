@@ -37,10 +37,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     if (this.keys.right.isDown) {
-      this.player.setVelocityX(100);
+      this.player.x += 1.75;
       this.backgroundManager.scrollRight();
     } else if (this.keys.left.isDown) { 
-      this.player.setVelocityX(-100);
+      this.player.x -= 1.75;
       this.backgroundManager.scrollLeft();
     } else {
       this.backgroundManager.idle();
@@ -78,7 +78,9 @@ export class GameScene extends Phaser.Scene {
       -this.map.heightInPixels / 2,
       this.map.widthInPixels,
       this.map.heightInPixels * 1.5,
-    )
+    );
+
+    this.cameras.main.setDeadzone(10, 50);
   }
 
   private initializeWorld() {

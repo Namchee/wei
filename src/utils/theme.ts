@@ -4,10 +4,15 @@ export const BACKGROUND = {
   CLOUD_SPEED: 0.5,
   CLOUD_SCROLL: 0.1,
   CLIFF_SPEED: 0.9,
-  CLIFF_SCROLL: 0.135,
+  CLIFF_SCROLL: 0.1,
   GROUND_SPEED: 1.125,
   GROUND_SCROLL: 0.235,
 };
+
+export const MAP = {
+  WIDTH: 2560,
+  HEIGHT: 384,
+}
 
 export enum Difficulty {
   EASY = 3,
@@ -24,4 +29,4 @@ export const COLORS = {
   }
 }
 
-export default { BACKGROUND, COLORS, DIFFICULTY: Difficulty };
+export default { BACKGROUND, COLORS, MAP, Difficulty };

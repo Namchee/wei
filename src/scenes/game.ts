@@ -4,7 +4,7 @@ import Phaser from 'phaser';
 import { Player } from '../objects/player';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { Difficulty } from '../utils/theme';
+import { Difficulty, MAP } from '../utils/theme';
 
 export class GameScene extends Phaser.Scene {
   private keys!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -18,13 +18,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   public create() {
-    this.initializeWorld();
     this.initializeBackground();
+    this.initializeWorld();
     this.initializePlayer();
     this.initializeCamera();
 
     this.keys = this.input.keyboard.createCursorKeys();
-    
   }
 
   public update() {
@@ -38,10 +37,10 @@ export class GameScene extends Phaser.Scene {
     }
 
     if (this.keys.right.isDown) {
-      this.player.x += 2.5;
+      this.player.setVelocityX(100);
       this.backgroundManager.scrollRight();
     } else if (this.keys.left.isDown) { 
-      this.player.x -= 2.5;
+      this.player.setVelocityX(-100);
       this.backgroundManager.scrollLeft();
     } else {
       this.backgroundManager.idle();
@@ -52,7 +51,7 @@ export class GameScene extends Phaser.Scene {
     this.backgroundManager = createBackgroundManager(
       this,
       'Forest',
-      { width: this.map.widthInPixels, height: this.map.heightInPixels },
+      { width: MAP.WIDTH, height: MAP.HEIGHT },
     );
   }
 
@@ -91,9 +90,9 @@ export class GameScene extends Phaser.Scene {
       0,
       -this.map.heightInPixels / 2,
       this.map.widthInPixels,
-      this.map.heightInPixels * 1.5,
+      this.map.heightInPixels * 1.6,
     );
 
-    this.map.createLayer('Terrain', 'terrain', 0, 0);
+    this.map.createLayer('Terrain', ['terrain', 'spikes']);
   }
 }

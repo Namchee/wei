@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 
 import { Player } from '../objects/player';
+import { Spike } from '../objects/spike';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { Difficulty, MAP } from '../utils/theme';
@@ -8,6 +9,8 @@ import { Difficulty, MAP } from '../utils/theme';
 export class GameScene extends Phaser.Scene {
   private keys!: Phaser.Types.Input.Keyboard.CursorKeys;
   private map!: Phaser.Tilemaps.Tilemap;
+
+  private spikes!: Phaser.Physics.Arcade.StaticGroup;
 
   private backgroundManager!: BackgroundManager;
   private player!: Player;
@@ -21,6 +24,8 @@ export class GameScene extends Phaser.Scene {
     this.initializeWorld();
     this.initializePlayer();
     this.initializeCamera();
+
+    this.initializeCollisions();
 
     this.keys = this.input.keyboard.createCursorKeys();
   }
@@ -38,7 +43,7 @@ export class GameScene extends Phaser.Scene {
     if (this.keys.right.isDown) {
       this.player.setVelocityX(200);
       this.backgroundManager.scrollRight();
-    } else if (this.keys.left.isDown) { 
+    } else if (this.keys.left.isDown) {
       this.player.setVelocityX(-200);
       this.backgroundManager.scrollLeft();
     } else {
@@ -65,13 +70,9 @@ export class GameScene extends Phaser.Scene {
       Difficulty.NORMAL,
       spawnPoint,
     );
-
-    this.map.layers.forEach((layer) => {
-      this.physics.add.collider(this.player, layer.tilemapLayer);
-    });
   }
 
-  private initializeCamera(): void {  
+  private initializeCamera(): void {
     this.cameras.main.startFollow(this.player, true);
     this.cameras.main.setFollowOffset(
       -this.player.displayWidth / 2,
@@ -96,6 +97,11 @@ export class GameScene extends Phaser.Scene {
       this.map.heightInPixels * 1.5 + MAP.HELLHOLE,
     );
 
+    this.initializeTerrain();
+    this.initializeSpikes();
+  }
+
+  private initializeTerrain() {
     const terrain = this.map.createLayer('Terrain', ['terrain']);
     terrain.setCollisionByProperty({ collides: true, collidesTop: true });
 
@@ -107,7 +113,7 @@ export class GameScene extends Phaser.Scene {
 
         tile.faceTop = true;
         tile.faceBottom = false;
-      } 
+      }
     });
 
     const edgeTerrain = this.map.createLayer('Edge Terrain', ['terrain']);
@@ -126,7 +132,7 @@ export class GameScene extends Phaser.Scene {
       if (tile.properties.collidesTop) {
         tile.collideUp = true;
       }
-  
+
       if (tile.properties.collidesLeft) {
         tile.collideLeft = true;
       }
@@ -135,5 +141,34 @@ export class GameScene extends Phaser.Scene {
         tile.collideLeft = true;
       }
     });
+  }
+
+  private initializeSpikes() {
+    const spikes = this.map.createLayer('Spikes', ['spikes']);
+
+    this.spikes = this.physics.add.staticGroup();
+  
+    spikes.forEachTile((tile) => {
+      if (tile.tileset) {
+        const x = tile.getCenterX();
+        const y = tile.getCenterY();
+
+        const spike = this.spikes.create(x, y, 'spikes') as Phaser.Physics.Arcade.Sprite;
+        
+        spike.body.setSize(this.map.tileWidth, this.map.tileHeight / 2);
+        spike.body.setOffset(0, this.map.tileHeight / 2);
+
+        spikes.removeTileAtWorldXY(tile.x, tile.y);
+      }
+    });
+  }
+
+  private initializeCollisions() {
+    // collisions for static layers
+    this.map.layers.forEach((layer) => {
+      this.physics.add.collider(this.player, layer.tilemapLayer);
+    });
+
+    this.physics.add.collider(this.player, this.spikes, () => console.log('Ouch!'));
   }
 }

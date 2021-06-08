@@ -13,7 +13,11 @@ export const MAP = {
   WIDTH: 2560,
   HEIGHT: 384,
   HELLHOLE: 48,
-}
+};
+
+export const PHYSICS = {
+  GRAVITY: 150,
+};
 
 export enum Difficulty {
   EASY = 3,
@@ -30,4 +34,4 @@ export const COLORS = {
   }
 }
 
-export default { BACKGROUND, COLORS, MAP, Difficulty };
+export default { BACKGROUND, COLORS, PHYSICS, MAP, Difficulty };

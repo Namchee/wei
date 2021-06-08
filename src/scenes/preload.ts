@@ -121,6 +121,6 @@ export class PreloaderScene extends Phaser.Scene {
     // load terrain asset
     this.load.image('terrain', 'terrain/terrain.png');
     this.load.image('spikes', 'platforms/spikes.png');
-    this.load.tilemapTiledJSON('world', 'tilemap/world.json');
+    this.load.tilemapTiledJSON('world', 'tilemap/wei.json');
   }
 }

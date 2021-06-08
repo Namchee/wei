@@ -1,4 +1,3 @@
-import { spawn } from 'child_process';
 import Phaser from 'phaser';
 
 import { Player } from '../objects/player';
@@ -29,18 +28,18 @@ export class GameScene extends Phaser.Scene {
   public update() {
     // temporary tester code
     if (this.keys.up.isDown) {
-      this.player.y -= 10;
+      this.player.setVelocityY(-100);
     }
 
     if (this.keys.down.isDown) {
-      this.player.y += 10;
+      this.player.setVelocityY(100);
     }
 
     if (this.keys.right.isDown) {
-      this.player.x += 1.75;
+      this.player.setVelocityX(200);
       this.backgroundManager.scrollRight();
     } else if (this.keys.left.isDown) { 
-      this.player.x -= 1.75;
+      this.player.setVelocityX(-200);
       this.backgroundManager.scrollLeft();
     } else {
       this.backgroundManager.idle();
@@ -65,7 +64,11 @@ export class GameScene extends Phaser.Scene {
       this,
       Difficulty.NORMAL,
       spawnPoint,
-    )
+    );
+
+    this.map.layers.forEach((layer) => {
+      this.physics.add.collider(this.player, layer.tilemapLayer);
+    });
   }
 
   private initializeCamera(): void {  
@@ -79,8 +82,6 @@ export class GameScene extends Phaser.Scene {
       this.map.widthInPixels,
       this.map.heightInPixels * 1.5,
     );
-
-    this.cameras.main.setDeadzone(10, 50);
   }
 
   private initializeWorld() {
@@ -95,6 +96,44 @@ export class GameScene extends Phaser.Scene {
       this.map.heightInPixels * 1.5 + MAP.HELLHOLE,
     );
 
-    this.map.createLayer('Terrain', ['terrain', 'spikes']);
+    const terrain = this.map.createLayer('Terrain', ['terrain']);
+    terrain.setCollisionByProperty({ collides: true, collidesTop: true });
+
+    terrain.tilemap.forEachTile((tile: Phaser.Tilemaps.Tile) => {
+      if (tile.properties.collidesTop) {
+        tile.collideDown = true;
+        tile.collideLeft = false;
+        tile.collideRight = false;
+
+        tile.faceTop = true;
+        tile.faceBottom = false;
+      } 
+    });
+
+    const edgeTerrain = this.map.createLayer('Edge Terrain', ['terrain']);
+    edgeTerrain.setCollisionByProperty({
+      collidesTop: true,
+      collidesLeft: true,
+      collidesRight: true,
+    });
+
+    edgeTerrain.tilemap.forEachTile((tile: Phaser.Tilemaps.Tile) => {
+      tile.collideUp = false;
+      tile.collideDown = false;
+      tile.collideLeft = false;
+      tile.collideRight = false;
+
+      if (tile.properties.collidesTop) {
+        tile.collideUp = true;
+      }
+  
+      if (tile.properties.collidesLeft) {
+        tile.collideLeft = true;
+      }
+
+      if (tile.properties.collidesRight) {
+        tile.collideLeft = true;
+      }
+    });
   }
 }

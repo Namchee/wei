@@ -92,7 +92,7 @@ export class GameScene extends Phaser.Scene {
       0,
       -this.map.heightInPixels / 2,
       this.map.widthInPixels,
-      this.map.heightInPixels * 1.6,
+      this.map.heightInPixels * 1.5 + MAP.HELLHOLE,
     );
 
     this.map.createLayer('Terrain', ['terrain', 'spikes']);

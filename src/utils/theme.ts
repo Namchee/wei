@@ -12,6 +12,7 @@ export const BACKGROUND = {
 export const MAP = {
   WIDTH: 2560,
   HEIGHT: 384,
+  HELLHOLE: 48,
 }
 
 export enum Difficulty {

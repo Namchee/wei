@@ -11,10 +11,8 @@ export class Spike extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, 'spikes');
     
     scene.add.existing(this);
-    scene.physics.world.enableBody(this);
+    scene.physics.world.enableBody(this, Phaser.Physics.Arcade.STATIC_BODY);
     
-    this.setImmovable(true);
-    (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
     this.setSize(MAP.TILE_SIZE, MAP.TILE_SIZE / 2);
     this.setOffset(0, MAP.TILE_SIZE / 2);
   }

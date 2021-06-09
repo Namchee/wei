@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { Cherry } from '../objects/cherry';
 
-import { Player } from '../objects/player';
+import { Movement, Player } from '../objects/player';
 import { Spike } from '../objects/spike';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
@@ -34,24 +34,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   public update() {
-    // temporary tester code
-    if (this.keys.up.isDown) {
-      this.player.setVelocityY(-100);
-    }
-
-    if (this.keys.down.isDown) {
-      this.player.setVelocityY(100);
-    }
-
-    if (this.keys.right.isDown) {
-      this.player.setVelocityX(200);
-      this.backgroundManager.scrollRight();
-    } else if (this.keys.left.isDown) {
-      this.player.setVelocityX(-200);
-      this.backgroundManager.scrollLeft();
-    } else {
-      this.backgroundManager.idle();
-    }
+    this.controllerLoop();
+    this.backgroundLoop();
   }
 
   private initializeBackground(): void {
@@ -194,14 +178,37 @@ export class GameScene extends Phaser.Scene {
       this.physics.add.collider(this.player, tilemapLayer);
     });
 
-    this.spikes.getChildren().forEach((spike) => {
-      this.physics.add.collider(this.player, spike, () => console.log('Ouch'));
-    });
+    this.physics.add.collider(this.spikes, this.player, () => console.log('Ouch!'));
 
-    this.cherries.getChildren().forEach((cherry) => {
-      this.physics.add.overlap(this.player, cherry, () => {
-        (cherry as Cherry).collect();
-      });
+    this.physics.add.overlap(this.cherries, this.player, (_, cherry) => {
+      (cherry as Cherry).collect();
     });
+  }
+
+  private controllerLoop(): void {
+    if (
+      (!this.keys.right.isDown && !this.keys.left.isDown) ||
+      (this.keys.right.isDown && this.keys.left.isDown)
+    ) {
+      this.player.idle();
+      return;
+    }
+  
+    this.keys.right.isDown ?
+      this.player.move(Movement.Right) :
+      this.player.move(Movement.Left);
+  }
+
+  private backgroundLoop(): void {
+    const velocity = this.player.body.velocity.x;
+
+    if (!velocity) {
+      this.backgroundManager.idle();
+      return;
+    }
+
+    velocity > 0 ?
+      this.backgroundManager.scrollLeft() :
+      this.backgroundManager.scrollRight();
   }
 }

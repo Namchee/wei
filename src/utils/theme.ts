@@ -17,7 +17,9 @@ export const MAP = {
 };
 
 export const PHYSICS = {
-  GRAVITY: 250,
+  GRAVITY: 500,
+  MOVEMENT: 150,
+  JUMP: 300,
 };
 
 export enum Difficulty {

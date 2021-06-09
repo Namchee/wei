@@ -1,5 +1,10 @@
 import Phaser from 'phaser';
-import { Difficulty } from '../utils/theme';
+import { Difficulty, PHYSICS } from '../utils/theme';
+
+export enum Movement {
+  Left = -1,
+  Right = 1
+};
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
   private lives: number;
@@ -72,6 +77,25 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       frames: this.anims.generateFrameNumbers('char-run', {}),
       frameRate: 20,
     });
+  }
+
+  public move(dir: Movement): void {
+    if (this.body.enable) {
+      this.anims.play('char-run', true);
+
+      if (dir === Movement.Left) {
+        this.setFlipX(true);
+        this.setVelocityX(-PHYSICS.MOVEMENT);
+      } else {
+        this.setFlipX(false);
+        this.setVelocityX(PHYSICS.MOVEMENT);
+      }
+    }
+  }
+
+  public idle(): void {
+    this.setVelocityX(0);
+    this.anims.play('char-idle', true);
   }
 
   public decrementLives(): void {

@@ -1,9 +1,10 @@
-import { Game, AUTO } from 'phaser';
+import { Game, AUTO, Types } from 'phaser';
 
+import { PHYSICS } from './utils/theme';
 import { PreloaderScene } from './scenes/preload';
 import { GameScene } from './scenes/game';
 
-const config: Phaser.Types.Core.GameConfig = {
+const config: Types.Core.GameConfig = {
   type: AUTO,
   width: 640,
   height: 384,
@@ -13,9 +14,9 @@ const config: Phaser.Types.Core.GameConfig = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: process.env.NODE_ENV === 'true',
+      debug: import.meta.env.MODE === 'development',
       gravity: {
-        y: 200,
+        y: PHYSICS.GRAVITY,
       }
     },
   },

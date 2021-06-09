@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 
 import { Player } from '../objects/player';
-import { Spike } from '../objects/spike';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { Difficulty, MAP } from '../utils/theme';

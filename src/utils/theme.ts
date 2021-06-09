@@ -10,6 +10,7 @@ export const BACKGROUND = {
 };
 
 export const MAP = {
+  TILE_SIZE: 16,
   WIDTH: 2560,
   HEIGHT: 384,
   HELLHOLE: 48,

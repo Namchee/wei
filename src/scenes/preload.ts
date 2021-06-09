@@ -61,7 +61,12 @@ export class PreloaderScene extends Phaser.Scene {
       percentText.setText(`${(Number(value) * 100).toFixed(2)}%`);
       progressBar.clear();
       progressBar.fillStyle(0xF4F4F5, 0.25);
-      progressBar.fillRect(width / 3.825, height / 2.275, Number(value) * width * 0.7 * 0.6875, height / 15);
+      progressBar.fillRect(
+        width / 3.825,
+        height / 2.275,
+        Number(value) * width * 0.7 * 0.6875,
+        height / 15,
+      );
     });
 
     this.load.on('fileprogress', (file: Phaser.Loader.File) => {
@@ -122,5 +127,18 @@ export class PreloaderScene extends Phaser.Scene {
     this.load.image('terrain', 'terrain/terrain.png');
     this.load.image('spikes', 'platforms/spikes.png');
     this.load.tilemapTiledJSON('world', 'tilemap/wei.json');
+
+    // load collectibles
+    this.load.image('cherrys', 'collectibles/cherry.png');
+    this.load.spritesheet(
+      'cherry',
+      'collectibles/cherry.png',
+      { frameWidth: 32, frameHeight: 32 },
+    );
+    this.load.spritesheet(
+      'collected',
+      'collectibles/collected.png',
+      { frameWidth: 32, frameHeight: 32 },
+    );
   }
 }

@@ -14,8 +14,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, key);
     this.setOrigin(0, 0);
 
-    scene.physics.world.enable(this);
     scene.add.existing(this);
+    scene.physics.world.enableBody(this);
 
     this.lives = initialLives;
   }
@@ -51,29 +51,26 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.anims.create({
       key: 'char-idle',
       frames: this.anims.generateFrameNumbers('char-idle', {}),
-      frameRate: 24,
+      frameRate: 20,
       repeat: -1,
     });
 
     this.anims.create({
       key: 'char-double-jump',
       frames: this.anims.generateFrameNumbers('char-double-jump', {}),
-      frameRate: 24,
-      repeat: -1,
+      frameRate: 20,
     });
 
     this.anims.create({
       key: 'char-hit',
       frames: this.anims.generateFrameNumbers('char-hit', {}),
-      frameRate: 24,
-      repeat: -1,
+      frameRate: 20,
     });
 
     this.anims.create({
       key: 'char-run',
       frames: this.anims.generateFrameNumbers('char-run', {}),
-      frameRate: 24,
-      repeat: -1,
+      frameRate: 20,
     });
   }
 

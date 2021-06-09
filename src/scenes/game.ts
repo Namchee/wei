@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
+import { Cherry } from '../objects/cherry';
 
 import { Player } from '../objects/player';
+import { Spike } from '../objects/spike';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { Difficulty, MAP } from '../utils/theme';
@@ -10,6 +12,7 @@ export class GameScene extends Phaser.Scene {
   private map!: Phaser.Tilemaps.Tilemap;
 
   private spikes!: Phaser.Physics.Arcade.StaticGroup;
+  private cherries!: Phaser.Physics.Arcade.StaticGroup;
 
   private backgroundManager!: BackgroundManager;
   private player!: Player;
@@ -23,6 +26,7 @@ export class GameScene extends Phaser.Scene {
     this.initializeWorld();
     this.initializePlayer();
     this.initializeCamera();
+    this.initializeCollectibles();
 
     this.initializeCollisions();
 
@@ -84,10 +88,8 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
-  private initializeWorld() {
+  private initializeWorld(): void {
     this.map = this.make.tilemap({ key: 'world' });
-    this.map.addTilesetImage('terrain', 'terrain');
-    this.map.addTilesetImage('spikes', 'spikes');
 
     this.physics.world.setBounds(
       0,
@@ -100,8 +102,11 @@ export class GameScene extends Phaser.Scene {
     this.initializeSpikes();
   }
 
-  private initializeTerrain() {
+  private initializeTerrain(): void {
     const terrain = this.map.createLayer('Terrain', ['terrain']);
+    this.map.addTilesetImage('terrain', 'terrain');
+    this.map.addTilesetImage('spikes', 'spikes');
+
     terrain.setCollisionByProperty({ collides: true, collidesTop: true });
 
     terrain.tilemap.forEachTile((tile: Phaser.Tilemaps.Tile) => {
@@ -142,32 +147,61 @@ export class GameScene extends Phaser.Scene {
     });
   }
 
-  private initializeSpikes() {
-    const spikes = this.map.createLayer('Spikes', ['spikes']);
+  private initializeSpikes(): void {
+    const spikeTiles = this.map.createLayer('Spikes', ['spikes']);
 
     this.spikes = this.physics.add.staticGroup();
   
-    spikes.forEachTile((tile) => {
+    spikeTiles.forEachTile((tile: Phaser.Tilemaps.Tile): void => {
       if (tile.tileset) {
         const x = tile.getCenterX();
         const y = tile.getCenterY();
 
-        const spike = this.spikes.create(x, y, 'spikes') as Phaser.Physics.Arcade.Sprite;
-        
-        spike.body.setSize(this.map.tileWidth, this.map.tileHeight / 2);
-        spike.body.setOffset(0, this.map.tileHeight / 2);
-
-        spikes.removeTileAtWorldXY(tile.x, tile.y);
+        const spike = new Spike(this, x, y);
+        this.spikes.add(spike, true);
+  
+        spikeTiles.removeTileAt(tile.x, tile.y);
       }
     });
+
+    this.map.removeLayer('Spikes');
   }
 
-  private initializeCollisions() {
-    // collisions for static layers
-    this.map.layers.forEach((layer) => {
-      this.physics.add.collider(this.player, layer.tilemapLayer);
+  private initializeCollectibles(): void {
+    const cherryTiles = this.map.createLayer('Fruits', ['cherry']);
+    this.map.addTilesetImage('cherry', 'cherry');
+
+    this.cherries = this.physics.add.staticGroup();
+
+    cherryTiles.forEachTile((tile: Phaser.Tilemaps.Tile): void => {
+      if (tile.tileset) {
+        const x = tile.getCenterX();
+        const y = tile.getCenterY();
+
+        const cherry = new Cherry(this, x, y);
+        this.cherries.add(cherry, true);
+
+        cherryTiles.removeTileAt(tile.x, tile.y, true);
+      }
     });
 
-    this.physics.add.collider(this.player, this.spikes, () => console.log('Ouch!'));
+    this.map.removeLayer('Fruits');
+  }
+
+  private initializeCollisions(): void {
+    // collisions for static layers
+    this.map.layers.forEach(({ tilemapLayer }) => {
+      this.physics.add.collider(this.player, tilemapLayer);
+    });
+
+    this.spikes.getChildren().forEach((spike) => {
+      this.physics.add.collider(this.player, spike, () => console.log('Ouch'));
+    });
+
+    this.cherries.getChildren().forEach((cherry) => {
+      this.physics.add.overlap(this.player, cherry, () => {
+        (cherry as Cherry).collect();
+      });
+    });
   }
 }

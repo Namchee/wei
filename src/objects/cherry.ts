@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { MAP } from '../utils/theme';
+import { ANIMS, MAP } from '../utils/theme';
 
 export class Cherry extends Phaser.Physics.Arcade.Sprite {
   public constructor(
@@ -23,14 +23,14 @@ export class Cherry extends Phaser.Physics.Arcade.Sprite {
     this.anims.create({
       key: 'cherry-idle',
       frames: this.anims.generateFrameNumbers('cherry', {}),
-      frameRate: 20,
+      frameRate: ANIMS.FPS,
       repeat: -1,
     });
 
     this.anims.create({
       key: 'collected',
       frames: this.anims.generateFrameNumbers('collected', {}),
-      frameRate: 20,
+      frameRate: ANIMS.FPS,
     });
   }
 

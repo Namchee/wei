@@ -29,13 +29,14 @@ export class GameScene extends Phaser.Scene {
     this.initializeCollectibles();
 
     this.initializeCollisions();
-
-    this.keys = this.input.keyboard.createCursorKeys();
+    this.registerInputs();
   }
 
   public update() {
     this.controllerLoop();
     this.backgroundLoop();
+
+    this.player.update();
   }
 
   private initializeBackground(): void {
@@ -183,6 +184,18 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.cherries, this.player, (_, cherry) => {
       (cherry as Cherry).collect();
     });
+  }
+
+  private registerInputs(): void {
+    const spacebar = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.SPACE,
+    );
+
+    spacebar.on('down', () => {
+      this.player.jump();
+    });
+
+    this.keys = this.input.keyboard.createCursorKeys();
   }
 
   private controllerLoop(): void {

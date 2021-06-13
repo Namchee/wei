@@ -16,10 +16,14 @@ export const MAP = {
   HELLHOLE: 48,
 };
 
+export const ANIMS = {
+  FPS: 20,
+};
+
 export const PHYSICS = {
-  GRAVITY: 500,
-  MOVEMENT: 150,
-  JUMP: 300,
+  GRAVITY: 800,
+  MOVEMENT: 135,
+  JUMP: 375,
 };
 
 export enum Difficulty {
@@ -37,4 +41,4 @@ export const COLORS = {
   }
 }
 
-export default { BACKGROUND, COLORS, PHYSICS, MAP, Difficulty };
+export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, Difficulty };

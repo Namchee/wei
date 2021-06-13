@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { Difficulty, PHYSICS } from '../utils/theme';
+import { ANIMS, Difficulty, PHYSICS } from '../utils/theme';
 
 export enum Movement {
   Left = -1,
@@ -8,6 +8,7 @@ export enum Movement {
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
   private lives: number;
+  private jumpCount: number;
   
   private constructor(
     scene: Phaser.Scene,
@@ -22,7 +23,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.world.enableBody(this);
 
+    this.texture.add('char-jump', 0, 0, 0, 0, 0);
+
     this.lives = initialLives;
+    this.jumpCount = 0;
   }
 
   public static initialize(
@@ -30,7 +34,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     difficulty: Difficulty,
     startingPoint: { x: number, y: number } = { x: 0, y: 0 },
   ): Player {
-    const player = new Player(scene, 0, 0, 'char', difficulty);
+    const player = new Player(scene, 0, 0, 'char-idle', difficulty);
 
     player.setCollideWorldBounds(true); 
     player.initializePosition(startingPoint);
@@ -56,32 +60,56 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.anims.create({
       key: 'char-idle',
       frames: this.anims.generateFrameNumbers('char-idle', {}),
-      frameRate: 20,
+      frameRate: ANIMS.FPS,
       repeat: -1,
     });
 
     this.anims.create({
       key: 'char-double-jump',
       frames: this.anims.generateFrameNumbers('char-double-jump', {}),
-      frameRate: 20,
+      frameRate: ANIMS.FPS,
+      repeat: 0,
     });
 
     this.anims.create({
       key: 'char-hit',
       frames: this.anims.generateFrameNumbers('char-hit', {}),
-      frameRate: 20,
+      frameRate: ANIMS.FPS,
     });
 
     this.anims.create({
       key: 'char-run',
       frames: this.anims.generateFrameNumbers('char-run', {}),
-      frameRate: 20,
+      frameRate: ANIMS.FPS,
+      repeat: -1,
     });
+  }
+
+  public update(): void {
+    if (this.body.velocity.y > 0) {
+      if (this.texture.key !== 'char-fall') {
+        this.setTexture('char-fall');
+      }
+    } else if (this.body.velocity.y < 0) {
+      if (this.texture.key !== 'char-jump') {
+        this.setTexture('char-jump');
+      }
+    } else {
+      this.jumpCount = 0;
+
+      if (this.body.velocity.x) {
+        this.anims.play('char-run', true);
+      } else {
+        this.anims.play('char-idle', true);
+      }
+    }
   }
 
   public move(dir: Movement): void {
     if (this.body.enable) {
-      this.anims.play('char-run', true);
+      if (this.body.velocity.y !== 0) {
+        this.anims.play('char-run', true);
+      }
 
       if (dir === Movement.Left) {
         this.setFlipX(true);
@@ -90,6 +118,19 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         this.setFlipX(false);
         this.setVelocityX(PHYSICS.MOVEMENT);
       }
+    }
+  }
+
+  public jump(): void {
+    if (this.jumpCount >= 2) {
+      return;
+    }
+
+    this.setVelocityY(-PHYSICS.JUMP);
+    this.jumpCount++;
+
+    if (this.jumpCount > 1) {
+      this.anims.play('char-double-jump');
     }
   }
 

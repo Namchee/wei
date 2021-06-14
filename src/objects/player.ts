@@ -118,11 +118,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       return;
     }
 
-    this.setVelocityY(-PHYSICS.JUMP);
     this.jumpCount++;
-
+    
     if (this.jumpCount > 1) {
       this.anims.play('char-double-jump');
+      this.setVelocityY(-PHYSICS.JUMP * .9);
+
+      console.log('this');
+    } else {
+      this.setVelocityY(-PHYSICS.JUMP);
     }
   }
 

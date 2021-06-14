@@ -10,7 +10,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private lives: number;
   private jumpCount: number;
   
-  private constructor(
+  public constructor(
     scene: Phaser.Scene,
     x: number,
     y: number,
@@ -26,24 +26,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.jumpCount = 0;
 
     this.setPosition(x - this.displayWidth, y - this.displayHeight);
-  }
 
-  public static initialize(
-    scene: Phaser.Scene,
-    difficulty: Difficulty,
-    startingPoint: { x: number, y: number } = { x: 0, y: 0 },
-  ): Player {
-    const player = new Player(
-      scene,
-      startingPoint.x,
-      startingPoint.y,
-      difficulty,
-    );
-
-    player.initializeAnims();
-    player.anims.play('char-idle', true);
-
-    return player;
+    this.initializeAnims();
+    this.anims.play('char-idle', true);
   }
 
   private initializeAnims() {

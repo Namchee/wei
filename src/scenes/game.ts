@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { Cherry } from '../objects/cherry';
+import { Flyer } from '../objects/flyer';
 
 import { Movement, Player } from '../objects/player';
 import { Spike } from '../objects/spike';
@@ -13,6 +14,7 @@ export class GameScene extends Phaser.Scene {
 
   private spikes!: Phaser.Physics.Arcade.StaticGroup;
   private cherries!: Phaser.Physics.Arcade.StaticGroup;
+  private flyers!: Phaser.Physics.Arcade.StaticGroup;
 
   private backgroundManager!: BackgroundManager;
   private player!: Player;
@@ -26,6 +28,7 @@ export class GameScene extends Phaser.Scene {
     this.initializeWorld();
     this.initializePlayer();
     this.initializeCamera();
+
     this.initializeCollectibles();
 
     this.initializeCollisions();
@@ -48,16 +51,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   private initializePlayer(): void {
-    const spawnPoint = {
-      x: this.map.tileWidth * 3,
-      y: this.map.heightInPixels - this.map.tileHeight,
-    };
+    const x = this.map.tileWidth * 3;
+    const y = this.map.heightInPixels - this.map.tileHeight;
 
-    this.player = Player.initialize(
-      this,
-      Difficulty.NORMAL,
-      spawnPoint,
-    );
+    this.player = new Player(this, x, y, Difficulty.NORMAL);
   }
 
   private initializeCamera(): void {
@@ -85,6 +82,7 @@ export class GameScene extends Phaser.Scene {
 
     this.initializeTerrain();
     this.initializeSpikes();
+    this.initializeFlyers();
   }
 
   private initializeTerrain(): void {
@@ -158,6 +156,27 @@ export class GameScene extends Phaser.Scene {
     this.map.removeLayer('Fruits');
   }
 
+  private initializeFlyers(): void {
+    const flyerTiles = this.map.createLayer('Flyers', ['flyers']);
+    this.map.addTilesetImage('flyers');
+
+    this.flyers = this.physics.add.staticGroup();
+
+    flyerTiles.forEachTile((tile: Phaser.Tilemaps.Tile): void => {
+      if (tile.tileset) {
+        const x = tile.getCenterX();
+        const y = tile.getCenterY();
+
+        const flyer = new Flyer(this, x, y);
+        this.flyers.add(flyer, true);
+
+        flyerTiles.removeTileAt(tile.x, tile.y, true);
+      }
+    });
+
+    this.map.removeLayer('Flyer');
+  }
+
   private initializeCollisions(): void {
     // collisions for static layers
     this.map.layers.forEach(({ tilemapLayer }) => {
@@ -169,6 +188,8 @@ export class GameScene extends Phaser.Scene {
     this.physics.add.overlap(this.cherries, this.player, (_, cherry) => {
       (cherry as Cherry).collect();
     });
+
+    this.physics.add.collider(this.flyers, this.player);
   }
 
   private registerInputs(): void {

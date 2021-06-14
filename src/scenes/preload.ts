@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import theme from '../utils/theme';
 
+const BASE_FRAME = { frameWidth: 32, frameHeight: 32 };
 export class PreloaderScene extends Phaser.Scene {
   public constructor() {
     super('PreloaderScene');
@@ -100,36 +101,12 @@ export class PreloaderScene extends Phaser.Scene {
     this.load.image('ground', 'background/ground.png');
 
     // load main character assets
-    this.load.spritesheet(
-      'char-idle',
-      'char/idle.png',
-      { frameWidth: 32, frameHeight: 32 },
-    );
-    this.load.spritesheet(
-      'char-double-jump',
-      'char/double-jump.png',
-      { frameWidth: 32, frameHeight: 32 },
-    );
-    this.load.spritesheet(
-      'char-hit',
-      'char/hit.png',
-      { frameWidth: 32, frameHeight: 32 },
-    );
-    this.load.spritesheet(
-      'char-run',
-      'char/run.png',
-      { frameWidth: 32, frameHeight: 32 },
-    );
-    this.load.spritesheet(
-      'char-jump',
-      'char/jump.png',
-      { frameWidth: 32, frameHeight: 32 },
-    );
-    this.load.spritesheet(
-      'char-fall',
-      'char/fall.png',
-      { frameWidth: 32, frameHeight: 32 },
-    );
+    this.load.spritesheet('char-idle', 'char/idle.png', BASE_FRAME);
+    this.load.spritesheet('char-double-jump', 'char/double-jump.png', BASE_FRAME);
+    this.load.spritesheet('char-hit', 'char/hit.png', BASE_FRAME);
+    this.load.spritesheet('char-run', 'char/run.png', BASE_FRAME);
+    this.load.spritesheet('char-jump', 'char/jump.png', BASE_FRAME);
+    this.load.spritesheet('char-fall', 'char/fall.png', BASE_FRAME);
 
     // load terrain asset
     this.load.image('terrain', 'terrain/terrain.png');
@@ -137,16 +114,10 @@ export class PreloaderScene extends Phaser.Scene {
     this.load.tilemapTiledJSON('world', 'tilemap/wei.json');
 
     // load collectibles
-    this.load.image('cherrys', 'collectibles/cherry.png');
-    this.load.spritesheet(
-      'cherry',
-      'collectibles/cherry.png',
-      { frameWidth: 32, frameHeight: 32 },
-    );
-    this.load.spritesheet(
-      'collected',
-      'collectibles/collected.png',
-      { frameWidth: 32, frameHeight: 32 },
-    );
+    this.load.spritesheet('cherry', 'collectibles/cherry.png', BASE_FRAME);
+    this.load.spritesheet('collected', 'collectibles/collected.png', BASE_FRAME);
+
+    // load flyers
+    this.load.spritesheet('flyers', 'platforms/flyers.png', { frameWidth: 32, frameHeight: 10 });
   }
 }

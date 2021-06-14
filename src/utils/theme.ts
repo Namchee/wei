@@ -20,9 +20,13 @@ export const ANIMS = {
   FPS: 20,
 };
 
+export const OBJECTS = {
+  FLYER: {
+    WIDTH: 32,
+    HEIGHT: 10,
+  },
+};
 
-// 800
-// 375
 export const PHYSICS = {
   GRAVITY: 800,
   MOVEMENT: 135,
@@ -44,4 +48,4 @@ export const COLORS = {
   }
 }
 
-export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, Difficulty };
+export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, OBJECTS, Difficulty };

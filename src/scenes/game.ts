@@ -90,17 +90,13 @@ export class GameScene extends Phaser.Scene {
   private initializeTerrain(): void {
     const terrain = this.map.createLayer('Terrain', ['terrain']);
     this.map.addTilesetImage('terrain', 'terrain');
-    this.map.addTilesetImage('spikes', 'spikes');
 
     terrain.setCollisionByProperty({ collides: true, collidesTop: true });
 
     terrain.tilemap.forEachTile((tile: Phaser.Tilemaps.Tile) => {
       if (tile.properties.collidesTop) {
-        tile.collideDown = true;
         tile.collideLeft = false;
         tile.collideRight = false;
-
-        tile.faceTop = true;
         tile.faceBottom = false;
       }
     });
@@ -113,27 +109,16 @@ export class GameScene extends Phaser.Scene {
     });
 
     edgeTerrain.tilemap.forEachTile((tile: Phaser.Tilemaps.Tile) => {
-      tile.collideUp = false;
+      tile.collideUp = !!tile.properties.collidesTop;
       tile.collideDown = false;
-      tile.collideLeft = false;
-      tile.collideRight = false;
-
-      if (tile.properties.collidesTop) {
-        tile.collideUp = true;
-      }
-
-      if (tile.properties.collidesLeft) {
-        tile.collideRight = true;
-      }
-
-      if (tile.properties.collidesRight) {
-        tile.collideLeft = true;
-      }
+      tile.collideLeft = !!tile.properties.collidesRight;
+      tile.collideRight = !!tile.properties.collidesLeft;
     });
   }
 
   private initializeSpikes(): void {
     const spikeTiles = this.map.createLayer('Spikes', ['spikes']);
+    this.map.addTilesetImage('spikes', 'spikes');
 
     this.spikes = this.physics.add.staticGroup();
   

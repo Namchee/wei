@@ -123,7 +123,7 @@ export class GameScene extends Phaser.Scene {
       }
 
       if (tile.properties.collidesLeft) {
-        tile.collideLeft = true;
+        tile.collideRight = true;
       }
 
       if (tile.properties.collidesRight) {

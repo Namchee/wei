@@ -23,10 +23,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.world.enableBody(this);
 
-    this.texture.add('char-jump', 0, 0, 0, 0, 0);
-
     this.lives = initialLives;
     this.jumpCount = 0;
+
+    this.setPosition(x - this.displayWidth, y - this.displayHeight);
   }
 
   public static initialize(
@@ -34,26 +34,18 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     difficulty: Difficulty,
     startingPoint: { x: number, y: number } = { x: 0, y: 0 },
   ): Player {
-    const player = new Player(scene, 0, 0, 'char-idle', difficulty);
+    const player = new Player(
+      scene,
+      startingPoint.x,
+      startingPoint.y,
+      'char-idle',
+      difficulty,
+    );
 
-    player.setCollideWorldBounds(true); 
-    player.initializePosition(startingPoint);
     player.initializeAnims();
     player.anims.play('char-idle');
 
     return player;
-  }
-
-  private initializePosition(
-    position: { x: number, y: number } = { x: 0, y: 0 },
-  ): void {
-    if (position.x) {
-      this.setPosition(position.x - this.displayWidth);
-    }
-
-    if (position.y) {
-      this.setPosition(this.x, position.y - this.displayHeight);
-    }
   }
 
   private initializeAnims() {

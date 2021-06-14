@@ -20,6 +20,9 @@ export const ANIMS = {
   FPS: 20,
 };
 
+
+// 800
+// 375
 export const PHYSICS = {
   GRAVITY: 800,
   MOVEMENT: 135,

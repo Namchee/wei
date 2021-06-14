@@ -119,9 +119,17 @@ export class PreloaderScene extends Phaser.Scene {
       'char-run',
       'char/run.png',
       { frameWidth: 32, frameHeight: 32 },
-    )
-    this.load.image('char-jump', 'char/jump.png');
-    this.load.image('char-fall', 'char/fall.png');
+    );
+    this.load.spritesheet(
+      'char-jump',
+      'char/jump.png',
+      { frameWidth: 32, frameHeight: 32 },
+    );
+    this.load.spritesheet(
+      'char-fall',
+      'char/fall.png',
+      { frameWidth: 32, frameHeight: 32 },
+    );
 
     // load terrain asset
     this.load.image('terrain', 'terrain/terrain.png');

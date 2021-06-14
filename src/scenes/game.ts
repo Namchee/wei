@@ -206,7 +206,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     velocity > 0 ?
-      this.backgroundManager.scrollLeft() :
-      this.backgroundManager.scrollRight();
+      this.backgroundManager.scrollRight() :
+      this.backgroundManager.scrollLeft();
   }
 }

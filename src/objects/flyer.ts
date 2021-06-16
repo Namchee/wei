@@ -1,8 +1,9 @@
 import Phaser from 'phaser';
 
 import { ANIMS, MAP, OBJECTS } from '../utils/theme';
-export class Flyer extends Phaser.Physics.Arcade.Sprite {
-  private isTouched!: boolean;
+export class Flyer extends Phaser.GameObjects.Sprite {
+  private origX: number;
+  private origY: number;
 
   public constructor(
     scene: Phaser.Scene,
@@ -12,14 +13,19 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, '');
 
     scene.add.existing(this);
-    scene.physics.world.enableBody(this, Phaser.Physics.Arcade.STATIC_BODY);
+    scene.physics.world.enableBody(this);
+
+    (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
 
     this.setSize(OBJECTS.FLYER.WIDTH, OBJECTS.FLYER.HEIGHT);
-
     this.initializeAnimations();
-    this.isTouched = false;
 
     this.anims.play('flying', true);
+
+    this.origX = x;
+    this.origY = y;
+
+    (this.body as Phaser.Physics.Arcade.Body).setAccelerationY(-OBJECTS.FLYER.OSCILATE);
   }
 
   public static initialize(
@@ -39,5 +45,19 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
       frameRate: ANIMS.FPS,
       repeat: -1,
     });
+  }
+
+  public update(): void {
+    super.update();
+
+    this.oscilate();
+  }
+
+  private oscilate(): void {
+    if (this.y - this.origY <= -OBJECTS.FLYER.LIM) {
+      (this.body as Phaser.Physics.Arcade.Body).setAccelerationY(OBJECTS.FLYER.OSCILATE);
+    } else if (this.y - this.origY >= OBJECTS.FLYER.LIM) {
+      (this.body as Phaser.Physics.Arcade.Body).setAccelerationY(-OBJECTS.FLYER.OSCILATE);
+    }
   }
 }

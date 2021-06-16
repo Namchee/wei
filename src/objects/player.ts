@@ -82,7 +82,14 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   public update(): void {
     super.update();
 
-    if (this.body.velocity.y === 0) {
+    const { y } = this.body.velocity;
+
+    if (y > 0) {
+      this.anims.play('char-fall', true);
+      return;
+    }
+
+    if (!this.body.velocity.y) {
       this.jumpCount = 0;
     }
   }
@@ -91,7 +98,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.body.enable) {
       const { x, y } = this.body.velocity;
     
-      if (x !== 0 && y === 0) {
+      if (x && !y) {
         this.anims.play('char-run', true);
       }
 
@@ -119,7 +126,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   public idle(): void {
     this.setVelocityX(0);
-    this.anims.play('char-idle', true);
+
+    if (!this.body.velocity.y) {
+      this.anims.play('char-idle', true);
+    }
   }
 
   public decrementLives(): void {

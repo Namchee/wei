@@ -40,6 +40,7 @@ export class GameScene extends Phaser.Scene {
     this.backgroundLoop();
 
     this.player.update();
+    this.flyers.getChildren().forEach(flyer => flyer.update());
   }
 
   private initializeBackground(): void {

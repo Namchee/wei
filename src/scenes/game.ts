@@ -190,7 +190,7 @@ export class GameScene extends Phaser.Scene {
       (cherry as Cherry).collect();
     });
 
-    this.physics.add.collider(this.flyers, this.player);
+    this.physics.add.collider(this.flyers, this.player, () => console.log('test'));
   }
 
   private registerInputs(): void {

@@ -1,9 +1,8 @@
 import Phaser from 'phaser';
 
 import { ANIMS, MAP, OBJECTS } from '../utils/theme';
-export class Flyer extends Phaser.GameObjects.Sprite {
-  private origX: number;
-  private origY: number;
+export class Flyer extends Phaser.Physics.Arcade.Sprite {
+  private idleTween!: Phaser.Tweens.Tween;
 
   public constructor(
     scene: Phaser.Scene,
@@ -13,19 +12,17 @@ export class Flyer extends Phaser.GameObjects.Sprite {
     super(scene, x, y, '');
 
     scene.add.existing(this);
-    scene.physics.world.enableBody(this);
-
+    scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
     (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
+    (this.body as Phaser.Physics.Arcade.Body).setAllowDrag(false);
 
-    this.setSize(OBJECTS.FLYER.WIDTH, OBJECTS.FLYER.HEIGHT);
+    this.setBodySize(OBJECTS.FLYER.WIDTH, OBJECTS.FLYER.HEIGHT);
+    this.setOffset(0, 10);
+
     this.initializeAnimations();
+    this.initializeTween();
 
     this.anims.play('flying', true);
-
-    this.origX = x;
-    this.origY = y;
-
-    (this.body as Phaser.Physics.Arcade.Body).setAccelerationY(-OBJECTS.FLYER.OSCILATE);
   }
 
   public static initialize(
@@ -34,7 +31,7 @@ export class Flyer extends Phaser.GameObjects.Sprite {
     y: number,
   ): Flyer {
     const flyer = new Flyer(scene, x, y);
-
+    
     return flyer;
   }
 
@@ -47,17 +44,18 @@ export class Flyer extends Phaser.GameObjects.Sprite {
     });
   }
 
-  public update(): void {
-    super.update();
-
-    this.oscilate();
+  private initializeTween(): void {
+    this.idleTween = this.scene.add.tween({
+      targets: this,
+      y: '+=7.5',
+      duration: 1500,
+      repeat: -1,
+      yoyo: true,
+      ease: Phaser.Math.Easing.Quadratic.InOut,
+    });
   }
 
-  private oscilate(): void {
-    if (this.y - this.origY <= -OBJECTS.FLYER.LIM) {
-      (this.body as Phaser.Physics.Arcade.Body).setAccelerationY(OBJECTS.FLYER.OSCILATE);
-    } else if (this.y - this.origY >= OBJECTS.FLYER.LIM) {
-      (this.body as Phaser.Physics.Arcade.Body).setAccelerationY(-OBJECTS.FLYER.OSCILATE);
-    }
+  public getHit(): void {
+
   }
 }

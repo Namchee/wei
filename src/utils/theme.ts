@@ -24,8 +24,8 @@ export const OBJECTS = {
   FLYER: {
     WIDTH: 32,
     HEIGHT: 10,
-    OSCILATE: 12.5,
-    LIM: 0.00000000001,
+    OSCILATE: 5,
+    LIM: 0.5,
   },
 };
 

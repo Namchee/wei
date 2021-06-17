@@ -12,12 +12,13 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
     super(scene, x, y, '');
 
     scene.add.existing(this);
-    scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
+    scene.physics.world.enable(this);
+    
+    this.setImmovable(true);
     (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
-    (this.body as Phaser.Physics.Arcade.Body).setAllowDrag(false);
 
     this.setBodySize(OBJECTS.FLYER.WIDTH, OBJECTS.FLYER.HEIGHT);
-    this.setOffset(0, 10);
+    this.setOffset(0, 0);
 
     this.initializeAnimations();
     this.initializeTween();
@@ -47,8 +48,8 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
   private initializeTween(): void {
     this.idleTween = this.scene.add.tween({
       targets: this,
-      y: '+=7.5',
-      duration: 1500,
+      y: '+=10',
+      duration: 1000,
       repeat: -1,
       yoyo: true,
       ease: Phaser.Math.Easing.Quadratic.InOut,

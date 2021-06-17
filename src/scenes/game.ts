@@ -14,7 +14,8 @@ export class GameScene extends Phaser.Scene {
 
   private spikes!: Phaser.Physics.Arcade.StaticGroup;
   private cherries!: Phaser.Physics.Arcade.StaticGroup;
-  private flyers!: Phaser.Physics.Arcade.StaticGroup;
+
+  private flyers!: Flyer[];
 
   private backgroundManager!: BackgroundManager;
   private player!: Player;
@@ -40,7 +41,6 @@ export class GameScene extends Phaser.Scene {
     this.backgroundLoop();
 
     this.player.update();
-    this.flyers.getChildren().forEach(flyer => flyer.update());
   }
 
   private initializeBackground(): void {
@@ -161,15 +161,14 @@ export class GameScene extends Phaser.Scene {
     const flyerTiles = this.map.createLayer('Flyers', ['flyers']);
     this.map.addTilesetImage('flyers');
 
-    this.flyers = this.physics.add.staticGroup();
+    this.flyers = [];
 
     flyerTiles.forEachTile((tile: Phaser.Tilemaps.Tile): void => {
       if (tile.tileset) {
         const x = tile.getCenterX();
         const y = tile.getCenterY();
 
-        const flyer = new Flyer(this, x, y);
-        this.flyers.add(flyer, true);
+        this.flyers.push(new Flyer(this, x, y));
 
         flyerTiles.removeTileAt(tile.x, tile.y, true);
       }
@@ -190,7 +189,9 @@ export class GameScene extends Phaser.Scene {
       (cherry as Cherry).collect();
     });
 
-    this.physics.add.collider(this.flyers, this.player, () => console.log('test'));
+    this.flyers.forEach((flyer: Flyer) => {
+      this.physics.add.collider(flyer, this.player);
+    })
   }
 
   private registerInputs(): void {

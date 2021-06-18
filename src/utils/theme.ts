@@ -24,8 +24,13 @@ export const OBJECTS = {
   FLYER: {
     WIDTH: 32,
     HEIGHT: 10,
-    OSCILATE: 5,
-    LIM: 0.5,
+    OSCILATE: 10,
+    TIMER: 1000,
+    GRAVITY: 1000,
+  },
+  SAW: {
+    WIDTH: 38,
+    HEIGHT: 38,
   },
 };
 

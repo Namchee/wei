@@ -49,15 +49,15 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
   private initializeTween(): void {
     this.idleTween = this.scene.add.tween({
       targets: this,
-      y: '+=10',
-      duration: 1000,
+      y: `+=${OBJECTS.FLYER.OSCILATE}`,
+      duration: OBJECTS.FLYER.TIMER,
       repeat: -1,
       yoyo: true,
       ease: Phaser.Math.Easing.Quadratic.InOut,
     });
   }
 
-  public getHit(): void {
+  public getHit(collider: Phaser.Physics.Arcade.Collider): void {
     // stop the default idle tween
     const dropEvent = this.scene.time.addEvent({
       delay: 500,
@@ -65,7 +65,8 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
       callback: () => {
         this.idleTween.stop();
         (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
-        this.setGravityY(1000);
+        this.setGravityY(OBJECTS.FLYER.GRAVITY);
+        this.scene.physics.world.removeCollider(collider);
         this.scene.time.removeEvent(dropEvent);
       },
     })

@@ -3,6 +3,7 @@ import { Cherry } from '../objects/cherry';
 import { Flyer } from '../objects/flyer';
 
 import { Movement, Player } from '../objects/player';
+import { Saw } from '../objects/saw';
 import { Spike } from '../objects/spike';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
@@ -15,6 +16,7 @@ export class GameScene extends Phaser.Scene {
   private spikes!: Phaser.Physics.Arcade.StaticGroup;
   private cherries!: Phaser.Physics.Arcade.StaticGroup;
 
+  private saws!: Saw[];
   private flyers!: Flyer[];
 
   private backgroundManager!: BackgroundManager;
@@ -26,12 +28,16 @@ export class GameScene extends Phaser.Scene {
 
   public create() {
     this.initializeBackground();
-    this.initializeWorld();
+    this.initializeTilemap();
+    this.initializeSaw();
+    this.initializeTerrain();
+    this.initializeSpikes();
+    this.initializeFlyers();
     this.initializePlayer();
     this.initializeCamera();
 
     this.initializeCollectibles();
-
+    
     this.initializeCollisions();
     this.registerInputs();
   }
@@ -71,7 +77,7 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
-  private initializeWorld(): void {
+  private initializeTilemap(): void {
     this.map = this.make.tilemap({ key: 'world' });
 
     this.physics.world.setBounds(
@@ -80,10 +86,6 @@ export class GameScene extends Phaser.Scene {
       this.map.widthInPixels,
       this.map.heightInPixels * 1.5 + MAP.HELLHOLE,
     );
-
-    this.initializeTerrain();
-    this.initializeSpikes();
-    this.initializeFlyers();
   }
 
   private initializeTerrain(): void {
@@ -159,7 +161,7 @@ export class GameScene extends Phaser.Scene {
 
   private initializeFlyers(): void {
     const flyerTiles = this.map.createLayer('Flyers', ['flyers']);
-    this.map.addTilesetImage('flyers');
+    this.map.addTilesetImage('flyers', 'flyers');
 
     this.flyers = [];
 
@@ -177,23 +179,47 @@ export class GameScene extends Phaser.Scene {
     this.map.removeLayer('Flyer');
   }
 
+  private initializeSaw(): void {
+    const sawTiles = this.map.createLayer('Saw', ['saw']);
+    this.map.addTilesetImage('saw', 'saw-off');
+
+    this.saws = [];
+
+    sawTiles.forEachTile((tile: Phaser.Tilemaps.Tile): void => {
+      if (tile.tileset) {
+        const x = tile.getCenterX();
+        const y = tile.getCenterY();
+
+        this.saws.push(new Saw(this, x, y));
+
+        sawTiles.removeTileAt(tile.x, tile.y, true);
+      }
+    });
+
+    this.map.removeLayer('Saw');
+  }
+
   private initializeCollisions(): void {
     // collisions for static layers
     this.map.layers.forEach(({ tilemapLayer }) => {
       this.physics.add.collider(this.player, tilemapLayer);
     });
 
-    this.physics.add.collider(this.spikes, this.player, () => console.log('Ouch!'));
+    this.physics.add.collider(this.spikes, this.player);
 
     this.physics.add.overlap(this.cherries, this.player, (_, cherry) => {
       (cherry as Cherry).collect();
     });
 
     this.flyers.forEach((flyer: Flyer) => {
-      this.physics.add.collider(flyer, this.player, () => {
-        flyer.getHit();
+      const collider = this.physics.add.collider(flyer, this.player, (a) => {
+        if (a.body.touching.up) {
+          flyer.getHit(collider);
+        }
       });
-    })
+    });
+
+    this.physics.add.collider(this.saws, this.player);
   }
 
   private registerInputs(): void {

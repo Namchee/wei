@@ -119,5 +119,9 @@ export class PreloaderScene extends Phaser.Scene {
 
     // load flyers
     this.load.spritesheet('flyers', 'platforms/flyers.png', { frameWidth: 32, frameHeight: 10 });
+
+    // load saw
+    this.load.spritesheet('saw-off', 'enemies/saw/off.png', { frameWidth: 38, frameHeight: 38 });
+    this.load.spritesheet('saw-on', 'enemies/saw/on.png', { frameWidth: 38, frameHeight: 38 });
   }
 }

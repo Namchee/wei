@@ -190,7 +190,9 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.flyers.forEach((flyer: Flyer) => {
-      this.physics.add.collider(flyer, this.player);
+      this.physics.add.collider(flyer, this.player, () => {
+        flyer.getHit();
+      });
     })
   }
 

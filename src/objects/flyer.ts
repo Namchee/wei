@@ -13,8 +13,9 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this);
     scene.physics.world.enable(this);
-    
+
     this.setImmovable(true);
+    this.setCollideWorldBounds(true);
     (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
 
     this.setBodySize(OBJECTS.FLYER.WIDTH, OBJECTS.FLYER.HEIGHT);
@@ -57,6 +58,16 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
   }
 
   public getHit(): void {
-
+    // stop the default idle tween
+    const dropEvent = this.scene.time.addEvent({
+      delay: 500,
+      repeat: 0,
+      callback: () => {
+        this.idleTween.stop();
+        (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
+        this.setGravityY(1000);
+        this.scene.time.removeEvent(dropEvent);
+      },
+    })
   }
 }

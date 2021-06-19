@@ -31,4 +31,17 @@ export class Saw extends Phaser.Physics.Arcade.Sprite {
       repeat: -1,
     })
   }
+
+  public setPatrolRoute({ x, y }: Phaser.Math.Vector2): void {
+    this.scene.add.tween({
+      targets: this,
+      x: x,
+      y: y,
+      yoyo: true,
+      repeat: -1,
+      repeatDelay: 2500,
+      hold: 2500,
+      duration: 5000,
+    });
+  }
 }

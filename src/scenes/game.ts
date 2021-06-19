@@ -58,10 +58,15 @@ export class GameScene extends Phaser.Scene {
   }
 
   private initializePlayer(): void {
-    const x = this.map.tileWidth * 3;
-    const y = this.map.heightInPixels - this.map.tileHeight;
+    const layer = this.map.createFromObjects('Player Spawn Point', {});
+    const sprite = layer[0] as Phaser.GameObjects.Sprite;
+
+    const x = sprite.x;
+    const y = sprite.y;
 
     this.player = new Player(this, x, y, Difficulty.NORMAL);
+
+    layer.forEach((sprite) => sprite.destroy());
   }
 
   private initializeCamera(): void {
@@ -180,23 +185,34 @@ export class GameScene extends Phaser.Scene {
   }
 
   private initializeSaw(): void {
-    const sawTiles = this.map.createLayer('Saw', ['saw']);
-    this.map.addTilesetImage('saw', 'saw-off');
+    const patrolRoute = this.map.createFromObjects('Saw Route', {});
 
     this.saws = [];
 
-    sawTiles.forEachTile((tile: Phaser.Tilemaps.Tile): void => {
-      if (tile.tileset) {
-        const x = tile.getCenterX();
-        const y = tile.getCenterY();
+    const startPoints = new Map<number, Phaser.Math.Vector2>();
+    const endPoints = new Map<number, Phaser.Math.Vector2>();
 
-        this.saws.push(new Saw(this, x, y));
+    patrolRoute.forEach((point) => {
+      const pointSprite = point as Phaser.GameObjects.Sprite;
 
-        sawTiles.removeTileAt(tile.x, tile.y, true);
-      }
+      const customProps = Object.keys(pointSprite.data.list);
+      const [prop, id] = customProps[0].split('_');
+      const position = new Phaser.Math.Vector2(pointSprite.x, pointSprite.y);
+
+      prop === 'start' ?
+        startPoints.set(Number(id), position) :
+        endPoints.set(Number(id), position);
     });
 
-    this.map.removeLayer('Saw');
+    startPoints.forEach((position, id) => {
+      const saw = new Saw(this, position.x, position.y);
+      const endPoint = endPoints.get(id);
+
+      saw.setPatrolRoute(endPoint as Phaser.Math.Vector2);
+      this.saws.push(saw);
+    });
+
+    patrolRoute.forEach((emptySprite) => emptySprite.destroy(true));
   }
 
   private initializeCollisions(): void {

@@ -34,10 +34,12 @@ export const OBJECTS = {
   },
 };
 
+// 135
+// 375
 export const PHYSICS = {
   GRAVITY: 800,
-  MOVEMENT: 135,
-  JUMP: 375,
+  MOVEMENT: 250,
+  JUMP: 500,
 };
 
 export enum Difficulty {

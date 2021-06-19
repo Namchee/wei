@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { Cherry } from '../objects/cherry';
 import { Flyer } from '../objects/flyer';
+import { Mushroom } from '../objects/mushroom';
 
 import { Movement, Player } from '../objects/player';
 import { Saw } from '../objects/saw';
@@ -17,6 +18,7 @@ export class GameScene extends Phaser.Scene {
   private cherries!: Phaser.Physics.Arcade.StaticGroup;
 
   private saws!: Saw[];
+  private mushrooms!: Mushroom[];
   private flyers!: Flyer[];
 
   private backgroundManager!: BackgroundManager;
@@ -35,8 +37,8 @@ export class GameScene extends Phaser.Scene {
     this.initializeFlyers();
     this.initializePlayer();
     this.initializeCamera();
-
     this.initializeCollectibles();
+    this.initializeMushrooms();
     
     this.initializeCollisions();
     this.registerInputs();
@@ -185,14 +187,14 @@ export class GameScene extends Phaser.Scene {
   }
 
   private initializeSaw(): void {
-    const patrolRoute = this.map.createFromObjects('Saw Route', {});
+    const sawRoutes = this.map.createFromObjects('Saw Route', {});
 
     this.saws = [];
 
     const startPoints = new Map<number, Phaser.Math.Vector2>();
     const endPoints = new Map<number, Phaser.Math.Vector2>();
 
-    patrolRoute.forEach((point) => {
+    sawRoutes.forEach((point) => {
       const pointSprite = point as Phaser.GameObjects.Sprite;
 
       const customProps = Object.keys(pointSprite.data.list);
@@ -212,7 +214,38 @@ export class GameScene extends Phaser.Scene {
       this.saws.push(saw);
     });
 
-    patrolRoute.forEach((emptySprite) => emptySprite.destroy(true));
+    sawRoutes.forEach((emptySprite) => emptySprite.destroy(true));
+  }
+
+  private initializeMushrooms(): void {
+    const mushroomRoutes = this.map.createFromObjects('Enemy Route', {});
+
+    this.mushrooms = [];
+
+    const startPoints = new Map<number, Phaser.Math.Vector2>();
+    const endPoints = new Map<number, Phaser.Math.Vector2>();
+
+    mushroomRoutes.forEach((point) => {
+      const pointSprite = point as Phaser.GameObjects.Sprite;
+
+      const customProps = Object.keys(pointSprite.data.list);
+      const [prop, id] = customProps[0].split('_');
+      const position = new Phaser.Math.Vector2(pointSprite.x, pointSprite.y);
+
+      prop === 'start' ?
+        startPoints.set(Number(id), position) :
+        endPoints.set(Number(id), position);
+    });
+
+    startPoints.forEach((position, id) => {
+      const mushroom = new Mushroom(this, position.x, position.y);
+      const endPoint = endPoints.get(id);
+
+      mushroom.setPatrolRoute(endPoint as Phaser.Math.Vector2);
+      this.mushrooms.push(mushroom);
+    });
+
+    mushroomRoutes.forEach((emptySprite) => emptySprite.destroy(true));
   }
 
   private initializeCollisions(): void {
@@ -235,7 +268,7 @@ export class GameScene extends Phaser.Scene {
       });
     });
 
-    this.physics.add.collider(this.saws, this.player);
+    this.physics.add.collider(this.saws, this.player, () => console.log('Blood'));
   }
 
   private registerInputs(): void {

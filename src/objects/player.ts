@@ -20,7 +20,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setOrigin(0, 0);
 
     scene.add.existing(this);
-    scene.physics.world.enable(this);
+    scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
 
     this.lives = initialLives;
     this.jumpCount = 0;

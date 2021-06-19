@@ -39,9 +39,9 @@ export class Saw extends Phaser.Physics.Arcade.Sprite {
       y: y,
       yoyo: true,
       repeat: -1,
-      repeatDelay: 2500,
-      hold: 2500,
-      duration: 5000,
+      repeatDelay: OBJECTS.SAW.DELAY,
+      hold: OBJECTS.SAW.DELAY,
+      duration: OBJECTS.SAW.TWEEN,
     });
   }
 }

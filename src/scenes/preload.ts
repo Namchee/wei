@@ -123,5 +123,10 @@ export class PreloaderScene extends Phaser.Scene {
     // load saw
     this.load.spritesheet('saw-off', 'enemies/saw/off.png', { frameWidth: 38, frameHeight: 38 });
     this.load.spritesheet('saw-on', 'enemies/saw/on.png', { frameWidth: 38, frameHeight: 38 });
+
+    // load mushroom
+    this.load.spritesheet('mushroom-idle', 'enemies/mushroom/idle.png', BASE_FRAME);
+    this.load.spritesheet('mushroom-run', 'enemies/mushroom/run.png', BASE_FRAME);
+    this.load.spritesheet('mushroom-hit', 'enemies/mushroom/hit.png', BASE_FRAME);
   }
 }

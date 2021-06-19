@@ -31,6 +31,8 @@ export const OBJECTS = {
   SAW: {
     WIDTH: 38,
     HEIGHT: 38,
+    TWEEN: 5000,
+    DELAY: 2500,
   },
 };
 

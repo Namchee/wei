@@ -36,6 +36,8 @@ export const OBJECTS = {
     RADIUS: 200,
   },
   MUSHROOMS: {
+    WIDTH: 32,
+    HEIGHT: 20,
     TWEEN: 4000,
     DELAY: 2000,
     RADIUS: 150,

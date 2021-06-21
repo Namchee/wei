@@ -302,9 +302,16 @@ export class GameScene extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.SPACE,
     );
 
+    const up = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.UP,
+    )
+
     spacebar.on('down', () => {
       this.player.jump();
     });
+    up.on('down', () => {
+      this.player.jump();
+    })
 
     this.keys = this.input.keyboard.createCursorKeys();
   }

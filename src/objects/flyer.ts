@@ -33,7 +33,7 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
     y: number,
   ): Flyer {
     const flyer = new Flyer(scene, x, y);
-    
+
     return flyer;
   }
 
@@ -57,18 +57,20 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
-  public getHit(collider: Phaser.Physics.Arcade.Collider): void {
+  public getHit(): Promise<void> {
     // stop the default idle tween
-    const dropEvent = this.scene.time.addEvent({
-      delay: 500,
-      repeat: 0,
-      callback: () => {
-        this.idleTween.stop();
-        (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
-        this.setGravityY(OBJECTS.FLYER.GRAVITY);
-        this.scene.physics.world.removeCollider(collider);
-        this.scene.time.removeEvent(dropEvent);
-      },
-    })
+    return new Promise(resolve => {
+      const dropEvent = this.scene.time.addEvent({
+        delay: 500,
+        repeat: 0,
+        callback: () => {
+          this.idleTween.stop();
+          (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
+          this.setGravityY(OBJECTS.FLYER.GRAVITY);
+          resolve();
+          this.scene.time.removeEvent(dropEvent);
+        },
+      })
+    });
   }
 }

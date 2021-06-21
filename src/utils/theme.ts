@@ -41,6 +41,10 @@ export const OBJECTS = {
     TWEEN: 4000,
     DELAY: 2000,
     RADIUS: 150,
+    DEATH: 300,
+    ANGLE: 22.5,
+    ANGLE_DURATION: 50,
+    GRAVITY: 1000.
   },
 };
 
@@ -48,6 +52,7 @@ export const PHYSICS = {
   GRAVITY: 800,
   MOVEMENT: 135,
   JUMP: 375,
+  MUSHROOM: 200,
 };
 
 export enum Difficulty {

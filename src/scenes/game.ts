@@ -287,19 +287,25 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.flyers.forEach((flyer: Flyer) => {
-      const collider = this.physics.add.collider(flyer, this.player, (target) => {
-        if (target.body.touching.up) {
-          flyer.getHit(collider);
+      const collider = this.physics.add.collider(flyer, this.player, () => {
+        if (flyer.body.touching.up) {
+          flyer.getHit()
+            .then(() => this.physics.world.removeCollider(collider));
         }
       });
     });
 
     this.physics.add.collider(this.saws, this.player, () => console.log('Blood'));
-    this.physics.add.collider(this.mushrooms, this.player, (target) => {
-      target.body.touching.up ?
-        console.log('mushroom dead') :
-        console.log('Ouch!!!');
-    })
+
+    this.mushrooms.forEach((mushroom: Mushroom) => {
+      const collider = this.physics.add.collider(mushroom, this.player, () => {
+        if (mushroom.body.touching.up) {
+          mushroom.getHit();
+          this.player.hitMushroom();
+          this.physics.world.removeCollider(collider);
+        }
+      });
+    });
   }
 
   private registerInputs(): void {

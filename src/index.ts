@@ -14,7 +14,7 @@ const config: Types.Core.GameConfig = {
   physics: {
     default: 'arcade',
     arcade: {
-      debug: import.meta.env.MODE === 'development',
+      debug: import.meta.env.MODE !== 'development',
       gravity: {
         y: PHYSICS.GRAVITY,
       }

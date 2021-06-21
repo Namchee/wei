@@ -47,7 +47,6 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
       key: 'mushroom-hit',
       frames: this.anims.generateFrameNumbers('mushroom-hit', {}),
       frameRate: ANIMS.FPS,
-      repeat: -1,
     });
   }
 
@@ -87,7 +86,7 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
   }
 
   public startPatrol(): void {
-    if (!this.patrolTween.isPlaying()) {
+    if (this.patrolTween.paused) {
       this.patrolTween.resume();
     }
   }
@@ -96,5 +95,22 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
     if (this.patrolTween.isPlaying()) {
       this.patrolTween.pause();
     }
+  }
+
+  public getHit(): void {
+    this.anims.play('mushroom-hit', true);
+    this.patrolTween.stop();
+    this.setVelocityY(-OBJECTS.MUSHROOMS.DEATH);
+
+    const randomizer = Math.random();
+
+    this.scene.tweens.add({
+      targets: this,
+      angle: randomizer < 0.5 ? -OBJECTS.MUSHROOMS.ANGLE : OBJECTS.MUSHROOMS.ANGLE,
+      duration: OBJECTS.MUSHROOMS.ANGLE_DURATION,
+    });
+
+    (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
+    (this.body as Phaser.Physics.Arcade.Body).setGravityY(OBJECTS.MUSHROOMS.GRAVITY);
   }
 }

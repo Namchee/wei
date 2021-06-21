@@ -132,6 +132,15 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  public hitMushroom(): void {
+    this.setVelocityY(-PHYSICS.MUSHROOM);
+    this.jumpCount++;
+  }
+
+  public getHit(): void {
+
+  }
+
   public decrementLives(): void {
     this.lives--;
   }

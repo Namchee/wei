@@ -33,12 +33,12 @@ export const OBJECTS = {
     HEIGHT: 38,
     TWEEN: 3000,
     DELAY: 1500,
-    RADIUS: 500,
+    RADIUS: 200,
   },
   MUSHROOMS: {
     TWEEN: 4000,
     DELAY: 2000,
-    RADIUS: 350,
+    RADIUS: 150,
   },
 };
 

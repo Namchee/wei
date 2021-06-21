@@ -8,7 +8,7 @@ import { Saw } from '../objects/saw';
 import { Spike } from '../objects/spike';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { Difficulty, MAP } from '../utils/theme';
+import { Difficulty, MAP, OBJECTS } from '../utils/theme';
 
 export class GameScene extends Phaser.Scene {
   private keys!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -50,12 +50,30 @@ export class GameScene extends Phaser.Scene {
 
     this.player.update();
 
+    const mushroomBounds = new Phaser.Geom.Rectangle(
+      this.cameras.main.worldView.x - OBJECTS.MUSHROOMS.RADIUS,
+      this.cameras.main.worldView.y,
+      this.cameras.main.worldView.width + OBJECTS.MUSHROOMS.RADIUS * 2,
+      this.cameras.main.worldView.height,
+    );
+
+    const sawBounds = new Phaser.Geom.Rectangle(
+      this.cameras.main.worldView.x - OBJECTS.SAW.RADIUS,
+      this.cameras.main.worldView.y,
+      this.cameras.main.worldView.width + OBJECTS.SAW.RADIUS * 2,
+      this.cameras.main.worldView.height,
+    );
+
     this.mushrooms.forEach((mushroom: Mushroom) => {
-      this.cameras.main.worldView.contains(mushroom.x, mushroom.y) ?
+      mushroomBounds.contains(mushroom.x, mushroom.y) ?
         mushroom.startPatrol() :
         mushroom.stopPatrol();
-      
-      mushroom.update();
+    });
+
+    this.saws.forEach((saw: Saw) => {
+      sawBounds.contains(saw.x, saw.y) ?
+        saw.startPatrol() :
+        saw.stopPatrol();
     });
   }
 

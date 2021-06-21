@@ -31,13 +31,13 @@ export const OBJECTS = {
   SAW: {
     WIDTH: 38,
     HEIGHT: 38,
-    TWEEN: 1000,
-    DELAY: 700,
+    TWEEN: 3000,
+    DELAY: 1500,
     RADIUS: 500,
   },
   MUSHROOMS: {
     TWEEN: 4000,
-    DELAY: 1500,
+    DELAY: 2000,
     RADIUS: 350,
   },
 };

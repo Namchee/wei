@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import { ANIMS, MAP, OBJECTS } from '../utils/theme';
 
 export class Mushroom extends Phaser.Physics.Arcade.Sprite {
-  private patrolTween!: Phaser.Tweens.Tween;
+  private patrolTween!: Phaser.Tweens.Timeline;
 
   public constructor(
     scene: Phaser.Scene,
@@ -11,6 +11,7 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
     y: number,
   ) {
     super(scene, x, y, 'mushroom-idle', 0);
+    this.setOrigin(0, 0.5);
 
     scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
     scene.add.existing(this);
@@ -49,30 +50,43 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
-  public setPatrolRoute({ x, y }: Phaser.Math.Vector2): void {
-    this.patrolTween = this.scene.add.tween({
+  public setPatrolRoute({ x }: Phaser.Math.Vector2): void {
+    const originalX = this.body.x;
+
+    this.patrolTween = this.scene.tweens.timeline({
       targets: this,
-      x: x,
-      y: y,
-      yoyo: true,
-      repeat: -1,
-      repeatDelay: OBJECTS.MUSHROOMS.DELAY,
-      hold: OBJECTS.MUSHROOMS.DELAY,
-      duration: OBJECTS.MUSHROOMS.TWEEN,
-      onStart: () => {
-        this.anims.play('mushroom-run', true);
-      },
-      onRepeat: () => {
-        this.setFlipX(false);
-      },
-      onYoyo: () => {
-        this.setFlipX(true);
-      },
+      loop: -1,
+      loopDelay: OBJECTS.MUSHROOMS.DELAY,
+      tweens: [
+        {
+          x: x,
+          duration: OBJECTS.MUSHROOMS.TWEEN,
+          onComplete: () => {
+            this.anims.play('mushroom-idle');
+          },
+          onUpdate: () => {
+            this.setFlipX(false);
+            this.anims.play('mushroom-run', true);
+          },
+        },
+        {
+          x: originalX,
+          duration: OBJECTS.MUSHROOMS.TWEEN,
+          delay: OBJECTS.MUSHROOMS.DELAY,
+          onComplete: () => {
+            this.anims.play('mushroom-idle');
+          },
+          onUpdate: () => {
+            this.setFlipX(true);
+            this.anims.play('mushroom-run', true);
+          },
+        }
+      ],
     });
   }
 
   public startPatrol(): void {
-    if (this.patrolTween.isPaused()) {
+    if (!this.patrolTween.isPlaying()) {
       this.patrolTween.resume();
     }
   }

@@ -54,6 +54,8 @@ export class GameScene extends Phaser.Scene {
       this.cameras.main.worldView.contains(mushroom.x, mushroom.y) ?
         mushroom.startPatrol() :
         mushroom.stopPatrol();
+      
+      mushroom.update();
     });
   }
 

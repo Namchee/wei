@@ -59,16 +59,27 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
       repeatDelay: OBJECTS.MUSHROOMS.DELAY,
       hold: OBJECTS.MUSHROOMS.DELAY,
       duration: OBJECTS.MUSHROOMS.TWEEN,
+      onStart: () => {
+        this.anims.play('mushroom-run', true);
+      },
+      onRepeat: () => {
+        this.setFlipX(false);
+      },
+      onYoyo: () => {
+        this.setFlipX(true);
+      },
     });
-
-    this.patrolTween.stop();
   }
 
   public startPatrol(): void {
-    this.patrolTween.resume();
+    if (this.patrolTween.isPaused()) {
+      this.patrolTween.resume();
+    }
   }
 
-  public stopTween(): void {
-    this.patrolTween.stop();
+  public stopPatrol(): void {
+    if (this.patrolTween.isPlaying()) {
+      this.patrolTween.pause();
+    }
   }
 }

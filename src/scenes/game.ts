@@ -49,6 +49,12 @@ export class GameScene extends Phaser.Scene {
     this.backgroundLoop();
 
     this.player.update();
+
+    this.mushrooms.forEach((mushroom: Mushroom) => {
+      this.cameras.main.worldView.contains(mushroom.x, mushroom.y) ?
+        mushroom.startPatrol() :
+        mushroom.stopPatrol();
+    });
   }
 
   private initializeBackground(): void {

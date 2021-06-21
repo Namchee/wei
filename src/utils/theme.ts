@@ -31,21 +31,21 @@ export const OBJECTS = {
   SAW: {
     WIDTH: 38,
     HEIGHT: 38,
-    TWEEN: 5000,
-    DELAY: 2500,
+    TWEEN: 1000,
+    DELAY: 700,
+    RADIUS: 500,
   },
   MUSHROOMS: {
-    TWEEN: 5000,
-    DELAY: 2500,
+    TWEEN: 4000,
+    DELAY: 1500,
+    RADIUS: 350,
   },
 };
 
-// 135
-// 375
 export const PHYSICS = {
   GRAVITY: 800,
-  MOVEMENT: 250,
-  JUMP: 500,
+  MOVEMENT: 135,
+  JUMP: 375,
 };
 
 export enum Difficulty {

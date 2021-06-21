@@ -45,8 +45,6 @@ export class Saw extends Phaser.Physics.Arcade.Sprite {
       hold: OBJECTS.SAW.DELAY,
       duration: OBJECTS.SAW.TWEEN,
     });
-
-    this.patrolTween.stop();
   }
 
   public startPatrol(): void {

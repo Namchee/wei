@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ANIMS, OBJECTS } from '../utils/theme';
+import { ANIMS, OBJECTS } from '../utils/const';
 
 export class Saw extends Phaser.Physics.Arcade.Sprite {
   private patrolTween!: Phaser.Tweens.Tween;
@@ -52,6 +52,6 @@ export class Saw extends Phaser.Physics.Arcade.Sprite {
   }
 
   public stopPatrol(): void {
-    this.patrolTween.stop();
+    this.patrolTween.pause();
   }
 }

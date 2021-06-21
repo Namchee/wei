@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { ANIMS, MAP, OBJECTS } from '../utils/theme';
+import { ANIMS, MAP, OBJECTS } from '../utils/const';
 
 export class Mushroom extends Phaser.Physics.Arcade.Sprite {
   private patrolTween!: Phaser.Tweens.Timeline;

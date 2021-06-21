@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { ANIMS, Difficulty, PHYSICS } from '../utils/theme';
+import { ANIMS, PHYSICS } from '../utils/const';
 
 export enum Movement {
   Left = -1,
@@ -134,7 +134,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   public hitMushroom(): void {
     this.setVelocityY(-PHYSICS.MUSHROOM);
-    this.jumpCount++;
   }
 
   public getHit(): void {

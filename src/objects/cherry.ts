@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { ANIMS, MAP } from '../utils/theme';
+import { ANIMS, MAP } from '../utils/const';
 
 export class Cherry extends Phaser.Physics.Arcade.Sprite {
   public constructor(

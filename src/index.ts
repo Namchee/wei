@@ -1,6 +1,6 @@
 import { Game, AUTO, Types } from 'phaser';
 
-import { PHYSICS } from './utils/theme';
+import { PHYSICS } from './utils/const';
 import { PreloaderScene } from './scenes/preload';
 import { GameScene } from './scenes/game';
 

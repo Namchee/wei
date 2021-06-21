@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import theme from '../utils/theme';
+import theme from '../utils/const';
 
 const BASE_FRAME = { frameWidth: 32, frameHeight: 32 };
 export class PreloaderScene extends Phaser.Scene {

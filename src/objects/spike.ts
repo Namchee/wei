@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { MAP } from '../utils/theme';
+import { MAP } from '../utils/const';
 
 export class Spike extends Phaser.Physics.Arcade.Sprite {
   public constructor(

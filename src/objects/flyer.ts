@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { ANIMS, MAP, OBJECTS } from '../utils/theme';
+import { ANIMS, MAP, OBJECTS } from '../utils/const';
 export class Flyer extends Phaser.Physics.Arcade.Sprite {
   private idleTween!: Phaser.Tweens.Tween;
 

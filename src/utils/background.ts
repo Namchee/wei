@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 import { UnimplementedFeatureException } from '../exceptions/unimplemented';
-import { BACKGROUND, COLORS } from './theme';
+import { BACKGROUND, COLORS } from './const';
 
 export interface BackgroundManager {
   scrollLeft: () => void;

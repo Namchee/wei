@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { ANIMS, OBJECTS } from '../utils/theme';
 
 export class Saw extends Phaser.Physics.Arcade.Sprite {
+  private patrolTween!: Phaser.Tweens.Tween;
+
   public constructor(
     scene: Phaser.Scene,
     x: number,
@@ -33,7 +35,7 @@ export class Saw extends Phaser.Physics.Arcade.Sprite {
   }
 
   public setPatrolRoute({ x, y }: Phaser.Math.Vector2): void {
-    this.scene.add.tween({
+    this.patrolTween = this.scene.add.tween({
       targets: this,
       x: x,
       y: y,
@@ -43,5 +45,15 @@ export class Saw extends Phaser.Physics.Arcade.Sprite {
       hold: OBJECTS.SAW.DELAY,
       duration: OBJECTS.SAW.TWEEN,
     });
+
+    this.patrolTween.stop();
+  }
+
+  public startPatrol(): void {
+    this.patrolTween.resume();
+  }
+
+  public stopPatrol(): void {
+    this.patrolTween.stop();
   }
 }

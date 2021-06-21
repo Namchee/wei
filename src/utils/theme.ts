@@ -34,6 +34,10 @@ export const OBJECTS = {
     TWEEN: 5000,
     DELAY: 2500,
   },
+  MUSHROOMS: {
+    TWEEN: 5000,
+    DELAY: 2500,
+  },
 };
 
 // 135

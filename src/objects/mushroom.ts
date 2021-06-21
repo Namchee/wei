@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
 
-import { ANIMS, MAP } from '../utils/theme';
+import { ANIMS, MAP, OBJECTS } from '../utils/theme';
 
 export class Mushroom extends Phaser.Physics.Arcade.Sprite {
+  private patrolTween!: Phaser.Tweens.Tween;
+
   public constructor(
     scene: Phaser.Scene,
     x: number,
@@ -12,8 +14,6 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
 
     scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
     scene.add.existing(this);
-
-    this.setOrigin(0.5, 1);
 
     this.setImmovable(true);
     this.setCollideWorldBounds(true);
@@ -50,15 +50,25 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
   }
 
   public setPatrolRoute({ x, y }: Phaser.Math.Vector2): void {
-    this.scene.add.tween({
+    this.patrolTween = this.scene.add.tween({
       targets: this,
       x: x,
       y: y,
       yoyo: true,
       repeat: -1,
-      repeatDelay: 2500,
-      hold: 2500,
-      duration: 5000,
+      repeatDelay: OBJECTS.MUSHROOMS.DELAY,
+      hold: OBJECTS.MUSHROOMS.DELAY,
+      duration: OBJECTS.MUSHROOMS.TWEEN,
     });
+
+    this.patrolTween.stop();
+  }
+
+  public startPatrol(): void {
+    this.patrolTween.resume();
+  }
+
+  public stopTween(): void {
+    this.patrolTween.stop();
   }
 }

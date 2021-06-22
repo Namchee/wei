@@ -1,0 +1,14 @@
+@font-face {
+  font-family: 'Matchup Pro';
+  src: url('../fonts/matchup-pro.woff2');
+}
+
+@font-face {
+  font-family: 'Monogram';
+  src: url('../fonts/monogram.woff2');
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}

@@ -27,8 +27,8 @@ export class PreloaderScene extends Phaser.Scene {
       Number(height) / 3,
       'Loading Game',
       {
-        fontFamily: 'Consolas, "Courier New"',
-        fontSize: '24px',
+        fontFamily: 'Monogram, Consolas, "Courier New"',
+        fontSize: '36px',
       },
     );
 
@@ -36,11 +36,11 @@ export class PreloaderScene extends Phaser.Scene {
 
     const percentText = this.add.text(
       Number(width) / 2,
-      Number(height) / 2.375 + Number(height) / 20,
+      Number(height) / 2.135,
       '0%',
       {
-        fontFamily: 'Consolas, "Courier New"',
-        fontSize: '18px',
+        fontFamily: 'Monogram, Consolas, "Courier New"',
+        fontSize: '24px',
       },
     );
 
@@ -51,8 +51,8 @@ export class PreloaderScene extends Phaser.Scene {
       Number(height) / 1.825,
       '',
       {
-        fontFamily: 'Consolas, "Courier New"',
-        fontSize: '12px',
+        fontFamily: 'Monogram, Consolas, "Courier New"',
+        fontSize: '18px',
       },
     );
 
@@ -71,7 +71,7 @@ export class PreloaderScene extends Phaser.Scene {
     });
 
     this.load.on('fileprogress', (file: Phaser.Loader.File) => {
-      assetText.setText(`Loaded assets: ${file.key}`);
+      assetText.setText(`Loaded ${file.key}`);
     });
 
     this.load.on('complete', () => {
@@ -86,9 +86,7 @@ export class PreloaderScene extends Phaser.Scene {
           percentText.destroy();
           assetText.destroy();
 
-          this.scene.sendToBack();
-
-          this.scene.start('GameScene');
+          this.scene.start('TitleScene');
         },
       });
     });

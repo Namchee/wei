@@ -1,8 +1,10 @@
 import { Game, AUTO, Types } from 'phaser';
 
 import { PHYSICS } from './utils/const';
+
 import { PreloaderScene } from './scenes/preload';
 import { GameScene } from './scenes/game';
+import { TitleScene } from './scenes/title';
 
 const config: Types.Core.GameConfig = {
   type: AUTO,
@@ -22,7 +24,7 @@ const config: Types.Core.GameConfig = {
   },
   pixelArt: true,
   parent: '#game',
-  scene: [PreloaderScene, GameScene],
+  scene: [PreloaderScene, TitleScene, GameScene],
 };
 
 new Game(config);

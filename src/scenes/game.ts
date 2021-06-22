@@ -280,7 +280,13 @@ export class GameScene extends Phaser.Scene {
       this.physics.add.collider(this.player, tilemapLayer);
     });
 
-    this.physics.add.collider(this.spikes, this.player);
+    this.physics.add.collider(this.spikes, this.player, () => {
+      if (this.player.isInvicible) {
+        return;
+      }
+
+      this.player.getHit();
+    });
 
     this.physics.add.overlap(this.cherries, this.player, (_, cherry) => {
       (cherry as Cherry).collect();
@@ -295,14 +301,26 @@ export class GameScene extends Phaser.Scene {
       });
     });
 
-    this.physics.add.collider(this.saws, this.player, () => console.log('Blood'));
+    this.physics.add.collider(this.saws, this.player, () => {
+      if (this.player.isInvicible) {
+        return;
+      }
+
+      this.player.getHit();
+    });
 
     this.mushrooms.forEach((mushroom: Mushroom) => {
       const collider = this.physics.add.collider(mushroom, this.player, () => {
+        if (this.player.isInvicible) {
+          return;
+        }
+
         if (mushroom.body.touching.up) {
           mushroom.getHit();
           this.player.hitMushroom();
           this.physics.world.removeCollider(collider);
+        } else {
+          this.player.getHit();
         }
       });
     });

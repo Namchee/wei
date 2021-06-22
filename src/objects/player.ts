@@ -9,7 +9,6 @@ export enum Movement {
 export class Player extends Phaser.Physics.Arcade.Sprite {
   private lives: number;
   private jumpCount: number;
-
   private invicible: boolean;
   
   public constructor(
@@ -94,6 +93,22 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     }
   }
 
+  public get isInvicible(): boolean {
+    return this.invicible;
+  }
+
+  public get isAlive(): boolean {
+    return this.lives > 0;
+  }
+
+  public get getLives(): number {
+    return this.lives;
+  }
+
+  public decrementLives(): void {
+    this.lives--;
+  }
+
   public move(dir: Movement): void {
     if (this.body.enable) {
       const { x, y } = this.body.velocity;
@@ -138,17 +153,25 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
   public getHit(): void {
     this.anims.play('char-hit', true);
-  }
+    this.setVelocityY(-PHYSICS.HIT_BACK.Y);
 
-  public decrementLives(): void {
-    this.lives--;
-  }
+    this.invicible = true;
 
-  public isAlive(): boolean {
-    return this.lives > 0;
-  }
+    this.scene.add.tween({
+      targets: this,
+      duration: PHYSICS.HIT_BACK.DURATION,
+      x: `${this.flipX ? '+' : '-'}=${PHYSICS.HIT_BACK.X}`,
+    });
 
-  public getLives(): number {
-    return this.lives;
+    this.scene.add.tween({
+      targets: this,
+      duration: PHYSICS.INVICIBILITY.DURATION,
+      alpha: 0,
+      yoyo: true, 
+      repeat: PHYSICS.INVICIBILITY.PERIOD,
+      onComplete: () => {
+        this.invicible = false;
+      },
+    });
   }
 }

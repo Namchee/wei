@@ -44,7 +44,7 @@ export const OBJECTS = {
     DEATH: 300,
     ANGLE: 22.5,
     ANGLE_DURATION: 50,
-    GRAVITY: 1000.
+    GRAVITY: 1000,
   },
 };
 
@@ -53,6 +53,15 @@ export const PHYSICS = {
   MOVEMENT: 135,
   JUMP: 375,
   MUSHROOM: 200,
+  HIT_BACK: {
+    DURATION: 250,
+    X: 25,
+    Y: 200,
+  },
+  INVICIBILITY: {
+    PERIOD: 10,
+    DURATION: 85,
+  },
 };
 
 export enum Difficulty {

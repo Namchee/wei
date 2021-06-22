@@ -10,7 +10,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private lives: number;
   private jumpCount: number;
   private invicible: boolean;
-  
+
   public constructor(
     scene: Phaser.Scene,
     x: number,
@@ -112,7 +112,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   public move(dir: Movement): void {
     if (this.body.enable) {
       const { x, y } = this.body.velocity;
-    
+
       if (x && !y) {
         this.anims.play('char-run', true);
       }
@@ -151,27 +151,30 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.setVelocityY(-PHYSICS.MUSHROOM);
   }
 
-  public getHit(): void {
-    this.anims.play('char-hit', true);
-    this.setVelocityY(-PHYSICS.HIT_BACK.Y);
+  public getHit(): Promise<void> {
+    return new Promise((resolve) => {
+      this.anims.play('char-hit', true);
+      this.setVelocityY(-PHYSICS.HIT_BACK.Y);
 
-    this.invicible = true;
+      this.invicible = true;
 
-    this.scene.add.tween({
-      targets: this,
-      duration: PHYSICS.HIT_BACK.DURATION,
-      x: `${this.flipX ? '+' : '-'}=${PHYSICS.HIT_BACK.X}`,
-    });
+      this.scene.add.tween({
+        targets: this,
+        duration: PHYSICS.HIT_BACK.DURATION,
+        x: `${this.flipX ? '+' : '-'}=${PHYSICS.HIT_BACK.X}`,
+      });
 
-    this.scene.add.tween({
-      targets: this,
-      duration: PHYSICS.INVICIBILITY.DURATION,
-      alpha: 0,
-      yoyo: true, 
-      repeat: PHYSICS.INVICIBILITY.PERIOD,
-      onComplete: () => {
-        this.invicible = false;
-      },
+      this.scene.add.tween({
+        targets: this,
+        duration: PHYSICS.INVICIBILITY.DURATION,
+        alpha: 0,
+        yoyo: true,
+        repeat: PHYSICS.INVICIBILITY.PERIOD,
+        onComplete: () => {
+          this.invicible = false;
+          return resolve();
+        },
+      });
     });
   }
 }

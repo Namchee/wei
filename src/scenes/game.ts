@@ -275,6 +275,22 @@ export class GameScene extends Phaser.Scene {
   }
 
   private initializeCollisions(): void {
+    const disablePlayerCollision = () => {
+      this.physics.world.colliders.getActive().forEach((collider) => {
+        if (['saw', 'mushroom'].includes(collider.name)) {
+          collider.active = false;
+        }
+      });
+    };
+
+    const enablePlayerCollision = () => {
+      this.physics.world.colliders.getActive().forEach((collider) => {
+        if (['saw', 'mushroom'].includes(collider.name)) {
+          collider.active = true;
+        }
+      });
+    };
+
     // collisions for static layers
     this.map.layers.forEach(({ tilemapLayer }) => {
       this.physics.add.collider(this.player, tilemapLayer);
@@ -301,13 +317,16 @@ export class GameScene extends Phaser.Scene {
       });
     });
 
-    this.physics.add.collider(this.saws, this.player, () => {
+    const sawCollider = this.physics.add.collider(this.saws, this.player, () => {
       if (this.player.isInvicible) {
         return;
       }
 
-      this.player.getHit();
+      disablePlayerCollision();
+      this.player.getHit()
+        .then(() => enablePlayerCollision());
     });
+    sawCollider.setName('saw');
 
     this.mushrooms.forEach((mushroom: Mushroom) => {
       const collider = this.physics.add.collider(mushroom, this.player, () => {
@@ -320,9 +339,14 @@ export class GameScene extends Phaser.Scene {
           this.player.hitMushroom();
           this.physics.world.removeCollider(collider);
         } else {
-          this.player.getHit();
+          disablePlayerCollision();
+
+          this.player.getHit()
+            .then(() => enablePlayerCollision());
         }
       });
+
+      collider.setName('mushroom');
     });
   }
 

@@ -9,6 +9,8 @@ export enum Movement {
 export class Player extends Phaser.Physics.Arcade.Sprite {
   private lives: number;
   private jumpCount: number;
+
+  private invicible: boolean;
   
   public constructor(
     scene: Phaser.Scene,
@@ -17,15 +19,13 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     initialLives: number,
   ) {
     super(scene, x, y, '', 0);
-    this.setOrigin(0, 0);
 
     scene.add.existing(this);
     scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
 
     this.lives = initialLives;
     this.jumpCount = 0;
-
-    this.setPosition(x - this.displayWidth, y - this.displayHeight);
+    this.invicible = false;
 
     this.initializeAnims();
     this.anims.play('char-idle', true);
@@ -137,7 +137,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public getHit(): void {
-
+    this.anims.play('char-hit', true);
   }
 
   public decrementLives(): void {

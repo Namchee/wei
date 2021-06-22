@@ -31,7 +31,7 @@ export class Saw extends Phaser.Physics.Arcade.Sprite {
       frames: this.anims.generateFrameNumbers('saw-on', {}),
       frameRate: ANIMS.FPS * 2,
       repeat: -1,
-    })
+    });
   }
 
   public setPatrolRoute({ x, y }: Phaser.Math.Vector2): void {

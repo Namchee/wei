@@ -21,6 +21,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this);
     scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
+    this.setCollideWorldBounds(true);
 
     this.lives = initialLives;
     this.jumpCount = 0;

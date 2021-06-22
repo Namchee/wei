@@ -1,11 +1,12 @@
 import Phaser from 'phaser';
+
 import { Cherry } from '../objects/cherry';
 import { Flyer } from '../objects/flyer';
 import { Mushroom } from '../objects/mushroom';
-
 import { Movement, Player } from '../objects/player';
 import { Saw } from '../objects/saw';
 import { Spike } from '../objects/spike';
+import { Trophy } from '../objects/trophy';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { Difficulty, MAP, OBJECTS } from '../utils/const';
@@ -20,6 +21,8 @@ export class GameScene extends Phaser.Scene {
   private saws!: Saw[];
   private mushrooms!: Mushroom[];
   private flyers!: Flyer[];
+
+  private trophy!: Trophy;
 
   private backgroundManager!: BackgroundManager;
   private player!: Player;
@@ -39,6 +42,7 @@ export class GameScene extends Phaser.Scene {
     this.initializeCamera();
     this.initializeCollectibles();
     this.initializeMushrooms();
+    this.initializeEndpoint();
     
     this.initializeCollisions();
     this.registerInputs();
@@ -274,6 +278,24 @@ export class GameScene extends Phaser.Scene {
     mushroomRoutes.forEach((emptySprite) => emptySprite.destroy(true));
   }
 
+  private initializeEndpoint(): void {
+    const trophyTiles = this.map.createLayer('Checkpoint', 'checkpoint');
+    this.map.addTilesetImage('checkpoint', 'trophy-idle');
+
+    trophyTiles.forEachTile((tile: Phaser.Tilemaps.Tile): void => {
+      if (tile.tileset) {
+        const x = tile.getCenterX();
+        const y = tile.getCenterY();
+
+        this.trophy = new Trophy(this, x, y);
+
+        trophyTiles.removeTileAt(tile.x, tile.y);
+      }
+    });
+
+    this.map.removeLayer(trophyTiles);
+  }
+
   private initializeCollisions(): void {
     const disablePlayerCollision = () => {
       this.physics.world.colliders.getActive().forEach((collider) => {
@@ -347,6 +369,10 @@ export class GameScene extends Phaser.Scene {
       });
 
       collider.setName('mushroom');
+    });
+
+    this.physics.add.overlap(this.player, this.trophy, () => {
+      this.trophy.collect();
     });
   }
 

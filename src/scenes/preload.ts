@@ -128,5 +128,9 @@ export class PreloaderScene extends Phaser.Scene {
     this.load.spritesheet('mushroom-idle', 'enemies/mushroom/idle.png', BASE_FRAME);
     this.load.spritesheet('mushroom-run', 'enemies/mushroom/run.png', BASE_FRAME);
     this.load.spritesheet('mushroom-hit', 'enemies/mushroom/hit.png', BASE_FRAME);
+
+    // load trophy
+    this.load.spritesheet('trophy-idle', 'checkpoint/idle.png', { frameWidth: 64, frameHeight: 64 });
+    this.load.spritesheet('trophy-hit', 'checkpoint/hit.png', { frameWidth: 64, frameHeight: 64 });
   }
 }

@@ -5,14 +5,12 @@ import { MAP } from '../utils/const';
 
 export class TitleScene extends Phaser.Scene {
   private sfx!: boolean;
-  private ost!: boolean;
 
   private backgroundManager!: BackgroundManager;
 
   private playButton!: Phaser.GameObjects.Image;
   private helpButton!: Phaser.GameObjects.Image;
   private sfxButton!: Phaser.GameObjects.Image;
-  private ostButton!: Phaser.GameObjects.Image;
 
   public constructor() {
     super('TitleScene');
@@ -21,7 +19,6 @@ export class TitleScene extends Phaser.Scene {
   public create(): void {
     this.scene.bringToTop();
     this.sfx = true;
-    this.ost = true;
 
     const { width, height } = this.game.config;
 
@@ -59,7 +56,7 @@ export class TitleScene extends Phaser.Scene {
       .setInteractive({ cursor: 'pointer' });
 
     this.helpButton = this.add.image(
-      Number(width) * 0.885 - MAP.TILE_SIZE,
+      Number(width) * 0.9,
       Number(height) * 0.05,
       'help'
     )
@@ -67,22 +64,14 @@ export class TitleScene extends Phaser.Scene {
       .setInteractive({ cursor: 'pointer' });
 
     this.sfxButton = this.add.image(
-      Number(width) * 0.9,
+      Number(width) * 0.9125 + MAP.TILE_SIZE,
       Number(height) * 0.05,
       'sfx-on'
     )
       .setOrigin(0.5, 0.5)
       .setInteractive({ cursor: 'pointer' });
 
-    this.ostButton = this.add.image(
-      Number(width) * 0.9125 + MAP.TILE_SIZE,
-      Number(height) * 0.05,
-      'ost-on'
-    )
-      .setOrigin(0.5, 0.5)
-      .setInteractive({ cursor: 'pointer' });
-
-    const disclaimerText = this.add.text(
+    this.add.text(
       Number(width) * 0.675,
       Number(height) * 0.925,
       'Made in 2021 by Namchee',
@@ -127,15 +116,10 @@ export class TitleScene extends Phaser.Scene {
       this.sfx = !this.sfx;
       this.sfxButton.setTexture(`sfx-${this.sfx ? 'on' : 'off'}`);
     });
+  }
 
-    this.ostButton.on('pointerdown', () => {
-      this.ostButton.setTexture(`ost-${this.ost ? 'on' : 'off'}-pressed`);
-    });
+  private showHelp(): void {
 
-    this.ostButton.on('pointerup', () => {
-      this.ost = !this.ost;
-      this.ostButton.setTexture(`ost-${this.ost ? 'on' : 'off'}`);
-    });
   }
 
   public update(): void {

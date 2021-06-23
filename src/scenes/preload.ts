@@ -130,5 +130,21 @@ export class PreloaderScene extends Phaser.Scene {
     // load trophy
     this.load.spritesheet('trophy-idle', 'checkpoint/idle.png', { frameWidth: 64, frameHeight: 64 });
     this.load.spritesheet('trophy-hit', 'checkpoint/hit.png', { frameWidth: 64, frameHeight: 64 });
+
+    // load buttons
+    this.load.image('play', 'buttons/play.png');
+    this.load.image('play-pressed', 'buttons/play-pressed.png');
+    this.load.image('help', 'buttons/help.png');
+    this.load.image('help-pressed', 'buttons/help-pressed.png');
+    this.load.image('back', 'buttons/back.png');
+    this.load.image('back-pressed', 'buttons/back-pressed.png');
+    this.load.image('sfx-on', 'buttons/sfx-on.png');
+    this.load.image('sfx-on-pressed', 'buttons/sfx-on-pressed.png');
+    this.load.image('sfx-off', 'buttons/sfx-off.png');
+    this.load.image('sfx-off-pressed', 'buttons/sfx-off-pressed.png');
+    this.load.image('ost-on', 'buttons/sound-on.png');
+    this.load.image('ost-on-pressed', 'buttons/sound-on-pressed.png');
+    this.load.image('ost-off', 'buttons/sound-off.png');
+    this.load.image('ost-off-pressed', 'buttons/sound-off-pressed.png');
   }
 }

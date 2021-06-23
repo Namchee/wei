@@ -1,7 +1,7 @@
 import Phaser, { HEADLESS } from 'phaser';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { MAP } from '../utils/const';
+import { HELP_TEXT, MAP } from '../utils/const';
 
 export class TitleScene extends Phaser.Scene {
   private sfx!: boolean;
@@ -11,6 +11,8 @@ export class TitleScene extends Phaser.Scene {
   private playButton!: Phaser.GameObjects.Image;
   private helpButton!: Phaser.GameObjects.Image;
   private sfxButton!: Phaser.GameObjects.Image;
+
+  private helpOverlay!: Phaser.GameObjects.Group;
 
   public constructor() {
     super('TitleScene');
@@ -79,7 +81,9 @@ export class TitleScene extends Phaser.Scene {
         fontFamily: 'Monogram',
         fontSize: '20px',
       },
-    )
+    );
+
+    this.initializeAbout();
 
     this.tweens.add({
       targets: titleText,
@@ -91,6 +95,72 @@ export class TitleScene extends Phaser.Scene {
     this.listenInputs();
   }
 
+  private initializeAbout(): void {
+    const { width, height } = this.game.config;
+
+    this.helpOverlay = this.add.group();
+    const overlayBg = this.add.renderTexture(
+      0,
+      0,
+      Number(width),
+      Number(height),
+    );
+    overlayBg.fill(0x121212, 0.9);
+
+    const aboutText = this.add.text(
+      Number(width) / 2,
+      Number(height) * 0.1,
+      'About this game',
+      {
+        fontFamily: 'Matchup Pro',
+        fontSize: '36px',
+        stroke: 'black',
+        strokeThickness: 3.5,
+        shadow: {
+          offsetX: 0,
+          offsetY: 5,
+          color: 'black',
+          fill: true,
+        },
+      },
+    ).setOrigin(0.5, 0.5);
+
+    const helpText = this.add.text(
+      Number(width) / 2,
+      Number(height) / 2,
+      HELP_TEXT,
+      {
+        fontFamily: 'Monogram',
+        fontSize: '22px',
+        wordWrap: { width: 400, useAdvancedWrap: true },
+      }
+    ).setOrigin(0.5, 0.5);
+
+    const closeButton = this.add.image(
+      Number(width) * 0.95,
+      Number(height) * 0.1,
+      'close',
+    )
+      .setOrigin(0.5, 0.5)
+      .setInteractive({ cursor: 'pointer' });
+
+    closeButton.on('pointerdown', () => {
+      closeButton.setTexture('close-pressed');
+    });
+
+    closeButton.on('pointerup', () => {
+      closeButton.setTexture('close');
+      this.hideHelp();
+    });
+
+    this.helpOverlay.add(overlayBg);
+    this.helpOverlay.add(aboutText);
+    this.helpOverlay.add(helpText);
+    this.helpOverlay.add(closeButton);
+
+    this.helpOverlay.setAlpha(0);
+  }
+
   private listenInputs(): void {
     this.helpButton.on('pointerdown', () => {
       this.helpButton.setTexture('help-pressed');
@@ -98,6 +168,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.helpButton.on('pointerup', () => {
       this.helpButton.setTexture('help');
+      this.showHelp();
     });
 
     this.playButton.on('pointerdown', () => {
@@ -119,7 +190,29 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private showHelp(): void {
+    this.add.tween({
+      targets: this.helpOverlay.getChildren(),
+      alpha: 1,
+      duration: 250,
+      ease: Phaser.Math.Easing.Sine.Out,
+    });
 
+    this.playButton.removeInteractive();
+    this.helpButton.removeInteractive();
+    this.sfxButton.removeInteractive();
+  }
+
+  private hideHelp(): void {
+    this.add.tween({
+      targets: this.helpOverlay.getChildren(),
+      alpha: 0,
+      duration: 250,
+      ease: Phaser.Math.Easing.Sine.Out,
+    });
+
+    this.playButton.setInteractive({ cursor: 'pointer' });
+    this.helpButton.setInteractive({ cursor: 'pointer' });
+    this.sfxButton.setInteractive({ cursor: 'pointer' });
   }
 
   public update(): void {

@@ -70,6 +70,8 @@ export enum Difficulty {
   HARD = 1
 };
 
+export const HELP_TEXT = 'Wei needs your help! Wei is currently rushing over to meet his friends across the grasslands. You can move Wei using arrow keys with your keyboard. Wei can also jump with either SPACEBAR or UP key. Collect as much cherries as possible while avoiding all harmful obstacles like grinding saws, spikes, and mushrooms! Remember that Wei isn\'t immortal. Defeat the mushrooms by stepping on their mushy head. May fortune be with Wei!';
+
 export const COLORS = {
   GRAY: {
     600: 0x313131,

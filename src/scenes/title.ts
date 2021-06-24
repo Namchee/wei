@@ -1,4 +1,4 @@
-import Phaser, { HEADLESS } from 'phaser';
+import Phaser from 'phaser';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { HELP_TEXT, MAP, SOUND } from '../utils/const';
@@ -30,6 +30,7 @@ export class TitleScene extends Phaser.Scene {
     this.initializeUi();
     this.initializeAbout();
     this.initializeBgm();
+    this.initializeShortcuts();
 
     this.listenInputs();
   }
@@ -188,6 +189,29 @@ export class TitleScene extends Phaser.Scene {
     this.titleBgm.play();
   }
 
+  private initializeShortcuts(): void {
+    const keys = this.input.keyboard.addKeys('SPACE, ENTER');
+
+    Object.values(keys).forEach((key: Phaser.Input.Keyboard.Key) => {
+      key.on('down', () => {
+        if (this.helpOverlay.getChildren()[0].alpha) {
+          return;
+        }
+
+        this.playButton.setTexture('play-pressed');
+      });
+
+      key.on('up', () => {
+        if (this.helpOverlay.getChildren()[0].alpha) {
+          return;
+        }
+  
+        this.playButton.setTexture('play');
+        this.startGame();
+      });
+    });
+  }
+
   private listenInputs(): void {
     this.helpButton.on('pointerdown', () => {
       this.helpButton.setTexture('help-pressed');
@@ -229,7 +253,6 @@ export class TitleScene extends Phaser.Scene {
     this.add.tween({
       targets: this.helpOverlay.getChildren(),
       alpha: 1,
-      duration: 250,
       ease: Phaser.Math.Easing.Sine.Out,
     });
 
@@ -242,7 +265,6 @@ export class TitleScene extends Phaser.Scene {
     this.add.tween({
       targets: this.helpOverlay.getChildren(),
       alpha: 0,
-      duration: 250,
       ease: Phaser.Math.Easing.Sine.Out,
     });
 
@@ -257,6 +279,10 @@ export class TitleScene extends Phaser.Scene {
     this.bgm ?
       this.titleBgm.play() :
       this.titleBgm.pause();
+  }
+
+  private startGame(): void {
+    // TODO: isi
   }
 
   public update(): void {

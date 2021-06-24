@@ -5,11 +5,13 @@ import { HELP_TEXT, MAP } from '../utils/const';
 
 export class TitleScene extends Phaser.Scene {
   private sfx!: boolean;
+  private bgm!: boolean;
 
   private backgroundManager!: BackgroundManager;
 
   private playButton!: Phaser.GameObjects.Image;
   private helpButton!: Phaser.GameObjects.Image;
+  private bgmButton!: Phaser.GameObjects.Image;
   private sfxButton!: Phaser.GameObjects.Image;
 
   private helpOverlay!: Phaser.GameObjects.Group;
@@ -19,9 +21,17 @@ export class TitleScene extends Phaser.Scene {
   }
 
   public create(): void {
-    this.scene.bringToTop();
     this.sfx = true;
+    this.bgm = true;
 
+    this.initializeBackground();
+    this.initializeUi();
+    this.initializeAbout();
+
+    this.listenInputs();
+  }
+
+  private initializeBackground(): void {
     const { width, height } = this.game.config;
 
     this.backgroundManager = createBackgroundManager(
@@ -29,6 +39,10 @@ export class TitleScene extends Phaser.Scene {
       'Forest',
       { width: Number(width), height: Number(height) },
     );
+  }
+
+  private initializeUi(): void {
+    const { width, height } = this.game.config;
 
     const titleText = this.add.text(
       Number(width) / 2,
@@ -58,9 +72,17 @@ export class TitleScene extends Phaser.Scene {
       .setInteractive({ cursor: 'pointer' });
 
     this.helpButton = this.add.image(
-      Number(width) * 0.9,
+      Number(width) * 0.8875 - MAP.TILE_SIZE,
       Number(height) * 0.05,
       'help'
+    )
+      .setOrigin(0.5, 0.5)
+      .setInteractive({ cursor: 'pointer' });
+
+    this.bgmButton = this.add.image(
+      Number(width) * 0.9,
+      Number(height) * 0.05,
+      'bgm-on',
     )
       .setOrigin(0.5, 0.5)
       .setInteractive({ cursor: 'pointer' });
@@ -83,8 +105,6 @@ export class TitleScene extends Phaser.Scene {
       },
     );
 
-    this.initializeAbout();
-
     this.tweens.add({
       targets: titleText,
       y: Number(height) / 4,
@@ -92,7 +112,6 @@ export class TitleScene extends Phaser.Scene {
       ease: Phaser.Math.Easing.Cubic.Out,
     });
 
-    this.listenInputs();
   }
 
   private initializeAbout(): void {
@@ -138,7 +157,7 @@ export class TitleScene extends Phaser.Scene {
 
     const closeButton = this.add.image(
       Number(width) * 0.95,
-      Number(height) * 0.1,
+      Number(height) * 0.05,
       'close',
     )
       .setOrigin(0.5, 0.5)
@@ -186,6 +205,15 @@ export class TitleScene extends Phaser.Scene {
     this.sfxButton.on('pointerup', () => {
       this.sfx = !this.sfx;
       this.sfxButton.setTexture(`sfx-${this.sfx ? 'on' : 'off'}`);
+    });
+
+    this.bgmButton.on('pointerdown', () => {
+      this.bgmButton.setTexture(`bgm-${this.bgm ? 'on' : 'off'}-pressed`);
+    });
+
+    this.sfxButton.on('pointerup', () => {
+      this.bgm = !this.bgm;
+      this.bgmButton.setTexture(`bgm-${this.bgm ? 'on' : 'off'}`);
     });
   }
 

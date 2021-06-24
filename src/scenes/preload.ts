@@ -142,7 +142,14 @@ export class PreloaderScene extends Phaser.Scene {
     this.load.image('sfx-on-pressed', 'buttons/sfx-on-pressed.png');
     this.load.image('sfx-off', 'buttons/sfx-off.png');
     this.load.image('sfx-off-pressed', 'buttons/sfx-off-pressed.png');
+    this.load.image('bgm-on', 'buttons/bgm-on.png');
+    this.load.image('bgm-on-pressed', 'buttons/bgm-on-pressed.png');
+    this.load.image('bgm-off', 'buttons/bgm-off.png');
+    this.load.image('bgm-off-pressed', 'buttons/bgm-off-pressed.png');
     this.load.image('close', 'buttons/close.png');
     this.load.image('close-pressed', 'buttons/close-pressed.png');
+
+    // load bgm
+    this.load.audio('title', 'bgm/title.mp3');
   }
 }

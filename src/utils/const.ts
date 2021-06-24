@@ -64,6 +64,11 @@ export const PHYSICS = {
   },
 };
 
+export const SOUND = {
+  BGM: 0.05,
+  SFX: 0.3,
+};
+
 export enum Difficulty {
   EASY = 3,
   NORMAL = 2,
@@ -81,4 +86,4 @@ export const COLORS = {
   }
 }
 
-export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, OBJECTS, Difficulty };
+export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, OBJECTS, SOUND, Difficulty };

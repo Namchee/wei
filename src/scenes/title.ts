@@ -1,7 +1,7 @@
 import Phaser, { HEADLESS } from 'phaser';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { HELP_TEXT, MAP } from '../utils/const';
+import { HELP_TEXT, MAP, SOUND } from '../utils/const';
 
 export class TitleScene extends Phaser.Scene {
   private sfx!: boolean;
@@ -13,6 +13,8 @@ export class TitleScene extends Phaser.Scene {
   private helpButton!: Phaser.GameObjects.Image;
   private bgmButton!: Phaser.GameObjects.Image;
   private sfxButton!: Phaser.GameObjects.Image;
+
+  private titleBgm!: Phaser.Sound.BaseSound;
 
   private helpOverlay!: Phaser.GameObjects.Group;
 
@@ -27,6 +29,7 @@ export class TitleScene extends Phaser.Scene {
     this.initializeBackground();
     this.initializeUi();
     this.initializeAbout();
+    this.initializeBgm();
 
     this.listenInputs();
   }
@@ -180,6 +183,11 @@ export class TitleScene extends Phaser.Scene {
     this.helpOverlay.setAlpha(0);
   }
 
+  private initializeBgm(): void {
+    this.titleBgm = this.sound.add('title', { volume: SOUND.BGM });
+    this.titleBgm.play();
+  }
+
   private listenInputs(): void {
     this.helpButton.on('pointerdown', () => {
       this.helpButton.setTexture('help-pressed');
@@ -211,8 +219,8 @@ export class TitleScene extends Phaser.Scene {
       this.bgmButton.setTexture(`bgm-${this.bgm ? 'on' : 'off'}-pressed`);
     });
 
-    this.sfxButton.on('pointerup', () => {
-      this.bgm = !this.bgm;
+    this.bgmButton.on('pointerup', () => {
+      this.toggleBgm();
       this.bgmButton.setTexture(`bgm-${this.bgm ? 'on' : 'off'}`);
     });
   }
@@ -241,6 +249,14 @@ export class TitleScene extends Phaser.Scene {
     this.playButton.setInteractive({ cursor: 'pointer' });
     this.helpButton.setInteractive({ cursor: 'pointer' });
     this.sfxButton.setInteractive({ cursor: 'pointer' });
+  }
+
+  private toggleBgm(): void {
+    this.bgm = !this.bgm;
+
+    this.bgm ?
+      this.titleBgm.play() :
+      this.titleBgm.pause();
   }
 
   public update(): void {

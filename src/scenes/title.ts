@@ -167,6 +167,10 @@ export class TitleScene extends Phaser.Scene {
     });
 
     closeButton.on('pointerup', () => {
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('button', { volume: SOUND.SFX });
+      }
+      
       closeButton.setTexture('close');
       this.hideHelp();
     });
@@ -216,6 +220,10 @@ export class TitleScene extends Phaser.Scene {
     });
 
     this.helpButton.on('pointerup', () => {
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('button', { volume: SOUND.SFX });
+      }
+
       this.helpButton.setTexture('help');
       this.showHelp();
     });
@@ -225,6 +233,10 @@ export class TitleScene extends Phaser.Scene {
     });
 
     this.playButton.on('pointerup', () => {
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('button', { volume: SOUND.SFX });
+      }
+
       this.playButton.setTexture('play');
     });
 
@@ -235,6 +247,10 @@ export class TitleScene extends Phaser.Scene {
     this.sfxButton.on('pointerup', () => {
       GameSettings.getInstance().toggleSfx();
       this.sfxButton.setTexture(`sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}`);
+
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('button', { volume: SOUND.SFX });
+      }
     });
 
     this.bgmButton.on('pointerdown', () => {
@@ -244,6 +260,10 @@ export class TitleScene extends Phaser.Scene {
     this.bgmButton.on('pointerup', () => {
       this.toggleBgm();
       this.bgmButton.setTexture(`bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}`);
+
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('button', { volume: SOUND.SFX });
+      }
     });
   }
 

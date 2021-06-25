@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GameSettings } from '../state/settings';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { HELP_TEXT, MAP, SOUND } from '../utils/const';
+import { HELP_TEXT, MAP, SCENES, SOUND } from '../utils/const';
 
 export class TitleScene extends Phaser.Scene {
   private backgroundManager!: BackgroundManager;
@@ -170,7 +170,7 @@ export class TitleScene extends Phaser.Scene {
       if (GameSettings.getInstance().sfx) {
         this.sound.play('button', { volume: SOUND.SFX });
       }
-      
+
       closeButton.setTexture('close');
       this.hideHelp();
     });
@@ -238,6 +238,7 @@ export class TitleScene extends Phaser.Scene {
       }
 
       this.playButton.setTexture('play');
+      this.startGame();
     });
 
     this.sfxButton.on('pointerdown', () => {
@@ -300,7 +301,12 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private startGame(): void {
-    // TODO: isi
+    this.cameras.main.fadeOut(SCENES.TRANSITION, 0, 0, 0);
+
+    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+      this.titleBgm.pause();
+      this.scene.start('SplashScene');
+    });
   }
 
   public update(): void {

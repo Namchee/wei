@@ -4,6 +4,7 @@ import { PHYSICS } from './utils/const';
 
 import { PreloaderScene } from './scenes/preload';
 import { GameScene } from './scenes/game';
+import { SplashScene } from './scenes/splash';
 import { TitleScene } from './scenes/title';
 
 const config: Types.Core.GameConfig = {
@@ -24,7 +25,7 @@ const config: Types.Core.GameConfig = {
   },
   pixelArt: true,
   parent: '#game',
-  scene: [PreloaderScene, TitleScene, GameScene],
+  scene: [PreloaderScene, SplashScene, TitleScene, GameScene],
 };
 
 new Game(config);

@@ -60,13 +60,18 @@ export const PHYSICS = {
   },
   INVICIBILITY: {
     PERIOD: 10,
-    DURATION: 85,
+    DURATION: 75,
   },
+};
+
+export const SCENES = {
+  TRANSITION: 500,
+  SPLASH: 3000,
 };
 
 export const SOUND = {
   BGM: 0.05,
-  SFX: 0.3,
+  SFX: 0.25,
 };
 
 export enum Difficulty {

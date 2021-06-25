@@ -48,7 +48,7 @@ export class PreloaderScene extends Phaser.Scene {
 
     const assetText = this.add.text(
       Number(width) / 2,
-      Number(height) / 1.825,
+      Number(height) / 1.8,
       '',
       {
         fontFamily: 'Monogram, Consolas, "Courier New"',

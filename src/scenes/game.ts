@@ -7,7 +7,7 @@ import { Movement, Player } from '../objects/player';
 import { Saw } from '../objects/saw';
 import { Spike } from '../objects/spike';
 import { Trophy } from '../objects/trophy';
-import { GameSettings } from '../state/settings';
+import { GameSettings } from '../state/setting';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { Difficulty, MAP, OBJECTS, SOUND } from '../utils/const';
@@ -46,10 +46,12 @@ export class GameScene extends Phaser.Scene {
     this.initializeCollectibles();
     this.initializeMushrooms();
     this.initializeEndpoint();
-    
+
     this.initializeCollisions();
     this.initializeUi();
     this.initializeBgm();
+    this.initializeBottomBounds();
+
     this.registerInputs();
   }
 
@@ -101,7 +103,7 @@ export class GameScene extends Phaser.Scene {
     const x = sprite.x;
     const y = sprite.y;
 
-    this.player = new Player(this, x, y, Difficulty.NORMAL);
+    this.player = new Player(this, x, y, Difficulty.EASY);
 
     layer.forEach((sprite) => sprite.destroy());
   }
@@ -164,7 +166,7 @@ export class GameScene extends Phaser.Scene {
     this.map.addTilesetImage('spikes', 'spikes');
 
     this.spikes = this.physics.add.staticGroup();
-  
+
     spikeTiles.forEachTile((tile: Phaser.Tilemaps.Tile): void => {
       if (tile.tileset) {
         const x = tile.getCenterX();
@@ -172,7 +174,7 @@ export class GameScene extends Phaser.Scene {
 
         const spike = new Spike(this, x, y);
         this.spikes.add(spike, true);
-  
+
         spikeTiles.removeTileAt(tile.x, tile.y);
       }
     });
@@ -302,45 +304,22 @@ export class GameScene extends Phaser.Scene {
   }
 
   private initializeCollisions(): void {
-    const disablePlayerCollision = () => {
-      this.physics.world.colliders.getActive().forEach((collider) => {
-        if (['saw', 'mushroom'].includes(collider.name)) {
-          collider.active = false;
-        }
-      });
-    };
-
-    const enablePlayerCollision = () => {
-      this.physics.world.colliders.getActive().forEach((collider) => {
-        if (['saw', 'mushroom'].includes(collider.name)) {
-          collider.active = true;
-        }
-      });
-    };
-
     // collisions for static layers
     this.map.layers.forEach(({ tilemapLayer }) => {
-      this.physics.add.collider(this.player, tilemapLayer);
+      const mapCollider = this.physics.add.collider(this.player, tilemapLayer);
+      mapCollider.setName('map');
     });
 
-    this.physics.add.collider(this.spikes, this.player, () => {
-      if (this.player.isInvicible) {
-        return;
-      }
-
-      if (GameSettings.getInstance().sfx) {
-        this.sound.play('hit', { volume: SOUND.SFX });
-      }
-
-      disablePlayerCollision();
-
-      this.player.getHit()
-        .then(() => enablePlayerCollision());
-    });
+    const spikeCollider = this.physics.add.collider(
+      this.spikes,
+      this.player,
+      () => this.handlePlayerHit(),
+    );
+    spikeCollider.setName('spike');
 
     this.physics.add.overlap(this.cherries, this.player, (_, cherry) => {
       (cherry as Cherry).collect();
-      
+
       if (GameSettings.getInstance().sfx) {
         this.sound.play('fruit', { volume: SOUND.SFX });
       }
@@ -355,20 +334,7 @@ export class GameScene extends Phaser.Scene {
       });
     });
 
-    const sawCollider = this.physics.add.collider(this.saws, this.player, () => {
-      if (this.player.isInvicible) {
-        return;
-      }
-
-      disablePlayerCollision();
-
-      if (GameSettings.getInstance().sfx) {
-        this.sound.play('hit', { volume: SOUND.SFX });
-      }
-
-      this.player.getHit()
-        .then(() => enablePlayerCollision());
-    });
+    const sawCollider = this.physics.add.collider(this.saws, this.player, () => this.handlePlayerHit());
     sawCollider.setName('saw');
 
     this.mushrooms.forEach((mushroom: Mushroom) => {
@@ -387,14 +353,7 @@ export class GameScene extends Phaser.Scene {
 
           this.physics.world.removeCollider(collider);
         } else {
-          disablePlayerCollision();
-
-          if (GameSettings.getInstance().sfx) {
-            this.sound.play('hit', { volume: SOUND.SFX });
-          }
-
-          this.player.getHit()
-            .then(() => enablePlayerCollision());
+          this.handlePlayerHit();
         }
       });
 
@@ -407,7 +366,7 @@ export class GameScene extends Phaser.Scene {
       }
 
       this.physics.world.removeCollider(overlapper);
-    
+
       this.trophy.collect();
     });
   }
@@ -417,8 +376,10 @@ export class GameScene extends Phaser.Scene {
   }
 
   private initializeBgm(): void {
+    this.gameBgm = this.sound.add('game', { volume: SOUND.BGM });
+  
     if (GameSettings.getInstance().bgm) {
-      this.sound.play('game', { volume: SOUND.BGM });
+      this.gameBgm.play();
     }
   }
 
@@ -427,6 +388,10 @@ export class GameScene extends Phaser.Scene {
 
     Object.values(keys).forEach((key: Phaser.Input.Keyboard.Key) => {
       key.on('down', () => {
+        if (!this.player.isAlive) {
+          return;
+        }
+
         this.player.jump();
       });
     });
@@ -434,7 +399,85 @@ export class GameScene extends Phaser.Scene {
     this.keys = this.input.keyboard.createCursorKeys();
   }
 
+  private initializeBottomBounds(): void {
+    this.physics.world.on('worldbounds', (body: Phaser.Physics.Arcade.Body) => {
+      if (body.touching.left || body.touching.right) {
+        return;
+      }
+
+      const { gameObject } = body;
+
+      switch (gameObject.constructor) {
+        case Flyer: {
+          (gameObject as Flyer).remove();
+          break;
+        }
+        case Mushroom : {
+          (gameObject as Mushroom).remove();
+          break;
+        }
+        default: {
+          this.player.die();
+          this.showResultScreen();
+          break;
+        }
+      }
+    });
+  }
+
+  private handlePlayerHit(): void {
+    const disablePlayerCollision = () => {
+      this.physics.world.colliders.getActive().forEach((collider) => {
+        if (['saw', 'mushroom'].includes(collider.name)) {
+          collider.active = false;
+        }
+      });
+    };
+
+    const enablePlayerCollision = () => {
+      this.physics.world.colliders.getActive().forEach((collider) => {
+        if (['saw', 'mushroom'].includes(collider.name)) {
+          collider.active = true;
+        }
+      });
+    };
+  
+    if (this.player.isInvicible) {
+      return;
+    }
+
+    disablePlayerCollision();
+
+    if (GameSettings.getInstance().sfx) {
+      this.sound.play('hit', { volume: SOUND.SFX });
+    }
+
+    this.player.decrementLives();
+
+    if (this.player.isAlive) {
+      this.player.getHit()
+        .then(() => enablePlayerCollision());
+
+      return;
+    } else {
+      this.physics.world.colliders.getActive().forEach(
+        (collider: Phaser.Physics.Arcade.Collider) => {
+          if (['map', 'spike'].includes(collider.name)) {
+            this.physics.world.removeCollider(collider);
+          }
+        },
+      );
+
+      this.cameras.main.stopFollow();
+      this.player.ragdoll();
+    }
+  }
+
   private controllerLoop(): void {
+    if (!this.player.isAlive) {
+      return;
+    }
+
     if (
       (!this.keys.right.isDown && !this.keys.left.isDown) ||
       (this.keys.right.isDown && this.keys.left.isDown)
@@ -442,10 +485,23 @@ export class GameScene extends Phaser.Scene {
       this.player.idle();
       return;
     }
-  
+
     this.keys.right.isDown ?
       this.player.move(Movement.Right) :
       this.player.move(Movement.Left);
+  }
+
+  private showResultScreen(): void {
+    this.gameBgm.pause();
+    this.sound.play('lose', { volume: SOUND.SFX });
+
+    this.scene.launch(
+      'ResultScene',
+      {
+        lives: this.player.lives,
+        allCherries: this.cherries.getChildren().every((obj) => !obj.active),
+      },
+    )
   }
 
   private backgroundLoop(): void {

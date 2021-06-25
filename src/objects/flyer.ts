@@ -17,6 +17,7 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
     this.setImmovable(true);
     this.setCollideWorldBounds(true);
     (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
+    this.body.onWorldBounds = true;
 
     this.setBodySize(OBJECTS.FLYER.WIDTH, OBJECTS.FLYER.HEIGHT);
     this.setOffset(0, 0);
@@ -72,5 +73,10 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
         },
       })
     });
+  }
+
+  public remove(): void {
+    this.setActive(false);
+    this.disableBody(true);
   }
 }

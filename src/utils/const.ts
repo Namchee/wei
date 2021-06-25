@@ -62,6 +62,11 @@ export const PHYSICS = {
     PERIOD: 10,
     DURATION: 75,
   },
+  DIE: {
+    GRAVITY: 300,
+    ANGLE: 22.5,
+    DURATION: 1000,
+  }
 };
 
 export const SCENES = {
@@ -80,7 +85,18 @@ export enum Difficulty {
   HARD = 1
 };
 
-export const HELP_TEXT = 'There\'s an ancient tale of a hero named Wei. This story marks the beginning if his journey. Wei can move using arrow keys on the keyboard. Wei can also jump with either SPACEBAR or UP key. Collect as much cherries as possible while avoiding all harmful obstacles like grinding saws, spikes, and mushrooms. Defeat the mushrooms by jumping on their mushy head. May fortune be with Wei.';
+export const TEXT = {
+  HELP: 'There\'s an ancient tale of a hero named Wei. This story marks the beginning if his journey. Wei can move using arrow keys on the keyboard. Wei can also jump with either SPACEBAR or UP key. Collect as much cherries as possible while avoiding all harmful obstacles like grinding saws, spikes, and mushrooms. Defeat the mushrooms by jumping on their mushy head. May fortune be with Wei.',
+  LOSE: {
+    TITLE: 'You Lose!',
+    DESC: 'Wei has fainted! Better luck next time.',
+  },
+  WIN: {
+    TITLE: '',
+    FULL: '',
+    PARTIAL: '',
+  },
+}
 
 export const COLORS = {
   GRAY: {
@@ -91,4 +107,4 @@ export const COLORS = {
   }
 }
 
-export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, OBJECTS, SOUND, Difficulty };
+export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, OBJECTS, SOUND, TEXT, Difficulty };

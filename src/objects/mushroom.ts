@@ -19,6 +19,7 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
     this.setImmovable(true);
     this.setCollideWorldBounds(true);
     (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(false);
+    this.body.onWorldBounds = true;
 
     this.setSize(OBJECTS.MUSHROOMS.WIDTH, OBJECTS.MUSHROOMS.HEIGHT);
     this.setOffset(0, MAP.TILE_SIZE * 0.7);
@@ -112,5 +113,10 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
 
     (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
     (this.body as Phaser.Physics.Arcade.Body).setGravityY(OBJECTS.MUSHROOMS.GRAVITY);
+  }
+
+  public remove(): void {
+    this.setActive(false);
+    this.disableBody(true);
   }
 }

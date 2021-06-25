@@ -6,6 +6,7 @@ import { PreloaderScene } from './scenes/preload';
 import { GameScene } from './scenes/game';
 import { SplashScene } from './scenes/splash';
 import { TitleScene } from './scenes/title';
+import { ResultScene } from './scenes/result';
 
 const config: Types.Core.GameConfig = {
   type: AUTO,
@@ -25,7 +26,7 @@ const config: Types.Core.GameConfig = {
   },
   pixelArt: true,
   parent: '#game',
-  scene: [PreloaderScene, SplashScene, TitleScene, GameScene],
+  scene: [PreloaderScene, TitleScene, SplashScene,  GameScene, ResultScene],
 };
 
 new Game(config);

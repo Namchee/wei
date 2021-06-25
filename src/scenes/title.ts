@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
-import { GameSettings } from '../state/settings';
+import { GameSettings } from '../state/setting';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { HELP_TEXT, MAP, SCENES, SOUND } from '../utils/const';
+import { MAP, SCENES, SOUND, TEXT } from '../utils/const';
 
 export class TitleScene extends Phaser.Scene {
   private backgroundManager!: BackgroundManager;
@@ -123,7 +123,7 @@ export class TitleScene extends Phaser.Scene {
       Number(width),
       Number(height),
     );
-    overlayBg.fill(0x121212, 0.9);
+    overlayBg.fill(0x121212, 0.85);
 
     const aboutText = this.add.text(
       Number(width) / 2,
@@ -146,7 +146,7 @@ export class TitleScene extends Phaser.Scene {
     const helpText = this.add.text(
       Number(width) / 2,
       Number(height) / 2,
-      HELP_TEXT,
+      TEXT.HELP,
       {
         fontFamily: 'Monogram',
         fontSize: '22px',
@@ -277,6 +277,7 @@ export class TitleScene extends Phaser.Scene {
       targets: this.helpOverlay.getChildren(),
       alpha: 1,
       ease: Phaser.Math.Easing.Sine.Out,
+      duration: SCENES.TRANSITION,
     });
 
     this.playButton.removeInteractive();
@@ -289,6 +290,7 @@ export class TitleScene extends Phaser.Scene {
       targets: this.helpOverlay.getChildren(),
       alpha: 0,
       ease: Phaser.Math.Easing.Sine.Out,
+      duration: SCENES.TRANSITION,
     });
 
     this.playButton.setInteractive({ cursor: 'pointer' });

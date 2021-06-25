@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { GameSettings } from '../state/settings';
+import { GameSettings } from '../state/setting';
 import { ANIMS, PHYSICS, SOUND } from '../utils/const';
 
 export enum Movement {
@@ -9,7 +9,7 @@ export enum Movement {
 };
 
 export class Player extends Phaser.Physics.Arcade.Sprite {
-  private lives: number;
+  private _lives: number;
   private jumpCount: number;
   private invicible: boolean;
 
@@ -24,8 +24,9 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     scene.add.existing(this);
     scene.physics.world.enable(this, Phaser.Physics.Arcade.DYNAMIC_BODY);
     this.setCollideWorldBounds(true);
+    this.body.onWorldBounds = true;
 
-    this.lives = initialLives;
+    this._lives = initialLives;
     this.jumpCount = 0;
     this.invicible = false;
 
@@ -101,15 +102,22 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public get isAlive(): boolean {
-    return this.lives > 0;
+    return this._lives > 0;
   }
 
-  public get getLives(): number {
-    return this.lives;
+  public get lives(): number {
+    return this._lives;
   }
 
   public decrementLives(): void {
-    this.lives--;
+    this._lives--;
+  }
+
+  public die(): void {
+    this._lives = 0;
+
+    this.setActive(false);
+    this.disableBody(true);
   }
 
   public move(dir: Movement): void {
@@ -183,5 +191,17 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
         },
       });
     });
+  }
+
+  public ragdoll(): void {
+    this.anims.play('char-hit', true);
+    this.setVelocityY(-PHYSICS.DIE.GRAVITY);
+
+    this.scene.tweens.add({
+      targets: this,
+      angle: this.flipX ? -PHYSICS.DIE.ANGLE : PHYSICS.DIE.ANGLE,
+      duration: PHYSICS.DIE.DURATION,
+    });
+
   }
 }

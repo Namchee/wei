@@ -207,6 +207,10 @@ export class TitleScene extends Phaser.Scene {
         if (this.helpOverlay.getChildren()[0].alpha) {
           return;
         }
+
+        if (GameSettings.getInstance().sfx) {
+          this.sound.play('button', { volume: SOUND.SFX });
+        }
   
         this.playButton.setTexture('play');
         this.startGame();

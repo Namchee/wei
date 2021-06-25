@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import Phaser, { Game } from 'phaser';
 
 import { Cherry } from '../objects/cherry';
 import { Flyer } from '../objects/flyer';
@@ -7,9 +7,10 @@ import { Movement, Player } from '../objects/player';
 import { Saw } from '../objects/saw';
 import { Spike } from '../objects/spike';
 import { Trophy } from '../objects/trophy';
+import { GameSettings } from '../state/settings';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { Difficulty, MAP, OBJECTS } from '../utils/const';
+import { Difficulty, MAP, OBJECTS, SOUND } from '../utils/const';
 
 export class GameScene extends Phaser.Scene {
   private keys!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -22,10 +23,12 @@ export class GameScene extends Phaser.Scene {
   private mushrooms!: Mushroom[];
   private flyers!: Flyer[];
 
+  private player!: Player;
   private trophy!: Trophy;
 
   private backgroundManager!: BackgroundManager;
-  private player!: Player;
+
+  private gameBgm!: Phaser.Sound.BaseSound;
 
   public constructor() {
     super('GameScene');
@@ -45,6 +48,8 @@ export class GameScene extends Phaser.Scene {
     this.initializeEndpoint();
     
     this.initializeCollisions();
+    this.initializeUi();
+    this.initializeBgm();
     this.registerInputs();
   }
 
@@ -323,11 +328,22 @@ export class GameScene extends Phaser.Scene {
         return;
       }
 
-      this.player.getHit();
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('hit', { volume: SOUND.SFX });
+      }
+
+      disablePlayerCollision();
+
+      this.player.getHit()
+        .then(() => enablePlayerCollision());
     });
 
     this.physics.add.overlap(this.cherries, this.player, (_, cherry) => {
       (cherry as Cherry).collect();
+      
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('fruit', { volume: SOUND.SFX });
+      }
     });
 
     this.flyers.forEach((flyer: Flyer) => {
@@ -345,6 +361,11 @@ export class GameScene extends Phaser.Scene {
       }
 
       disablePlayerCollision();
+
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('hit', { volume: SOUND.SFX });
+      }
+
       this.player.getHit()
         .then(() => enablePlayerCollision());
     });
@@ -359,9 +380,18 @@ export class GameScene extends Phaser.Scene {
         if (mushroom.body.touching.up) {
           mushroom.getHit();
           this.player.hitMushroom();
+
+          if (GameSettings.getInstance().sfx) {
+            this.sound.play('enemy', { volume: SOUND.SFX });
+          }
+
           this.physics.world.removeCollider(collider);
         } else {
           disablePlayerCollision();
+
+          if (GameSettings.getInstance().sfx) {
+            this.sound.play('hit', { volume: SOUND.SFX });
+          }
 
           this.player.getHit()
             .then(() => enablePlayerCollision());
@@ -371,26 +401,35 @@ export class GameScene extends Phaser.Scene {
       collider.setName('mushroom');
     });
 
-    this.physics.add.overlap(this.player, this.trophy, () => {
+    const overlapper = this.physics.add.overlap(this.player, this.trophy, () => {
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('trophy', { volume: SOUND.SFX });
+      }
+
+      this.physics.world.removeCollider(overlapper);
+    
       this.trophy.collect();
     });
   }
 
+  private initializeUi(): void {
+
+  }
+
+  private initializeBgm(): void {
+    if (GameSettings.getInstance().bgm) {
+      this.sound.play('game', { volume: SOUND.BGM });
+    }
+  }
+
   private registerInputs(): void {
-    const spacebar = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE,
-    );
+    const keys = this.input.keyboard.addKeys('SPACE, UP');
 
-    const up = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.UP,
-    )
-
-    spacebar.on('down', () => {
-      this.player.jump();
+    Object.values(keys).forEach((key: Phaser.Input.Keyboard.Key) => {
+      key.on('down', () => {
+        this.player.jump();
+      });
     });
-    up.on('down', () => {
-      this.player.jump();
-    })
 
     this.keys = this.input.keyboard.createCursorKeys();
   }

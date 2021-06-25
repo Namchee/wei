@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
-import { ANIMS, PHYSICS } from '../utils/const';
+
+import { GameSettings } from '../state/settings';
+import { ANIMS, PHYSICS, SOUND } from '../utils/const';
 
 export enum Movement {
   Left = -1,
@@ -129,6 +131,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   public jump(): void {
     if (this.jumpCount >= 2) {
       return;
+    }
+    
+    if (GameSettings.getInstance().sfx) {
+      this.scene.sound.play('jump', { volume: SOUND.SFX });
     }
 
     this.jumpCount++;

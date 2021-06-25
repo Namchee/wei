@@ -71,7 +71,7 @@ export const SCENES = {
 
 export const SOUND = {
   BGM: 0.05,
-  SFX: 0.25,
+  SFX: 0.2,
 };
 
 export enum Difficulty {

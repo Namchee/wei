@@ -151,11 +151,15 @@ export class PreloaderScene extends Phaser.Scene {
 
     // load bgm
     this.load.audio('title', 'bgm/title.mp3');
+    this.load.audio('game', 'bgm/game.mp3');
 
     // load sfx
     this.load.audio('button', 'sfx/button.wav');
     this.load.audio('hit', 'sfx/hit.wav');
     this.load.audio('jump', 'sfx/jump.wav');
     this.load.audio('fruit', 'sfx/fruit.wav');
+    this.load.audio('enemy', 'sfx/enemy.wav');
+    this.load.audio('trophy', 'sfx/trophy.wav');
+    this.load.audio('win', 'sfx/win.wav');
   }
 }

@@ -1,12 +1,10 @@
 import Phaser from 'phaser';
+import { GameSettings } from '../state/settings';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { HELP_TEXT, MAP, SOUND } from '../utils/const';
 
 export class TitleScene extends Phaser.Scene {
-  private sfx!: boolean;
-  private bgm!: boolean;
-
   private backgroundManager!: BackgroundManager;
 
   private playButton!: Phaser.GameObjects.Image;
@@ -23,9 +21,6 @@ export class TitleScene extends Phaser.Scene {
   }
 
   public create(): void {
-    this.sfx = true;
-    this.bgm = true;
-
     this.initializeBackground();
     this.initializeUi();
     this.initializeAbout();
@@ -186,7 +181,10 @@ export class TitleScene extends Phaser.Scene {
 
   private initializeBgm(): void {
     this.titleBgm = this.sound.add('title', { volume: SOUND.BGM });
-    this.titleBgm.play();
+
+    if (GameSettings.getInstance().bgm) {
+      this.titleBgm.play();
+    }
   }
 
   private initializeShortcuts(): void {
@@ -231,21 +229,21 @@ export class TitleScene extends Phaser.Scene {
     });
 
     this.sfxButton.on('pointerdown', () => {
-      this.sfxButton.setTexture(`sfx-${this.sfx ? 'on' : 'off'}-pressed`);
+      this.sfxButton.setTexture(`sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}-pressed`);
     });
 
     this.sfxButton.on('pointerup', () => {
-      this.sfx = !this.sfx;
-      this.sfxButton.setTexture(`sfx-${this.sfx ? 'on' : 'off'}`);
+      GameSettings.getInstance().toggleSfx();
+      this.sfxButton.setTexture(`sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}`);
     });
 
     this.bgmButton.on('pointerdown', () => {
-      this.bgmButton.setTexture(`bgm-${this.bgm ? 'on' : 'off'}-pressed`);
+      this.bgmButton.setTexture(`bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}-pressed`);
     });
 
     this.bgmButton.on('pointerup', () => {
       this.toggleBgm();
-      this.bgmButton.setTexture(`bgm-${this.bgm ? 'on' : 'off'}`);
+      this.bgmButton.setTexture(`bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}`);
     });
   }
 
@@ -274,9 +272,9 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private toggleBgm(): void {
-    this.bgm = !this.bgm;
+    GameSettings.getInstance().toggleBgm();
 
-    this.bgm ?
+    GameSettings.getInstance().bgm ?
       this.titleBgm.play() :
       this.titleBgm.pause();
   }

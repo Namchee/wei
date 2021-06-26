@@ -187,7 +187,7 @@ export class TitleScene extends Phaser.Scene {
     this.titleBgm = this.sound.add('title', { volume: SOUND.BGM });
 
     if (GameSettings.getInstance().bgm) {
-      this.titleBgm.play();
+      this.titleBgm.play({ loop: true });
     }
   }
 
@@ -302,7 +302,7 @@ export class TitleScene extends Phaser.Scene {
     GameSettings.getInstance().toggleBgm();
 
     GameSettings.getInstance().bgm ?
-      this.titleBgm.play() :
+      this.titleBgm.play({ loop: true }) :
       this.titleBgm.pause();
   }
 

@@ -97,7 +97,7 @@ export const TEXT = {
   WIN: {
     TITLE: 'You Win!',
     FULL: 'Congratulations! You have helped Wei to collect all cherries in this map and get closer to his dreams! See you on the next possible worlds~',
-    PARTIAL: 'Congratulations! You have helped Wei to some cherries in this map and get closer to his dreams! However, it seems that you missed some cherries. Maybe you want to try again?',
+    PARTIAL: 'Congratulations! You have helped Wei to some cherries in this map and get closer to his dreams! However, it seems that you missed some cherries. Maybe you want to try again? Either way, good job!',
   },
 }
 

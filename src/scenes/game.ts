@@ -41,7 +41,8 @@ export class GameScene extends Phaser.Scene {
   }
 
   public create() {
-    this.initializeGameState();
+    this.gameState = new GameState();
+
     this.initializeBackground();
     this.initializeTilemap();
     this.initializeSaw();
@@ -333,6 +334,9 @@ export class GameScene extends Phaser.Scene {
     this.cherries.getChildren().forEach((cherry) => {
       const collider = this.physics.add.overlap(cherry, this.player, () => {
         (cherry as Cherry).collect();
+        this.gameState.collectCherry();
+        this.score.setText(`Cherries: ${this.gameState.cherries} / ${this.cherries.getChildren().length}`);
+
         this.physics.world.removeCollider(collider);
 
         if (GameSettings.getInstance().sfx) {
@@ -422,30 +426,11 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0);
   }
 
-  private initializeGameState(): void {
-    const originalState = new GameState();
-
-    const proxied = new Proxy(originalState, {
-      set: (target: GameState, key: string, value: any) => {
-        // @ts-ignore
-        target[key] = value;
-
-        if (key === 'score') {
-          this.setScore(value);
-        }
-
-        return true;
-      },
-    });
-
-    this.gameState = proxied;
-  }
-
   private initializeBgm(): void {
     this.gameBgm = this.sound.add('game', { volume: SOUND.BGM });
   
     if (GameSettings.getInstance().bgm) {
-      this.gameBgm.play();
+      this.gameBgm.play('', { loop: true });
     }
   }
 
@@ -519,6 +504,7 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.player.decrementLives();
+    this.lives.setText(`Lives: ${this.player.lives} / ${Difficulty.EASY}`);
 
     if (this.player.isAlive) {
       this.player.getHit()
@@ -552,7 +538,7 @@ export class GameScene extends Phaser.Scene {
       'ResultScene',
       {
         isAlive: true,
-        allCherries: !this.cherries.getChildren().some(obj => obj.active),
+        allCherry: this.gameState.cherries === this.cherries.getChildren().length,
       },
     );
   }

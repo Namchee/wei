@@ -46,6 +46,8 @@ export class ResultScene extends Phaser.Scene {
     )
       .setOrigin(0.5, 0.5);
 
+    console.log(this.allCherry);
+
     const description = !this.isAlive ?
       TEXT.LOSE.DESC :
       this.allCherry ?

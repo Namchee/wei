@@ -7,6 +7,7 @@ import { Movement, Player } from '../objects/player';
 import { Saw } from '../objects/saw';
 import { Spike } from '../objects/spike';
 import { Trophy } from '../objects/trophy';
+import { GameState } from '../state/game';
 import { GameSettings } from '../state/setting';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
@@ -30,15 +31,17 @@ export class GameScene extends Phaser.Scene {
 
   private gameBgm!: Phaser.Sound.BaseSound;
 
-  private isRunning!: boolean;
+  private gameState!: GameState;
+
+  private lives!: Phaser.GameObjects.Text;
+  private score!: Phaser.GameObjects.Text;
 
   public constructor() {
     super('GameScene');
   }
 
   public create() {
-    this.isRunning = true;
-  
+    this.initializeGameState();
     this.initializeBackground();
     this.initializeTilemap();
     this.initializeSaw();
@@ -60,7 +63,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   public update() {
-    if (this.isRunning) {
+    if (this.gameState.isRunning) {
       this.controllerLoop();
       this.player.update();
     }
@@ -385,14 +388,57 @@ export class GameScene extends Phaser.Scene {
       }
 
       this.physics.world.removeCollider(overlapper);
-      this.isRunning = false;
+      this.gameState.stopGame();
 
       this.win();
     });
   }
 
   private initializeUi(): void {
+    const { width, height } = this.game.config;
 
+    this.lives = this.add.text(
+      Number(width) * 0.25,
+      Number(height) * 0.05,
+      `Lives: ${this.player.lives} / ${Difficulty.EASY}`,
+      {
+        fontFamily: 'Monogram',
+        fontSize: '24px',
+      },
+    )
+      .setOrigin(0.5, 0.5)
+      .setScrollFactor(0);
+
+    this.score = this.add.text(
+      Number(width) * 0.75,
+      Number(height) * 0.05,
+      `Cherries: ${this.gameState.cherries} / ${this.cherries.getChildren().length}`,
+      {
+        fontFamily: 'Monogram',
+        fontSize: '24px',
+      },
+    )
+      .setOrigin(0.5, 0.5)
+      .setScrollFactor(0);
+  }
+
+  private initializeGameState(): void {
+    const originalState = new GameState();
+
+    const proxied = new Proxy(originalState, {
+      set: (target: GameState, key: string, value: any) => {
+        // @ts-ignore
+        target[key] = value;
+
+        if (key === 'score') {
+          this.setScore(value);
+        }
+
+        return true;
+      },
+    });
+
+    this.gameState = proxied;
   }
 
   private initializeBgm(): void {
@@ -530,7 +576,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private showResultScreen(): void {
-    this.isRunning = false;
+    this.gameState.stopGame();
 
     this.gameBgm.pause();
     this.sound.play('lose', { volume: SOUND.SFX });

@@ -1,10 +1,8 @@
 import Phaser from 'phaser';
 
-import { ANIMS } from '../utils/const';
+import { ANIMS, OBJECTS } from '../utils/const';
 
 export class Trophy extends Phaser.Physics.Arcade.Sprite {
-  private hasCollected: boolean;
-
   public constructor(
     scene: Phaser.Scene,
     x: number,
@@ -14,13 +12,11 @@ export class Trophy extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this);
     scene.physics.world.enable(this, Phaser.Physics.Arcade.STATIC_BODY);
-    
+
     this.setImmovable(true);
 
     this.initializeAnimations();
     this.anims.play('trophy-idle', true);
-    
-    this.hasCollected = false;
   }
 
   private initializeAnimations(): void {
@@ -39,9 +35,12 @@ export class Trophy extends Phaser.Physics.Arcade.Sprite {
   }
 
   public collect(): void {
-    if (!this.hasCollected) {
-      this.anims.play('trophy-hit', true);
-      this.hasCollected = true;
-    }
+    this.anims.play('trophy-hit', true);
+
+    this.scene.add.tween({
+      targets: this,
+      alpha: 0,
+      duration: OBJECTS.TROPHY.DURATION,
+    });
   }
 }

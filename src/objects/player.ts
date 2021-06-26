@@ -202,6 +202,5 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       angle: this.flipX ? -PHYSICS.DIE.ANGLE : PHYSICS.DIE.ANGLE,
       duration: PHYSICS.DIE.DURATION,
     });
-
   }
 }

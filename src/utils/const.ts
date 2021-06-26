@@ -46,6 +46,9 @@ export const OBJECTS = {
     ANGLE_DURATION: 50,
     GRAVITY: 1000,
   },
+  TROPHY: {
+    DURATION: 2000,
+  },
 };
 
 export const PHYSICS = {
@@ -92,9 +95,9 @@ export const TEXT = {
     DESC: 'Wei has fainted! Better luck next time.',
   },
   WIN: {
-    TITLE: '',
-    FULL: '',
-    PARTIAL: '',
+    TITLE: 'You Win!',
+    FULL: 'Congratulations! You have helped Wei to collect all cherries in this map and get closer to his dreams! See you on the next possible worlds~',
+    PARTIAL: 'Congratulations! You have helped Wei to some cherries in this map and get closer to his dreams! However, it seems that you missed some cherries. Maybe you want to try again?',
   },
 }
 

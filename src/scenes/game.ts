@@ -30,11 +30,15 @@ export class GameScene extends Phaser.Scene {
 
   private gameBgm!: Phaser.Sound.BaseSound;
 
+  private isRunning!: boolean;
+
   public constructor() {
     super('GameScene');
   }
 
   public create() {
+    this.isRunning = true;
+  
     this.initializeBackground();
     this.initializeTilemap();
     this.initializeSaw();
@@ -56,10 +60,12 @@ export class GameScene extends Phaser.Scene {
   }
 
   public update() {
-    this.controllerLoop();
+    if (this.isRunning) {
+      this.controllerLoop();
+      this.player.update();
+    }
+    
     this.backgroundLoop();
-
-    this.player.update();
 
     const mushroomBounds = new Phaser.Geom.Rectangle(
       this.cameras.main.worldView.x - OBJECTS.MUSHROOMS.RADIUS,
@@ -129,6 +135,10 @@ export class GameScene extends Phaser.Scene {
       -this.map.heightInPixels / 2,
       this.map.widthInPixels,
       this.map.heightInPixels * 1.5 + MAP.HELLHOLE,
+      true,
+      true,
+      true,
+      true,
     );
   }
 
@@ -375,8 +385,9 @@ export class GameScene extends Phaser.Scene {
       }
 
       this.physics.world.removeCollider(overlapper);
+      this.isRunning = false;
 
-      this.trophy.collect();
+      this.win();
     });
   }
 
@@ -410,7 +421,7 @@ export class GameScene extends Phaser.Scene {
 
   private initializeBottomBounds(): void {
     this.physics.world.on('worldbounds', (body: Phaser.Physics.Arcade.Body) => {
-      if (body.touching.left || body.touching.right) {
+      if (!body.blocked.down) {
         return;
       }
 
@@ -482,6 +493,24 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
+  private win(): void {
+    if (GameSettings.getInstance().sfx) {
+      this.sound.play('win', { volume: SOUND.SFX });
+    }
+
+    this.gameBgm.pause();
+    this.player.idle();
+    this.trophy.collect();
+
+    this.scene.launch(
+      'ResultScene',
+      {
+        isAlive: true,
+        allCherries: !this.cherries.getChildren().some(obj => obj.active),
+      },
+    );
+  }
+
   private controllerLoop(): void {
     if (!this.player.isAlive) {
       return;
@@ -501,16 +530,17 @@ export class GameScene extends Phaser.Scene {
   }
 
   private showResultScreen(): void {
+    this.isRunning = false;
+
     this.gameBgm.pause();
     this.sound.play('lose', { volume: SOUND.SFX });
 
     this.scene.launch(
       'ResultScene',
       {
-        lives: this.player.lives,
-        allCherries: this.cherries.getChildren().every((obj) => !obj.active),
+        isAlive: false,
       },
-    )
+    );
   }
 
   private backgroundLoop(): void {
@@ -524,9 +554,5 @@ export class GameScene extends Phaser.Scene {
     velocity > 0 ?
       this.backgroundManager.scrollRight() :
       this.backgroundManager.scrollLeft();
-  }
-
-  public restartGame(): void {
-    this.scene.restart();
   }
 }

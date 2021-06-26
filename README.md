@@ -1,24 +1,33 @@
-# Template Tugas PPK
+# Wei
 
-Repositori ini adalah repositori _template_ untuk mempercepat pengembangan permainan komputer menggunakan [Phaser](https://phaser.io/). Dibuat oleh 2017730017. 
+Wei merupakan sebuah _game platformer_ sederhana tiruan [Mario](https://en.wikipedia.org/wiki/Super_Mario) yang dibuat menggunakan _engine_ Phaser 3.
+
+Dibuat oleh 2017730017 sebagai salah satu tugas mata kuliah Pemrograman Permainan Komputer.
 
 ## Memulai
 
 > Pastikan Anda memiliki `pnpm` di komputer Anda. Apabila tidak, `npm` bisa jadi alternatif.
 
-1. Clone repositori ini.
+1. _Clone_ repositori ini.
 2. Jalankan perintah `pnpm install` atau `npm install` melalui _terminal_ Anda.
-3. Kerjakan
-3. Jalankan perintah `pnpm run build` atau `npm run build` untuk membangun kode perangkat lunak.
-
-> Jangan dicopas, kerjain tugasnya sendiri!
+3. Jalankan perintah `pnpm run dev` atau `npm run dev` melalui _terminal_ Anda untuk melakukan pengembangan.
+4. Jalankan perintah `pnpm run build` atau `npm run build` untuk membangun kode perangkat lunak.
 
 ### Dosen
 
-Karena projectnya sudah di_build_, cukup jalankan sebuah web server dengan `dist` sebagai root directory. Salah satu cara termudah untuk melakukannya adalah menggunakan `serve` melalui `npx serve dist`
+Karena projectnya sudah di_build_, cukup jalankan sebuah web server dengan `dist` sebagai root directory. Salah satu cara termudah untuk melakukannya adalah menggunakan `serve` melalui `npx serve dist`.
 
 ## Fitur
 
 1. _Hot-reloading_ menggunakan [`vite`](https://vitejs.dev/)
 2. _Package-manager_ yang _disk-efficient_ menggunakan [`pnpm`](https://pnpm.js.org/)
 3. _Static-type checking_ menggunakan [TypeScript](https://www.typescriptlang.org/)
+
+## Assets
+
+1. [Pixel Adventure 1](https://pixelfrog-assets.itch.io/pixel-adventure-1)
+2. [Pixel Adventure 2](https://pixelfrog-assets.itch.io/pixel-adventure-2)
+3. [Forest Walk by Alexander Nakaranda](https://www.serpentsoundstudios.com/)
+4. [8-bit / 16-bit Sound Effects (x25) Pack by JdWasabi](https://www.jdwasabi.com/store/8-bit-16-bit-sound-effects-x25-pack)
+5. [Free Creative Commons BGM collection by LunaLucid](https://lunalucid.itch.io/free-creative-commons-bgm-collection)
+6. [Forest Tileset](https://mamanezakon.itch.io/forest-tileset)

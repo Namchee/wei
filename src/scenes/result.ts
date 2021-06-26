@@ -1,9 +1,12 @@
 import Phaser from 'phaser';
-import { SCENES, TEXT } from '../utils/const';
+import { MAP, SCENES, TEXT } from '../utils/const';
 
 export class ResultScene extends Phaser.Scene {
   private playerLives!: number;
   private allCherry!: boolean;
+
+  private homeButton!: Phaser.GameObjects.Image;
+  private retryButton!: Phaser.GameObjects.Image;
 
   public constructor() {
     super('ResultScene');
@@ -53,14 +56,36 @@ export class ResultScene extends Phaser.Scene {
       description,
       {
         fontFamily: 'Monogram',
-        fontSize: '22px',
+        fontSize: '24px',
         wordWrap: { width: 400, useAdvancedWrap: true },
       }
     ).setOrigin(0.5, 0.5);
 
+    this.homeButton = this.add.image(
+      Number(width) / 2 - MAP.TILE_SIZE * 1.5,
+      Number(height) / 1.55,
+      'home'
+    )
+      .setOrigin(0.5, 0.5)
+      .setScale(1.5, 1.5)
+      .setInteractive({ cursor: 'pointer' });
+
+    this.retryButton = this.add.image(
+      Number(width) / 2 + MAP.TILE_SIZE * 1.5,
+      Number(height) / 1.55,
+      'retry'
+    )
+      .setOrigin(0.5, 0.5)
+      .setScale(1.5, 1.5)
+      .setInteractive({ cursor: 'pointer' });
+
+    this.listenInputs();
+
     group.add(titleText);
     group.add(descText);
     group.add(background);
+    group.add(this.homeButton);
+    group.add(this.retryButton);
 
     group.setAlpha(0);
 
@@ -68,6 +93,28 @@ export class ResultScene extends Phaser.Scene {
       targets: group.getChildren(),
       alpha: 1,
       duration: SCENES.TRANSITION,
+    });
+  }
+
+  private listenInputs(): void {
+    this.homeButton.on('pointerdown', () => {
+      this.homeButton.setTexture('home-pressed');
+    });
+
+    this.homeButton.on('pointerup', () => {
+      this.homeButton.setTexture('home');
+      this.scene.start('TitleScene');
+      this.scene.stop('GameScene');
+    });
+
+    this.retryButton.on('pointerdown', () => {
+      this.retryButton.setTexture('retry-pressed');
+    });
+
+    this.retryButton.on('pointerup', () => {
+      this.retryButton.setTexture('retry');
+      this.scene.start('SplashScene');
+      this.scene.stop('GameScene');
     });
   }
 }

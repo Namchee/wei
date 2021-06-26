@@ -1,12 +1,13 @@
 import Phaser from 'phaser';
 import { Difficulty, MAP, SCENES } from '../utils/const';
+import { GameScene } from './game';
 
 export class SplashScene extends Phaser.Scene {
   public constructor() {
     super('SplashScene');
   }
 
-  public create(): void {
+  public create(): void {  
     const { width, height } = this.game.config;
   
     const texture = this.add.renderTexture(0, 0, Number(width), Number(height));
@@ -48,7 +49,11 @@ export class SplashScene extends Phaser.Scene {
 
   public setTimer(): void {
     this.time.delayedCall(SCENES.SPLASH, () => {
-      this.scene.start('GameScene');
+      if (this.scene.isActive('GameScene')) {
+        (this.scene.get('GameScene') as GameScene).restartGame();
+      } else {
+        this.scene.start('GameScene');
+      }
     });
   }
 }

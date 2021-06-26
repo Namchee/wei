@@ -148,6 +148,10 @@ export class PreloaderScene extends Phaser.Scene {
     this.load.image('bgm-off-pressed', 'buttons/bgm-off-pressed.png');
     this.load.image('close', 'buttons/close.png');
     this.load.image('close-pressed', 'buttons/close-pressed.png');
+    this.load.image('home', 'buttons/home.png');
+    this.load.image('home-pressed', 'buttons/home-pressed.png');
+    this.load.image('retry', 'buttons/retry.png');
+    this.load.image('retry-pressed', 'buttons/retry-pressed.png');
 
     // load bgm
     this.load.audio('title', 'bgm/title.mp3');

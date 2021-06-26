@@ -317,12 +317,17 @@ export class GameScene extends Phaser.Scene {
     );
     spikeCollider.setName('spike');
 
-    this.physics.add.overlap(this.cherries, this.player, (_, cherry) => {
-      (cherry as Cherry).collect();
+    this.cherries.getChildren().forEach((cherry) => {
+      const collider = this.physics.add.overlap(cherry, this.player, () => {
+        (cherry as Cherry).collect();
+        this.physics.world.removeCollider(collider);
 
-      if (GameSettings.getInstance().sfx) {
-        this.sound.play('fruit', { volume: SOUND.SFX });
-      }
+        if (GameSettings.getInstance().sfx) {
+          this.sound.play('fruit', { volume: SOUND.SFX });
+        }
+      });
+
+      collider.setName('cherry');
     });
 
     this.flyers.forEach((flyer: Flyer) => {
@@ -334,7 +339,11 @@ export class GameScene extends Phaser.Scene {
       });
     });
 
-    const sawCollider = this.physics.add.collider(this.saws, this.player, () => this.handlePlayerHit());
+    const sawCollider = this.physics.add.collider(
+      this.saws,
+      this.player,
+      () => this.handlePlayerHit(),
+    );
     sawCollider.setName('saw');
 
     this.mushrooms.forEach((mushroom: Mushroom) => {
@@ -462,7 +471,7 @@ export class GameScene extends Phaser.Scene {
     } else {
       this.physics.world.colliders.getActive().forEach(
         (collider: Phaser.Physics.Arcade.Collider) => {
-          if (['map', 'spike'].includes(collider.name)) {
+          if (['map', 'spike', 'cherry'].includes(collider.name)) {
             this.physics.world.removeCollider(collider);
           }
         },
@@ -515,5 +524,9 @@ export class GameScene extends Phaser.Scene {
     velocity > 0 ?
       this.backgroundManager.scrollRight() :
       this.backgroundManager.scrollLeft();
+  }
+
+  public restartGame(): void {
+    this.scene.restart();
   }
 }

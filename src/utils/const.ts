@@ -73,7 +73,7 @@ export const PHYSICS = {
 };
 
 export const SCENES = {
-  TRANSITION: 500,
+  TRANSITION: 200,
   SPLASH: 3000,
 };
 
@@ -83,7 +83,7 @@ export const SOUND = {
 };
 
 export enum Difficulty {
-  EASY = 3, // debug
+  EASY = 3,
   NORMAL = 2,
   HARD = 1
 };

@@ -282,6 +282,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.playButton.removeInteractive();
     this.helpButton.removeInteractive();
+    this.bgmButton.removeInteractive();
     this.sfxButton.removeInteractive();
   }
 
@@ -295,6 +296,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.playButton.setInteractive({ cursor: 'pointer' });
     this.helpButton.setInteractive({ cursor: 'pointer' });
+    this.bgmButton.setInteractive({ cursor: 'pointer' });
     this.sfxButton.setInteractive({ cursor: 'pointer' });
   }
 

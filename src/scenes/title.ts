@@ -195,7 +195,7 @@ export class TitleScene extends Phaser.Scene {
     const keys = this.input.keyboard.addKeys('SPACE, ENTER');
 
     Object.values(keys).forEach((key: Phaser.Input.Keyboard.Key) => {
-      key.on('down', () => {
+      key.once('down', () => {
         if (this.helpOverlay.getChildren()[0].alpha) {
           return;
         }
@@ -203,7 +203,7 @@ export class TitleScene extends Phaser.Scene {
         this.playButton.setTexture('play-pressed');
       });
 
-      key.on('up', () => {
+      key.once('up', () => {
         if (this.helpOverlay.getChildren()[0].alpha) {
           return;
         }

@@ -33,7 +33,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this.invicible = false;
 
     this.initializeAnims();
-    this.initializeParticles();
     this.anims.play('char-idle', true);
   }
 
@@ -85,18 +84,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
-  private initializeParticles(): void {
-    const dustParticle = this.scene.add.particles('dust');
-
-    this.dustEmitter = dustParticle.createEmitter({
-      quantity: 1,
-      lifespan: 1,
-      delay: 5,
-      scale: { start: 0.5, end: 0 },
-      gravityY: -100,
-    });
-  }
-
   public update(): void {
     super.update();
 
@@ -141,10 +128,6 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
       if (x && !y) {
         this.anims.play('char-run', true);
-        this.dustEmitter.emitParticleAt(
-          this.flipX ? this.body.x + this.body.width : this.body.x + MAP.TILE_SIZE / 3,
-          this.body.y + this.body.height
-        );
       }
 
       const flip = dir === Movement.Left;

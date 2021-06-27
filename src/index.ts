@@ -8,6 +8,8 @@ import { SplashScene } from './scenes/splash';
 import { TitleScene } from './scenes/title';
 import { ResultScene } from './scenes/result';
 
+import './assets/styles/style.css';
+
 const config: Types.Core.GameConfig = {
   type: AUTO,
   width: 640,

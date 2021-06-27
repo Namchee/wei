@@ -469,6 +469,7 @@ export class GameScene extends Phaser.Scene {
         }
         default: {
           this.player.die();
+          this.lives.setText(`Lives: ${this.player.lives} / ${Difficulty.EASY}`);
           this.showResultScreen();
           break;
         }

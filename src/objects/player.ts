@@ -93,7 +93,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       lifespan: 1,
       delay: 5,
       scale: { start: 0.5, end: 0 },
-      gravityY: -5,
+      gravityY: -100,
     });
   }
 

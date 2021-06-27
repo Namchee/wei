@@ -550,7 +550,8 @@ export class GameScene extends Phaser.Scene {
 
     if (
       (!this.keys.right.isDown && !this.keys.left.isDown) ||
-      (this.keys.right.isDown && this.keys.left.isDown)
+      (this.keys.right.isDown && this.keys.left.isDown) ||
+      this.player.isBounded
     ) {
       this.player.idle();
       return;
@@ -578,7 +579,7 @@ export class GameScene extends Phaser.Scene {
   private backgroundLoop(): void {
     const velocity = this.player.body.velocity.x;
 
-    if (!velocity) {
+    if (!velocity || this.player.isBounded) {
       this.backgroundManager.idle();
       return;
     }

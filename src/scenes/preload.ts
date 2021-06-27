@@ -166,5 +166,8 @@ export class PreloaderScene extends Phaser.Scene {
     this.load.audio('trophy', 'sfx/trophy.wav');
     this.load.audio('lose', 'sfx/lose.wav');
     this.load.audio('win', 'sfx/win.wav');
+
+    // load fx
+    this.load.image('dust', 'fx/dust.png');
   }
 }

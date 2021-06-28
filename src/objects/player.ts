@@ -13,7 +13,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   private jumpCount: number;
   private invicible: boolean;
 
-  private dustEmitter!: Phaser.GameObjects.Particles.ParticleEmitter;
+  private isFlinching: boolean;
 
   public constructor(
     scene: Phaser.Scene,
@@ -31,6 +31,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
     this._lives = initialLives;
     this.jumpCount = 0;
     this.invicible = false;
+    this.isFlinching = true;
 
     this.initializeAnims();
     this.anims.play('char-idle', true);
@@ -96,6 +97,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
     if (!this.body.velocity.y) {
       this.jumpCount = 0;
+      this.isFlinching = false;
     }
   }
 
@@ -123,7 +125,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public move(dir: Movement): void {
-    if (this.body.enable) {
+    if (this.body.enable && !this.isFlinching) {
       const { x, y } = this.body.velocity;
 
       if (x && !y) {
@@ -139,10 +141,10 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public jump(): void {
-    if (this.jumpCount >= 2) {
+    if (this.jumpCount >= 2 || this.isFlinching) {
       return;
     }
-    
+
     if (GameSettings.getInstance().sfx) {
       this.scene.sound.play('jump', { volume: SOUND.SFX });
     }
@@ -157,10 +159,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   public idle(): void {
-    this.setVelocityX(0);
+    if (!this.isFlinching) {
+      this.setVelocityX(0);
 
-    if (!this.body.velocity.y) {
-      this.anims.play('char-idle', true);
+      if (!this.body.velocity.y) {
+        this.anims.play('char-idle', true);
+      }
     }
   }
 
@@ -171,15 +175,12 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
   public getHit(): Promise<void> {
     return new Promise((resolve) => {
       this.anims.play('char-hit', true);
-      this.setVelocityY(-PHYSICS.HIT_BACK.Y);
 
+      this.isFlinching = true;
       this.invicible = true;
-
-      this.scene.add.tween({
-        targets: this,
-        duration: PHYSICS.HIT_BACK.DURATION,
-        x: `${this.flipX ? '+' : '-'}=${PHYSICS.HIT_BACK.X}`,
-      });
+    
+      this.setVelocityX(this.flipX ? PHYSICS.HIT_BACK.X : -PHYSICS.HIT_BACK.X);
+      this.setVelocityY(-PHYSICS.HIT_BACK.Y);
 
       this.scene.add.tween({
         targets: this,

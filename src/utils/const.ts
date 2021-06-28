@@ -58,7 +58,7 @@ export const PHYSICS = {
   MUSHROOM: 200,
   HIT_BACK: {
     DURATION: 250,
-    X: 25,
+    X: 75,
     Y: 200,
   },
   INVICIBILITY: {
@@ -83,7 +83,7 @@ export const SOUND = {
 };
 
 export enum Difficulty {
-  EASY = 3,
+  EASY = 100,
   NORMAL = 2,
   HARD = 1
 };

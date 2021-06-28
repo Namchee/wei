@@ -83,7 +83,7 @@ export const SOUND = {
 };
 
 export enum Difficulty {
-  EASY = 100,
+  EASY = 3,
   NORMAL = 2,
   HARD = 1
 };

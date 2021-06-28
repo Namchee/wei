@@ -72,6 +72,10 @@ export const PHYSICS = {
   }
 };
 
+export const TITLE = {
+  DURATION: 1250,
+};
+
 export const SCENES = {
   TRANSITION: 200,
   SPLASH: 3000,
@@ -99,6 +103,7 @@ export const TEXT = {
     FULL: 'Congratulations! You have helped Wei to collect all cherries in this map and get closer to his dreams! See you on the next possible worlds~',
     PARTIAL: 'Congratulations! You have helped Wei to some cherries in this map and get closer to his dreams! However, it seems that you missed some cherries. Maybe you want to try again? Either way, good job!',
   },
+  SHARE: 'Hey!%20I%27m%20having%20a%20blast%20after%20playing%20a%20new-and-exciting%20platformer%20game%20%27Wei%27!%0A%0ACome%20and%20try%20it%20out%20now!%20https%3A%2F%2Fwei.vercel.app%2F',
 }
 
 export const COLORS = {
@@ -110,4 +115,4 @@ export const COLORS = {
   }
 }
 
-export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, OBJECTS, SOUND, TEXT, Difficulty };
+export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, OBJECTS, SOUND, TEXT, TITLE, Difficulty };

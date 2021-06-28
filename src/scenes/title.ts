@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GameSettings } from '../state/setting';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { MAP, SCENES, SOUND, TEXT } from '../utils/const';
+import { MAP, SCENES, SOUND, TEXT, TITLE } from '../utils/const';
 
 export class TitleScene extends Phaser.Scene {
   private backgroundManager!: BackgroundManager;
@@ -11,6 +11,8 @@ export class TitleScene extends Phaser.Scene {
   private helpButton!: Phaser.GameObjects.Image;
   private bgmButton!: Phaser.GameObjects.Image;
   private sfxButton!: Phaser.GameObjects.Image;
+
+  private twitterButton!: Phaser.GameObjects.Image;
 
   private titleBgm!: Phaser.Sound.BaseSound;
 
@@ -72,7 +74,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.helpButton = this.add.image(
       Number(width) * 0.8875 - MAP.TILE_SIZE,
-      Number(height) * 0.05,
+      Number(height) * 0.075,
       'help'
     )
       .setOrigin(0.5, 0.5)
@@ -80,7 +82,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.bgmButton = this.add.image(
       Number(width) * 0.9,
-      Number(height) * 0.05,
+      Number(height) * 0.075,
       'bgm-on',
     )
       .setOrigin(0.5, 0.5)
@@ -88,7 +90,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.sfxButton = this.add.image(
       Number(width) * 0.9125 + MAP.TILE_SIZE,
-      Number(height) * 0.05,
+      Number(height) * 0.075,
       'sfx-on'
     )
       .setOrigin(0.5, 0.5)
@@ -96,7 +98,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.add.text(
       Number(width) * 0.675,
-      Number(height) * 0.925,
+      Number(height) * 0.9125,
       'Made in 2021 by Namchee',
       {
         fontFamily: 'Monogram',
@@ -104,13 +106,21 @@ export class TitleScene extends Phaser.Scene {
       },
     );
 
+    this.twitterButton = this.add.image(
+      Number(width) * 0.05,
+      Number(height) * 0.925,
+      'twitter',
+    )
+      .setOrigin(0.5, 0.5)
+      .setScale(0.065, 0.065)
+      .setInteractive({ cursor: 'pointer' });
+
     this.tweens.add({
       targets: titleText,
       y: Number(height) / 4,
-      duration: 1250,
+      duration: TITLE.DURATION,
       ease: Phaser.Math.Easing.Cubic.Out,
     });
-
   }
 
   private initializeAbout(): void {
@@ -270,6 +280,10 @@ export class TitleScene extends Phaser.Scene {
         this.sound.play('button', { volume: SOUND.SFX });
       }
     });
+
+    this.twitterButton.on('pointerup', () => {
+      window.open(`https://twitter.com/intent/tweet?text=${TEXT.SHARE}`);
+    });
   }
 
   private showHelp(): void {
@@ -284,6 +298,7 @@ export class TitleScene extends Phaser.Scene {
     this.helpButton.removeInteractive();
     this.bgmButton.removeInteractive();
     this.sfxButton.removeInteractive();
+    this.twitterButton.removeInteractive();
   }
 
   private hideHelp(): void {
@@ -298,6 +313,7 @@ export class TitleScene extends Phaser.Scene {
     this.helpButton.setInteractive({ cursor: 'pointer' });
     this.bgmButton.setInteractive({ cursor: 'pointer' });
     this.sfxButton.setInteractive({ cursor: 'pointer' });
+    this.twitterButton.setInteractive({ cursor: 'pointer' });
   }
 
   private toggleBgm(): void {

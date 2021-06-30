@@ -69,8 +69,8 @@ export class GameScene extends Phaser.Scene {
       this.player.update();
     }
     
-    this.backgroundLoop();
-
+    this.backgroundManager.idle();
+  
     const mushroomBounds = new Phaser.Geom.Rectangle(
       this.cameras.main.worldView.x - OBJECTS.MUSHROOMS.RADIUS,
       this.cameras.main.worldView.y - OBJECTS.MUSHROOMS.RADIUS,
@@ -551,8 +551,7 @@ export class GameScene extends Phaser.Scene {
 
     if (
       (!this.keys.right.isDown && !this.keys.left.isDown) ||
-      (this.keys.right.isDown && this.keys.left.isDown) ||
-      this.player.isBounded
+      (this.keys.right.isDown && this.keys.left.isDown)
     ) {
       this.player.idle();
       return;
@@ -575,18 +574,5 @@ export class GameScene extends Phaser.Scene {
         isAlive: false,
       },
     );
-  }
-
-  private backgroundLoop(): void {
-    const velocity = this.player.body.velocity.x;
-
-    if (!velocity || this.player.isBounded) {
-      this.backgroundManager.idle();
-      return;
-    }
-
-    velocity > 0 ?
-      this.backgroundManager.scrollRight() :
-      this.backgroundManager.scrollLeft();
   }
 }

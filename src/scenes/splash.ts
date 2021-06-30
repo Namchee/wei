@@ -49,11 +49,7 @@ export class SplashScene extends Phaser.Scene {
 
   public setTimer(): void {
     this.time.delayedCall(SCENES.SPLASH, () => {
-      if (this.scene.isActive('GameScene')) {
-        (this.scene.get('GameScene') as GameScene).restartGame();
-      } else {
-        this.scene.start('GameScene');
-      }
+      this.scene.start('GameScene');
     });
   }
 }

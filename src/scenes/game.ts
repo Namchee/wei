@@ -11,7 +11,7 @@ import { GameState } from '../state/game';
 import { GameSettings } from '../state/setting';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { Difficulty, MAP, OBJECTS, SOUND } from '../utils/const';
+import { MAP, OBJECTS, SOUND } from '../utils/const';
 
 export class GameScene extends Phaser.Scene {
   private keys!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -35,6 +35,9 @@ export class GameScene extends Phaser.Scene {
 
   private lives!: Phaser.GameObjects.Text;
   private score!: Phaser.GameObjects.Text;
+  private times!: Phaser.GameObjects.Text;
+
+  private countdown!: Phaser.Time.TimerEvent;
 
   public constructor() {
     super('GameScene');
@@ -67,6 +70,8 @@ export class GameScene extends Phaser.Scene {
     if (this.gameState.isRunning) {
       this.controllerLoop();
       this.player.update();
+    } else {
+      this.countdown.destroy();
     }
     
     this.backgroundManager.idle();
@@ -139,10 +144,6 @@ export class GameScene extends Phaser.Scene {
       -this.map.heightInPixels / 2,
       this.map.widthInPixels,
       this.map.heightInPixels * 1.5 + MAP.HELLHOLE,
-      true,
-      true,
-      true,
-      true,
     );
   }
 
@@ -335,7 +336,9 @@ export class GameScene extends Phaser.Scene {
       const collider = this.physics.add.overlap(cherry, this.player, () => {
         (cherry as Cherry).collect();
         this.gameState.collectCherry();
-        this.score.setText(`Cherries: ${this.gameState.cherries} / ${this.cherries.getChildren().length}`);
+        this.score.setText(
+          ['CHERRIES', `${this.gameState.cherries} / ${this.cherries.getChildren().length}`],
+        );
 
         this.physics.world.removeCollider(collider);
 
@@ -400,30 +403,52 @@ export class GameScene extends Phaser.Scene {
 
   private initializeUi(): void {
     const { width, height } = this.game.config;
+    const style = {
+      fontFamily: 'Monogram',
+      fontSize: '24px',
+      lineSpacing: 1.25,
+      align: 'center',
+    };
 
     this.lives = this.add.text(
       Number(width) * 0.25,
-      Number(height) * 0.05,
-      `Lives: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`,
-      {
-        fontFamily: 'Monogram',
-        fontSize: '24px',
-      },
+      Number(height) * 0.085,
+      ['LIVES', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
+      style,
     )
       .setOrigin(0.5, 0.5)
       .setScrollFactor(0);
 
     this.score = this.add.text(
-      Number(width) * 0.75,
-      Number(height) * 0.05,
-      `Cherries: ${this.gameState.cherries} / ${this.cherries.getChildren().length}`,
-      {
-        fontFamily: 'Monogram',
-        fontSize: '24px',
-      },
+      Number(width) * 0.5,
+      Number(height) * 0.085,
+      ['CHERRIES', `${this.gameState.cherries} / ${this.cherries.getChildren().length}`],
+      style,
     )
       .setOrigin(0.5, 0.5)
       .setScrollFactor(0);
+
+    this.times = this.add.text(
+      Number(width) * 0.75,
+      Number(height) * 0.085,
+      ['TIME', `${OBJECTS.TIME}`],
+      style,
+    )
+      .setOrigin(0.5, 0.5)
+      .setScrollFactor(0);
+
+    this.countdown = this.time.addEvent({
+      delay: 1000,
+      repeat: -1,
+      callback: () => {
+        const currentTime = Number(this.times.text.match(/\d+/));
+        if (!currentTime) {
+          this.countdown.destroy();
+        }
+
+        this.times.setText(['TIME', `${currentTime - 1}`.padStart(3)]);
+      },
+    })
   }
 
   private initializeBgm(): void {
@@ -470,7 +495,7 @@ export class GameScene extends Phaser.Scene {
         default: {
           this.player.die();
           this.lives.setText(
-            `Lives: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`,
+            ['LIVES', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
           );
           this.showResultScreen();
           break;
@@ -508,7 +533,7 @@ export class GameScene extends Phaser.Scene {
 
     this.player.decrementLives();
     this.lives.setText(
-      `Lives: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`,
+      ['LIVES', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
     );
 
     if (this.player.isAlive) {

@@ -49,6 +49,7 @@ export const OBJECTS = {
   TROPHY: {
     DURATION: 2000,
   },
+  TIME: 600,
 };
 
 export const PHYSICS = {

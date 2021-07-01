@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
+import { GameSettings } from '../state/setting';
+
 import { Difficulty, MAP, SCENES } from '../utils/const';
-import { GameScene } from './game';
 
 export class SplashScene extends Phaser.Scene {
   public constructor() {
@@ -36,7 +37,7 @@ export class SplashScene extends Phaser.Scene {
     this.add.text(
       Number(width) / 2 + MAP.TILE_SIZE,
       Number(height) / 2.125,
-      `x ${Difficulty.EASY}`,
+      `x ${GameSettings.getInstance().difficulty}`,
       {
         fontFamily: 'Monogram',
         fontSize: '32px',

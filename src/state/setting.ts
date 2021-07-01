@@ -1,12 +1,16 @@
+import { Difficulty } from '../utils/const';
+
 export class GameSettings {
-  private _sfx!: boolean;
-  private _bgm!: boolean;
+  private _sfx: boolean;
+  private _bgm: boolean;
+  private _difficulty: Difficulty;
 
   private static instance: GameSettings;
   
   private constructor() {
     this._sfx = true;
     this._bgm = true;
+    this._difficulty = Difficulty.NORMAL;
   }
 
   public static getInstance(): GameSettings {

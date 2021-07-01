@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GameSettings } from '../state/setting';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
-import { MAP, SCENES, SOUND, TEXT, TITLE } from '../utils/const';
+import { Difficulty, MAP, SCENES, SOUND, TEXT, TITLE } from '../utils/const';
 
 export class TitleScene extends Phaser.Scene {
   private backgroundManager!: BackgroundManager;
@@ -17,9 +17,15 @@ export class TitleScene extends Phaser.Scene {
   private titleBgm!: Phaser.Sound.BaseSound;
 
   private helpOverlay!: Phaser.GameObjects.Group;
+  private difficultySelector!: Phaser.GameObjects.Group;
+
+  private readonly difficulties = [Difficulty.EASY, Difficulty.NORMAL, Difficulty.HARD];
+  private selected: number;
 
   public constructor() {
     super('TitleScene');
+    
+    this.selected = 1;
   }
 
   public create(): void {
@@ -28,6 +34,7 @@ export class TitleScene extends Phaser.Scene {
     this.initializeAbout();
     this.initializeBgm();
     this.initializeShortcuts();
+    this.initializeDifficulty();
 
     this.listenInputs();
   }
@@ -117,7 +124,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.tweens.add({
       targets: titleText,
-      y: Number(height) / 4,
+      y: Number(height) / 4.25,
       duration: TITLE.DURATION,
       ease: Phaser.Math.Easing.Cubic.Out,
     });
@@ -203,29 +210,83 @@ export class TitleScene extends Phaser.Scene {
 
   private initializeShortcuts(): void {
     const keys = this.input.keyboard.addKeys('SPACE, ENTER');
+    const bg = this.helpOverlay.getChildren()[0] as Phaser.GameObjects.RenderTexture;
 
     Object.values(keys).forEach((key: Phaser.Input.Keyboard.Key) => {
-      key.once('down', () => {
-        if (this.helpOverlay.getChildren()[0].alpha) {
+      key.on('down', () => {
+        if (bg.alpha) {
           return;
         }
 
-        this.playButton.setTexture('play-pressed');
+        if (this.playButton.alpha) {
+          this.playButton.setTexture('play-pressed');
+        }
       });
 
-      key.once('up', () => {
-        if (this.helpOverlay.getChildren()[0].alpha) {
+      const listener = key.on('up', () => {
+        if (bg.alpha) {
           return;
         }
 
         if (GameSettings.getInstance().sfx) {
           this.sound.play('button', { volume: SOUND.SFX });
         }
-  
-        this.playButton.setTexture('play');
-        this.startGame();
+
+        if (this.playButton.alpha) {
+          this.playButton.setTexture('play');
+          this.playButton.removeInteractive();
+          this.showDifficultyScreen();
+        } else {
+          this.startGame();
+          listener.removeListener('up')
+        }
       });
     });
+  }
+
+  private initializeDifficulty(): void {
+    const { width, height } = this.game.config;
+    this.difficultySelector = this.add.group();
+  
+    const easy = this.add.text(
+      Number(width) / 2.15,
+      Number(height) / 2.25 - MAP.TILE_SIZE / 2,
+      'EASY',
+      {
+        fontSize: '32px',
+        fontFamily: 'Monogram',
+      },
+    )
+      .setOrigin(0, 0.5);
+
+    const normal = this.add.text(
+      Number(width) / 2.15,
+      // for some reason, perfect spacing is skewed to top, so reduced it a bit
+      Number(height) / 1.975,
+      'NORMAL',
+      {
+        fontSize: '32px',
+        fontFamily: 'Monogram',
+      },
+    )
+      .setOrigin(0, 0.5);
+
+    const hard = this.add.text(
+      Number(width) / 2.15,
+      Number(height) / 1.75 + MAP.TILE_SIZE / 2,
+      'HARD',
+      {
+        fontSize: '32px',
+        fontFamily: 'Monogram',
+      },
+    )
+      .setOrigin(0, 0.5);
+
+    this.difficultySelector.add(easy);
+    this.difficultySelector.add(normal);
+    this.difficultySelector.add(hard);
+
+    this.difficultySelector.setAlpha(0);
   }
 
   private listenInputs(): void {
@@ -252,7 +313,7 @@ export class TitleScene extends Phaser.Scene {
       }
 
       this.playButton.setTexture('play');
-      this.startGame();
+      this.showDifficultyScreen();
     });
 
     this.sfxButton.on('pointerdown', () => {
@@ -324,12 +385,85 @@ export class TitleScene extends Phaser.Scene {
       this.titleBgm.pause();
   }
 
+  private showDifficultyScreen(): void {
+    const menuTimeline = this.tweens.timeline({
+      tweens: [
+        {
+          targets: this.playButton,
+          alpha: 0,
+          duration: SCENES.TRANSITION,
+          ease: Phaser.Math.Easing.Quadratic.Out,
+        },
+        {
+          targets: this.difficultySelector.getChildren(),
+          alpha: 1,
+          duration: SCENES.TRANSITION,
+          ease: Phaser.Math.Easing.Quadratic.Out,
+        },
+      ],
+    });
+
+    menuTimeline.on(Phaser.Tweens.Events.TIMELINE_COMPLETE, () => {
+      this.enableDifficultySelection();
+    });
+  }
+
+  private enableDifficultySelection(): void {
+    const { width } = this.game.config;
+
+    const up = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.UP,
+    );
+
+    const down = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.DOWN,
+    );
+
+    const cursor = this.add.image(
+      Number(width) / 2.275,
+      (this.difficultySelector.getChildren()[this.selected] as Phaser.GameObjects.Image).y + 5,
+      'cursor',
+      33,
+    )
+      .setOrigin(0.5, 0.5);
+
+    const buttons = this.difficultySelector.getChildren();
+
+    const resetCursor = () => {
+      cursor.setY(
+        (buttons[this.selected] as Phaser.GameObjects.Image).y + 5,
+      );
+    };
+
+    up.on('down', () => {
+      this.selected = (this.selected - 1) % this.difficulties.length;
+
+      if (this.selected < 0) {
+        this.selected = 0;
+      }
+
+      resetCursor();
+      this.sound.play('difficulty', { volume: SOUND.SFX });
+    });
+
+    down.on('down', () => {
+      this.selected++;
+
+      if (this.selected >= this.difficulties.length) {
+        this.selected = this.difficulties.length - 1;
+      }
+
+      resetCursor();
+      this.sound.play('difficulty', { volume: SOUND.SFX });
+    });
+  }
+
   private startGame(): void {
     this.cameras.main.fadeOut(SCENES.TRANSITION, 0, 0, 0);
 
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       this.titleBgm.pause();
-      this.scene.start('SplashScene');
+      this.scene.start('SplashScene', { difficulty: this.difficulties[this.selected] });
     });
   }
 

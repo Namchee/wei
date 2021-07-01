@@ -113,7 +113,7 @@ export class GameScene extends Phaser.Scene {
     const x = sprite.x;
     const y = sprite.y;
 
-    this.player = new Player(this, x, y, Difficulty.EASY);
+    this.player = new Player(this, x, y, GameSettings.getInstance().difficulty);
 
     layer.forEach((sprite) => sprite.destroy());
   }
@@ -404,7 +404,7 @@ export class GameScene extends Phaser.Scene {
     this.lives = this.add.text(
       Number(width) * 0.25,
       Number(height) * 0.05,
-      `Lives: ${this.player.lives} / ${Difficulty.EASY}`,
+      `Lives: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`,
       {
         fontFamily: 'Monogram',
         fontSize: '24px',
@@ -469,7 +469,9 @@ export class GameScene extends Phaser.Scene {
         }
         default: {
           this.player.die();
-          this.lives.setText(`Lives: ${this.player.lives} / ${Difficulty.EASY}`);
+          this.lives.setText(
+            `Lives: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`,
+          );
           this.showResultScreen();
           break;
         }
@@ -505,7 +507,9 @@ export class GameScene extends Phaser.Scene {
     }
 
     this.player.decrementLives();
-    this.lives.setText(`Lives: ${this.player.lives} / ${Difficulty.EASY}`);
+    this.lives.setText(
+      `Lives: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`,
+    );
 
     if (this.player.isAlive) {
       this.player.getHit()
@@ -570,9 +574,7 @@ export class GameScene extends Phaser.Scene {
 
     this.scene.launch(
       'ResultScene',
-      {
-        isAlive: false,
-      },
+      { isAlive: false },
     );
   }
 }

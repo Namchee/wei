@@ -497,7 +497,7 @@ export class GameScene extends Phaser.Scene {
           this.lives.setText(
             ['LIVES', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
           );
-          this.showResultScreen();
+          this.lose();
           break;
         }
       }
@@ -567,8 +567,12 @@ export class GameScene extends Phaser.Scene {
     this.scene.launch(
       'ResultScene',
       {
-        isAlive: true,
-        allCherry: this.gameState.cherries === this.cherries.getChildren().length,
+        result: {
+          difficulty: GameSettings.getInstance().difficulty,
+          lives: this.player.lives,
+          time: Number(this.times.text.match(/\d+/)),
+          cherries: this.gameState.cherries,
+        },
       },
     );
   }
@@ -591,7 +595,7 @@ export class GameScene extends Phaser.Scene {
       this.player.move(Movement.Left);
   }
 
-  private showResultScreen(): void {
+  private lose(): void {
     this.gameState.stopGame();
 
     this.gameBgm.pause();
@@ -599,7 +603,11 @@ export class GameScene extends Phaser.Scene {
 
     this.scene.launch(
       'ResultScene',
-      { isAlive: false },
+      {
+        result: {
+          lives: 0,
+        },
+      },
     );
   }
 }

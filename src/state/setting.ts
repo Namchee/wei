@@ -29,11 +29,19 @@ export class GameSettings {
     return this._sfx;
   }
 
+  public get difficulty(): Difficulty {
+    return this._difficulty;
+  }
+
   public toggleBgm(): void {
     this._bgm = !this._bgm;
   }
 
   public toggleSfx(): void {
     this._sfx = !this._sfx;
+  }
+
+  public setDifficulty(diff: Difficulty): void {
+    this._difficulty = diff;
   }
 }

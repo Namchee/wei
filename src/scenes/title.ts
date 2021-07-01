@@ -443,6 +443,7 @@ export class TitleScene extends Phaser.Scene {
       }
 
       resetCursor();
+      GameSettings.getInstance().setDifficulty(this.difficulties[this.selected]);
       this.sound.play('difficulty', { volume: SOUND.SFX });
     });
 
@@ -454,6 +455,7 @@ export class TitleScene extends Phaser.Scene {
       }
 
       resetCursor();
+      GameSettings.getInstance().setDifficulty(this.difficulties[this.selected]);
       this.sound.play('difficulty', { volume: SOUND.SFX });
     });
   }
@@ -463,7 +465,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       this.titleBgm.pause();
-      this.scene.start('SplashScene', { difficulty: this.difficulties[this.selected] });
+      this.scene.start('SplashScene');
     });
   }
 

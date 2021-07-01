@@ -444,7 +444,9 @@ export class TitleScene extends Phaser.Scene {
 
       resetCursor();
       GameSettings.getInstance().setDifficulty(this.difficulties[this.selected]);
-      this.sound.play('difficulty', { volume: SOUND.SFX });
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('difficulty', { volume: SOUND.SFX });
+      }
     });
 
     down.on('down', () => {
@@ -456,7 +458,31 @@ export class TitleScene extends Phaser.Scene {
 
       resetCursor();
       GameSettings.getInstance().setDifficulty(this.difficulties[this.selected]);
-      this.sound.play('difficulty', { volume: SOUND.SFX });
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('difficulty', { volume: SOUND.SFX });
+      }
+    });
+
+    this.difficultySelector.getChildren().forEach((obj, idx: number) => {
+      obj.setInteractive({ cursor: 'pointer' });
+
+      obj.on('pointerover', () => {
+        this.selected = idx;
+    
+        resetCursor();
+        GameSettings.getInstance().setDifficulty(this.difficulties[this.selected]);
+        if (GameSettings.getInstance().sfx) {
+          this.sound.play('difficulty', { volume: SOUND.SFX });
+        }
+      });
+
+      obj.on('pointerdown', () => {
+        if (GameSettings.getInstance().sfx) {
+          this.sound.play('button', { volume: SOUND.SFX });
+        }
+
+        this.startGame();
+      })
     });
   }
 

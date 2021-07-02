@@ -1,7 +1,8 @@
 import Phaser from 'phaser';
 
 import { GameResult } from '../state/result';
-import { MAP, SCENES, SCORE, TEXT } from '../utils/const';
+import { GameSettings } from '../state/setting';
+import { MAP, SCENES, SCORE, SOUND, TEXT } from '../utils/const';
 
 export class ResultScene extends Phaser.Scene {
   private result!: GameResult;
@@ -34,7 +35,7 @@ export class ResultScene extends Phaser.Scene {
       this.result.lives ? TEXT.WIN.TITLE : TEXT.LOSE.TITLE,
       {
         fontFamily: 'Matchup Pro',
-        fontSize: '36px',
+        fontSize: '48px',
         stroke: 'black',
         strokeThickness: 3.5,
         shadow: {
@@ -91,7 +92,12 @@ export class ResultScene extends Phaser.Scene {
     this.tweens.add({
       targets: group.getChildren(),
       alpha: 1,
-      duration: SCENES.TRANSITION,
+      duration: SCENES.RESULT,
+      onComplete: () => {
+        if (GameSettings.getInstance().sfx) {
+          this.sound.play(this.result.lives ? 'win' : 'lose', { volume: SOUND.SFX });
+        }    
+      },
     });
   }
 

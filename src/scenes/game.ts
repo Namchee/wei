@@ -1,4 +1,4 @@
-import Phaser, { Game } from 'phaser';
+import Phaser from 'phaser';
 
 import { Cherry } from '../objects/cherry';
 import { Flyer } from '../objects/flyer';
@@ -556,10 +556,6 @@ export class GameScene extends Phaser.Scene {
   }
 
   private win(): void {
-    if (GameSettings.getInstance().sfx) {
-      this.sound.play('win', { volume: SOUND.SFX });
-    }
-
     this.gameBgm.pause();
     this.player.idle();
     this.trophy.collect();
@@ -597,9 +593,7 @@ export class GameScene extends Phaser.Scene {
 
   private lose(): void {
     this.gameState.stopGame();
-
     this.gameBgm.pause();
-    this.sound.play('lose', { volume: SOUND.SFX });
 
     this.scene.launch(
       'ResultScene',

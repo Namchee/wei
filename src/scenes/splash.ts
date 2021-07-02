@@ -25,7 +25,7 @@ export class SplashScene extends Phaser.Scene {
     )
       .setOrigin(0.5, 0.5);
 
-    this.add.image(
+    const avatar = this.add.image(
       Number(width) / 2 - MAP.TILE_SIZE * 2,
       Number(height) / 2.125,
       'char-idle',
@@ -35,7 +35,7 @@ export class SplashScene extends Phaser.Scene {
       .setOrigin(0.5, 0.5);
 
     this.add.text(
-      Number(width) / 2 + MAP.TILE_SIZE,
+      Number(width) / 2 + avatar.displayWidth / 2,
       Number(height) / 2.125,
       `x ${GameSettings.getInstance().difficulty}`,
       {

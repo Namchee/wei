@@ -47,9 +47,9 @@ export const OBJECTS = {
     GRAVITY: 1000,
   },
   TROPHY: {
-    DURATION: 2000,
+    DURATION: 1500,
   },
-  TIME: 600,
+  TIME: 300,
 };
 
 export const PHYSICS = {
@@ -79,6 +79,7 @@ export const TITLE = {
 
 export const SCENES = {
   TRANSITION: 200,
+  RESULT: 500,
   SPLASH: 3000,
 };
 
@@ -94,7 +95,7 @@ export enum Difficulty {
 };
 
 export const SCORE = {
-  LIVES: 75,
+  LIVES: 50,
   CHERRY: 5,
   TIME: 0.1,
   DIFFICULTY: {

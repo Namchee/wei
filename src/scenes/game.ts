@@ -339,7 +339,7 @@ export class GameScene extends Phaser.Scene {
         (cherry as Cherry).collect();
         this.gameState.collectCherry();
         this.score.setText(
-          ['CHERRY', `${this.gameState.cherries}`],
+          [`CHERRY: ${this.gameState.cherries}`],
         );
 
         this.physics.world.removeCollider(collider);
@@ -413,30 +413,30 @@ export class GameScene extends Phaser.Scene {
     };
 
     this.lives = this.add.text(
-      Number(width) * 0.25,
-      Number(height) * 0.085,
-      ['HEALTH', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
+      Number(width) * 0.025,
+      Number(height) * 0.05,
+      [`HEALTH: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
       style,
     )
-      .setOrigin(0.5, 0.5)
+      .setOrigin(0, 0.5)
       .setScrollFactor(0);
 
     this.score = this.add.text(
-      Number(width) * 0.5,
-      Number(height) * 0.085,
-      ['CHERRY', `${this.gameState.cherries}`],
+      Number(width) * 0.025,
+      Number(height) * 0.1,
+      [`CHERRY: ${this.gameState.cherries}`],
       style,
     )
-      .setOrigin(0.5, 0.5)
+      .setOrigin(0, 0.5)
       .setScrollFactor(0);
 
     this.times = this.add.text(
-      Number(width) * 0.75,
-      Number(height) * 0.085,
-      ['TIME', `${OBJECTS.TIME}`],
+      Number(width) * 0.025,
+      Number(height) * 0.15,
+      [`TIME: ${OBJECTS.TIME}`],
       style,
     )
-      .setOrigin(0.5, 0.5)
+      .setOrigin(0, 0.5)
       .setScrollFactor(0);
 
     this.countdown = this.time.addEvent({
@@ -448,7 +448,7 @@ export class GameScene extends Phaser.Scene {
           this.countdown.destroy();
         }
 
-        this.times.setText(['TIME', `${currentTime - 1}`.padStart(3)]);
+        this.times.setText([`TIME: ${(currentTime - 1).toString().padStart(3)}`]);
       },
     })
   }
@@ -504,7 +504,7 @@ export class GameScene extends Phaser.Scene {
         default: {
           this.player.die();
           this.lives.setText(
-            ['HEALTH', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
+            [`HEALTH: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
           );
           this.lose();
           break;
@@ -542,7 +542,7 @@ export class GameScene extends Phaser.Scene {
 
     this.player.decrementLives();
     this.lives.setText(
-      ['HEALTH', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
+      [`HEALTH: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
     );
 
     if (this.player.isAlive) {

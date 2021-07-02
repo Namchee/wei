@@ -95,6 +95,8 @@ export function loadAssets(scene: Phaser.Scene): void {
   scene.load.image('retry', 'buttons/retry.png');
   scene.load.image('retry-pressed', 'buttons/retry-pressed.png');
   scene.load.image('twitter', 'buttons/twitter.png');
+  scene.load.image('pause', 'buttons/pause.png');
+  scene.load.image('pause-pressed', 'buttons/pause-pressed.png');
 
   // load bgm
   scene.load.audio('title', 'bgm/title.mp3');

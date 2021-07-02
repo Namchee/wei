@@ -30,7 +30,7 @@ export class ResultScene extends Phaser.Scene {
 
     const titleText = this.add.text(
       Number(width) / 2,
-      Number(height) / 3.5,
+      Number(height) / 4,
       this.result.lives ? TEXT.WIN.TITLE : TEXT.LOSE.TITLE,
       {
         fontFamily: 'Matchup Pro',
@@ -47,34 +47,23 @@ export class ResultScene extends Phaser.Scene {
     )
       .setOrigin(0.5, 0.5);
 
-    const texts = this.result.lives ?
-      [
-        'YOUR SCORE',
-        `Cherry Score\t\t\t\t\t\t\t${SCORE.CHERRY * this.result.cherries}`,
-        `Lives Bonus\t\t\t\t\t\t\t${SCORE.LIVES * this.result.lives}`,
-        `Time Bonus\t\t\t\t\t\t\t${Math.floor(SCORE.TIME * this.result.time)}`,
-        `Difficulty Multiplier\t\t\t\t\t\t\t${SCORE.DIFFICULTY[this.result.difficulty]}`
-      ] :
-      [TEXT.LOSE.DESC];
-
-    const total = !this.result.lives ? `0` : this.calculateScore();
-
-    const descText = this.add.text(
+    const scoreText = this.add.text(
       Number(width) / 2,
-      Number(height) / 2,
-      texts,
+      titleText.y + MAP.TILE_SIZE * 5,
+      this.result.lives ? ['SCORE', `${this.calculateScore()}`] : TEXT.LOSE.DESC,
       {
         fontFamily: 'Monogram',
-        fontSize: '24px',
+        fontSize: this.result.lives ? '36px': '24px',
         wordWrap: { width: 400, useAdvancedWrap: true },
-        lineSpacing: 1.25,
+        align: 'center',
       }
-    ).setOrigin(0.5, 0.5);
+    )
+      .setOrigin(0.5, 0.5);
 
     this.homeButton = this.add.image(
       Number(width) / 2 - MAP.TILE_SIZE * 1.5,
-      Number(height) / (this.result.lives ? 1.25 : 1.55),
-      'home'
+      scoreText.y + MAP.TILE_SIZE * 6,
+      'home',
     )
       .setOrigin(0.5, 0.5)
       .setScale(1.5, 1.5)
@@ -82,8 +71,8 @@ export class ResultScene extends Phaser.Scene {
 
     this.retryButton = this.add.image(
       Number(width) / 2 + MAP.TILE_SIZE * 1.5,
-      Number(height) / (this.result.lives ? 1.25 : 1.55),
-      'retry'
+      scoreText.y + MAP.TILE_SIZE * 6,
+      'retry',
     )
       .setOrigin(0.5, 0.5)
       .setScale(1.5, 1.5)
@@ -92,7 +81,7 @@ export class ResultScene extends Phaser.Scene {
     this.listenInputs();
 
     group.add(titleText);
-    group.add(descText);
+    group.add(scoreText);
     group.add(background);
     group.add(this.homeButton);
     group.add(this.retryButton);
@@ -131,7 +120,7 @@ export class ResultScene extends Phaser.Scene {
   private calculateScore(): number {
     let baseScore = (SCORE.LIVES * this.result.lives +
       SCORE.CHERRY * this.result.cherries +
-      SCORE.TIME * this.result.time);
+      Math.floor(SCORE.TIME * this.result.time));
 
     Object.entries(SCORE.DIFFICULTY).forEach((val) => {
       if (Number(val[0]) === this.result.difficulty) {

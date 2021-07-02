@@ -170,7 +170,7 @@ export class TitleScene extends Phaser.Scene {
       TEXT.HELP,
       {
         fontFamily: 'Monogram',
-        fontSize: '22px',
+        fontSize: '20px',
         wordWrap: { width: 400, useAdvancedWrap: true },
         lineHeight: 1.25,
         align: 'center',

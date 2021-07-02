@@ -136,6 +136,7 @@ export const TEXT = {
 export const COLORS = {
   GRAY: {
     600: 0x313131,
+    900: 0x121212,
   },
   BLUE: {
     400: 0x5BC2E7,

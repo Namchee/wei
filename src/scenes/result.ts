@@ -3,7 +3,7 @@ import Phaser from 'phaser';
 import { GameResult } from '../state/result';
 import { GameSettings } from '../state/setting';
 import { GameStorage } from '../state/storage';
-import { MAP, SCENES, SCORE, SOUND, TEXT } from '../utils/const';
+import { COLORS, MAP, SCENES, SCORE, SOUND, TEXT } from '../utils/const';
 
 export class ResultScene extends Phaser.Scene {
   private result!: GameResult;
@@ -29,7 +29,7 @@ export class ResultScene extends Phaser.Scene {
     const group = this.add.group();
 
     const background = this.add.renderTexture(0, 0, Number(width), Number(height));
-    background.fill(0x121212, 0.85);
+    background.fill(COLORS.GRAY[900], 0.9);
 
     const titleText = this.add.text(
       Number(width) / 2,

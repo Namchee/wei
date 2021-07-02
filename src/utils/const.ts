@@ -108,7 +108,7 @@ export const TEXT = {
   HELP: 'There\'s an ancient tale of a hero named Wei. This story marks the beginning if his journey. Wei can move using arrow keys on the keyboard. Wei can also jump with either SPACEBAR or UP key. Collect as much cherries as possible while avoiding all harmful obstacles like grinding saws, spikes, and mushrooms. Defeat the mushrooms by jumping on their mushy head. May fortune be with Wei.',
   LOSE: {
     TITLE: 'You Lose!',
-    DESC: 'Wei has fainted! Better luck next time.',
+    DESC: ['Wei has taken too much hit and fainted!', 'Better luck next time, o heroes!'],
   },
   WIN: {
     TITLE: 'You Win!',

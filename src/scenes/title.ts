@@ -1,5 +1,6 @@
-import Phaser from 'phaser';
+import Phaser, { Game } from 'phaser';
 import { GameSettings } from '../state/setting';
+import { GameStorage } from '../state/storage';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { Difficulty, MAP, SCENES, SOUND, TEXT, TITLE } from '../utils/const';
@@ -103,15 +104,18 @@ export class TitleScene extends Phaser.Scene {
       .setOrigin(0.5, 0.5)
       .setInteractive({ cursor: 'pointer' });
 
-    this.add.text(
-      Number(width) * 0.675,
-      Number(height) * 0.9125,
-      'Made in 2021 by Namchee',
-      {
-        fontFamily: 'Monogram',
-        fontSize: '20px',
-      },
-    );
+    if (GameStorage.getInstance().highScore) {
+      this.add.text(
+        Number(width) * 0.95,
+        Number(height) * 0.95,
+        `HIGH SCORE: ${GameStorage.getInstance().highScore}`,
+        {
+          fontFamily: 'Monogram',
+          fontSize: '20px',
+        },
+      )
+      .setOrigin(1, 0.5);
+    }
 
     this.twitterButton = this.add.image(
       Number(width) * 0.05,

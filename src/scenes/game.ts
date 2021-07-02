@@ -337,7 +337,7 @@ export class GameScene extends Phaser.Scene {
         (cherry as Cherry).collect();
         this.gameState.collectCherry();
         this.score.setText(
-          ['CHERRIES', `${this.gameState.cherries} / ${this.cherries.getChildren().length}`],
+          ['CHERRIES', `${this.gameState.cherries}`],
         );
 
         this.physics.world.removeCollider(collider);
@@ -422,7 +422,7 @@ export class GameScene extends Phaser.Scene {
     this.score = this.add.text(
       Number(width) * 0.5,
       Number(height) * 0.085,
-      ['CHERRIES', `${this.gameState.cherries} / ${this.cherries.getChildren().length}`],
+      ['CHERRIES', `${this.gameState.cherries}`],
       style,
     )
       .setOrigin(0.5, 0.5)

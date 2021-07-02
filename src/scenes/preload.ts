@@ -10,7 +10,6 @@ export class PreloaderScene extends Phaser.Scene {
   public preload() {
     this.initPreloader();
     this.loadAssets();
-    this.loadPlugins();
   }
 
   private initPreloader() {
@@ -94,13 +93,5 @@ export class PreloaderScene extends Phaser.Scene {
 
   private loadAssets(): void {
     loadAssets(this);
-  }
-
-  private loadPlugins(): void {
-    this.load.scenePlugin({
-      key: 'rexuiplugin',
-      url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
-      sceneKey: 'rexUI',
-    });      
   }
 }

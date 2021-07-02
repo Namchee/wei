@@ -206,4 +206,8 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
       duration: PHYSICS.DIE.DURATION,
     });
   }
+
+  public get isBlockedHorizontally(): boolean {
+    return this.body.blocked.left || this.body.blocked.right;
+  }
 }

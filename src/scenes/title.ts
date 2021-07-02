@@ -242,7 +242,7 @@ export class TitleScene extends Phaser.Scene {
           this.showDifficultyScreen();
         } else {
           this.startGame();
-          listener.removeListener('up')
+          listener.removeListener('up');
         }
       });
     });

@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import Phaser, { Game } from 'phaser';
 
 import { Cherry } from '../objects/cherry';
 import { Flyer } from '../objects/flyer';
@@ -15,11 +15,10 @@ import { MAP, OBJECTS, SOUND } from '../utils/const';
 
 export class GameScene extends Phaser.Scene {
   private keys!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private map!: Phaser.Tilemaps.Tilemap;
 
+  private map!: Phaser.Tilemaps.Tilemap;
   private spikes!: Phaser.Physics.Arcade.StaticGroup;
   private cherries!: Phaser.Physics.Arcade.StaticGroup;
-
   private saws!: Saw[];
   private mushrooms!: Mushroom[];
   private flyers!: Flyer[];
@@ -31,12 +30,12 @@ export class GameScene extends Phaser.Scene {
 
   private gameBgm!: Phaser.Sound.BaseSound;
 
-  private gameState!: GameState;
-
   private lives!: Phaser.GameObjects.Text;
   private score!: Phaser.GameObjects.Text;
   private times!: Phaser.GameObjects.Text;
+  private pauseButton!: Phaser.GameObjects.Image;
 
+  private gameState!: GameState;
   private countdown!: Phaser.Time.TimerEvent;
 
   public constructor() {
@@ -439,6 +438,29 @@ export class GameScene extends Phaser.Scene {
       .setOrigin(0, 0.5)
       .setScrollFactor(0);
 
+    this.pauseButton = this.add.image(
+      Number(width) * 0.95,
+      Number(height) * 0.05,
+      'pause',
+    )
+      .setOrigin(0.5, 0.5)
+      .setScrollFactor(0)
+      .setInteractive({ cursor: 'pointer' });
+
+    this.pauseButton.on('pointerdown', () => {
+      this.pauseButton.setTexture('pause-pressed');
+    })
+
+    this.pauseButton.on('pointerup', () => {
+      this.pauseButton.setTexture('pause');
+      
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('button', { volume: SOUND.SFX });
+      }
+
+      this.pauseGame();
+    })
+
     this.countdown = this.time.addEvent({
       delay: 1000,
       repeat: -1,
@@ -448,7 +470,9 @@ export class GameScene extends Phaser.Scene {
           this.countdown.destroy();
         }
 
-        this.times.setText([`TIME: ${(currentTime - 1).toString().padStart(3)}`]);
+        this.times.setText(
+          [`TIME: ${(currentTime - 1).toString().padStart(3)}`],
+        );
       },
     })
   }
@@ -479,9 +503,13 @@ export class GameScene extends Phaser.Scene {
     const pause = this.input.keyboard.addKey('P');
 
     pause.on('up', () => {
-      this.scene.pause('GameScene');
-      this.scene.launch('PauseScene');
+      this.pauseGame();
     });
+  }
+
+  private pauseGame(): void {
+    this.scene.pause('GameScene');
+    this.scene.launch('PauseScene');
   }
 
   private initializeBottomBounds(): void {

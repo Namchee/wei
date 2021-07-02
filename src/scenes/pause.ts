@@ -5,14 +5,14 @@ import { COLORS, MAP, SCENES, SCORE } from '../utils/const';
 export class PauseScene extends Phaser.Scene {
   private components!: Phaser.GameObjects.Group;
 
-  private blinkingTween!: Phaser.Tweens.Tween;
-
   public constructor() {
     super('PauseScene');
   }
 
   public create(): void {
     const { width, height } = this.game.config;
+
+    this.scene.bringToTop('PauseScene');
     this.components = this.add.group();
 
     const texture = this.add.renderTexture(
@@ -52,29 +52,26 @@ export class PauseScene extends Phaser.Scene {
         fontSize: '24px',
         align: 'center',
       },
-    );
+    )
+      .setOrigin(0.5, 0.5);
 
     this.components.add(titleText);
     this.components.add(flashingText);
 
     this.components.setAlpha(0);
 
-    this.blinkingTween = this.tweens.create({
-      targets: flashingText,
-      alpha: 0,
-      yoyo: true,
-      duration: SCORE.HIGH_SCORE_BLINK.DURATION,
-      repeat: -1,
-    });
-
     this.initializeHooks();
     this.listenInputs();
+
+    this.tweens.add({
+      targets: this.components.getChildren(),
+      alpha: 1,
+      duration: SCENES.RESULT,
+    });
   }
 
   private initializeHooks(): void {
-    this.events.on('pause', () => {
-      this.blinkingTween.pause();
-    
+    this.events.on('pause', () => {    
       this.tweens.add({
         targets: this.components.getChildren(),
         alpha: 0,
@@ -91,11 +88,6 @@ export class PauseScene extends Phaser.Scene {
         targets: this.components.getChildren(),
         alpha: 1,
         duration: SCENES.RESULT,
-        onComplete: () => {
-          this.blinkingTween.isPaused() ?
-            this.blinkingTween.resume() :
-            this.blinkingTween.play();
-        }
       });
     });
   }

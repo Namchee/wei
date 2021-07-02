@@ -64,6 +64,8 @@ export class GameScene extends Phaser.Scene {
     this.initializeBottomBounds();
 
     this.registerInputs();
+
+    this.initializeHooks();
   }
 
   public update() {
@@ -473,6 +475,13 @@ export class GameScene extends Phaser.Scene {
     });
 
     this.keys = this.input.keyboard.createCursorKeys();
+
+    const pause = this.input.keyboard.addKey('P');
+
+    pause.on('up', () => {
+      this.scene.pause('GameScene');
+      this.scene.launch('PauseScene');
+    });
   }
 
   private initializeBottomBounds(): void {
@@ -573,6 +582,20 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
+  private lose(): void {
+    this.gameState.stopGame();
+    this.gameBgm.pause();
+
+    this.scene.launch(
+      'ResultScene',
+      {
+        result: {
+          lives: 0,
+        },
+      },
+    );
+  }
+
   private controllerLoop(): void {
     if (!this.player.isAlive) {
       return;
@@ -592,17 +615,15 @@ export class GameScene extends Phaser.Scene {
       this.player.move(Movement.Left);
   }
 
-  private lose(): void {
-    this.gameState.stopGame();
-    this.gameBgm.pause();
+  private initializeHooks(): void {
+    this.events.on('resume', () => {
+      if (GameSettings.getInstance().bgm) {
+        this.gameBgm.resume();
+      }
+    });
 
-    this.scene.launch(
-      'ResultScene',
-      {
-        result: {
-          lives: 0,
-        },
-      },
-    );
+    this.events.on('pause', () => {
+      this.gameBgm.pause();
+    });
   }
 }

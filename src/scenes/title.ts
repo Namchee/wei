@@ -172,6 +172,8 @@ export class TitleScene extends Phaser.Scene {
         fontFamily: 'Monogram',
         fontSize: '22px',
         wordWrap: { width: 400, useAdvancedWrap: true },
+        lineHeight: 1.25,
+        align: 'center',
       }
     ).setOrigin(0.5, 0.5);
 
@@ -214,6 +216,9 @@ export class TitleScene extends Phaser.Scene {
 
   private initializeShortcuts(): void {
     const keys = this.input.keyboard.addKeys('SPACE, ENTER');
+    const helpShortcut = this.input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.H,
+    );
     const bg = this.helpOverlay.getChildren()[0] as Phaser.GameObjects.RenderTexture;
 
     Object.values(keys).forEach((key: Phaser.Input.Keyboard.Key) => {
@@ -245,6 +250,22 @@ export class TitleScene extends Phaser.Scene {
           listener.removeListener('up');
         }
       });
+    });
+
+    helpShortcut.on('down', () => {
+      this.helpButton.setTexture('help-pressed');
+    });
+
+    helpShortcut.on('up', () => {
+      this.helpButton.setTexture('help');
+    
+      bg.alpha ?
+        this.hideHelp() :
+        this.showHelp();
+
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('button', { volume: SOUND.SFX });
+      }
     });
   }
 
@@ -352,6 +373,7 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private showHelp(): void {
+    this.helpOverlay.getChildren().forEach((child) => this.children.bringToTop(child));
     this.add.tween({
       targets: this.helpOverlay.getChildren(),
       alpha: 1,

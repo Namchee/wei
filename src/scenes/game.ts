@@ -337,7 +337,7 @@ export class GameScene extends Phaser.Scene {
         (cherry as Cherry).collect();
         this.gameState.collectCherry();
         this.score.setText(
-          ['CHERRIES', `${this.gameState.cherries}`],
+          ['CHERRY', `${this.gameState.cherries}`],
         );
 
         this.physics.world.removeCollider(collider);
@@ -413,7 +413,7 @@ export class GameScene extends Phaser.Scene {
     this.lives = this.add.text(
       Number(width) * 0.25,
       Number(height) * 0.085,
-      ['LIVES', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
+      ['HEALTH', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
       style,
     )
       .setOrigin(0.5, 0.5)
@@ -422,7 +422,7 @@ export class GameScene extends Phaser.Scene {
     this.score = this.add.text(
       Number(width) * 0.5,
       Number(height) * 0.085,
-      ['CHERRIES', `${this.gameState.cherries}`],
+      ['CHERRY', `${this.gameState.cherries}`],
       style,
     )
       .setOrigin(0.5, 0.5)
@@ -495,7 +495,7 @@ export class GameScene extends Phaser.Scene {
         default: {
           this.player.die();
           this.lives.setText(
-            ['LIVES', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
+            ['HEALTH', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
           );
           this.lose();
           break;
@@ -533,7 +533,7 @@ export class GameScene extends Phaser.Scene {
 
     this.player.decrementLives();
     this.lives.setText(
-      ['LIVES', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
+      ['HEALTH', `${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
     );
 
     if (this.player.isAlive) {
@@ -580,7 +580,8 @@ export class GameScene extends Phaser.Scene {
 
     if (
       (!this.keys.right.isDown && !this.keys.left.isDown) ||
-      (this.keys.right.isDown && this.keys.left.isDown)
+      (this.keys.right.isDown && this.keys.left.isDown) ||
+      this.player.isBlockedHorizontally
     ) {
       this.player.idle();
       return;

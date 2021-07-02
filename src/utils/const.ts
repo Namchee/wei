@@ -84,7 +84,7 @@ export const SCENES = {
 };
 
 export const SOUND = {
-  BGM: 0.05,
+  BGM: 0.0625,
   SFX: 0.2,
 };
 
@@ -102,6 +102,9 @@ export const SCORE = {
     5: 1,
     3: 2,
     1: 3.5,
+  },
+  HIGH_SCORE_BLINK: {
+    DURATION: 115,
   },
 }
 

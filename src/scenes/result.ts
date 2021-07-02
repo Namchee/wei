@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 
 import { GameResult } from '../state/result';
 import { GameSettings } from '../state/setting';
+import { GameStorage } from '../state/storage';
 import { MAP, SCENES, SCORE, SOUND, TEXT } from '../utils/const';
 
 export class ResultScene extends Phaser.Scene {
@@ -9,6 +10,8 @@ export class ResultScene extends Phaser.Scene {
 
   private homeButton!: Phaser.GameObjects.Image;
   private retryButton!: Phaser.GameObjects.Image;
+
+  private scoreNotification!: Phaser.GameObjects.Text;
 
   public constructor() {
     super('ResultScene');
@@ -22,7 +25,6 @@ export class ResultScene extends Phaser.Scene {
     this.scene.bringToTop();
   
     const { width, height } = this.game.config;
-    console.log(this.result);
 
     const group = this.add.group();
 
@@ -48,10 +50,12 @@ export class ResultScene extends Phaser.Scene {
     )
       .setOrigin(0.5, 0.5);
 
+    const score = this.calculateScore();
+
     const scoreText = this.add.text(
       Number(width) / 2,
       titleText.y + MAP.TILE_SIZE * 5,
-      this.result.lives ? ['SCORE', `${this.calculateScore()}`] : TEXT.LOSE.DESC,
+      this.result.lives ? ['SCORE', `${score}`] : TEXT.LOSE.DESC,
       {
         fontFamily: 'Monogram',
         fontSize: this.result.lives ? '36px': '24px',
@@ -61,9 +65,27 @@ export class ResultScene extends Phaser.Scene {
     )
       .setOrigin(0.5, 0.5);
 
+    if (this.result.lives && GameStorage.getInstance().highScore < score) {
+      this.scoreNotification = this.add.text(
+        Number(width) / 2,
+        scoreText.y + MAP.TILE_SIZE * 3,
+        'HIGH SCORE!',
+        {
+          fontFamily: 'Monogram',
+          fontSize: '24px',
+          wordWrap: { width: 300, useAdvancedWrap: true },
+          align: 'center',
+        },
+      )
+        .setOrigin(0.5, 0.5);
+
+      this.blinkHighScore();
+      GameStorage.getInstance().setHighScore(score);
+    }
+
     this.homeButton = this.add.image(
       Number(width) / 2 - MAP.TILE_SIZE * 1.5,
-      scoreText.y + MAP.TILE_SIZE * 6,
+      (this.scoreNotification ? this.scoreNotification.y : scoreText.y) + MAP.TILE_SIZE * 5,
       'home',
     )
       .setOrigin(0.5, 0.5)
@@ -72,7 +94,7 @@ export class ResultScene extends Phaser.Scene {
 
     this.retryButton = this.add.image(
       Number(width) / 2 + MAP.TILE_SIZE * 1.5,
-      scoreText.y + MAP.TILE_SIZE * 6,
+      (this.scoreNotification ? this.scoreNotification.y : scoreText.y) + MAP.TILE_SIZE * 5,
       'retry',
     )
       .setOrigin(0.5, 0.5)
@@ -134,6 +156,16 @@ export class ResultScene extends Phaser.Scene {
       }
     });
 
-    return baseScore;
+    return Math.ceil(baseScore);
+  }
+
+  private blinkHighScore(): void {
+    this.tweens.add({
+      targets: this.scoreNotification,
+      alpha: 0,
+      yoyo: true,
+      duration: SCORE.HIGH_SCORE_BLINK.DURATION,
+      repeat: -1,
+    });
   }
 }

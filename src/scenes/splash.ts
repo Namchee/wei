@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { GameSettings } from '../state/setting';
 
-import { Difficulty, MAP, SCENES } from '../utils/const';
+import { Difficulty, MAP, SCENES, TEXT } from '../utils/const';
 
 export class SplashScene extends Phaser.Scene {
   public constructor() {
@@ -14,33 +14,63 @@ export class SplashScene extends Phaser.Scene {
     const texture = this.add.renderTexture(0, 0, Number(width), Number(height));
     texture.fill(0x121212, 1);
 
-    this.add.text(
+    const title = this.add.text(
       Number(width) / 2,
       Number(height) / 3.5,
-      'World 1 - 1',
+      'OBJECTIVE',
       {
-        fontFamily: 'Monogram',
-        fontSize: '36px',
-      }
+        fontFamily: 'Matchup Pro',
+        fontSize: '48px',
+        stroke: 'black',
+        strokeThickness: 3.5,
+        shadow: {
+          offsetX: 0,
+          offsetY: 5,
+          color: 'black',
+          fill: true,
+        },
+      },
     )
       .setOrigin(0.5, 0.5);
 
-    const avatar = this.add.image(
-      Number(width) / 2 - MAP.TILE_SIZE * 2,
-      Number(height) / 2.125,
-      'char-idle',
-      0,
+    const objective = this.add.text(
+      Number(width) / 2,
+      title.y + MAP.TILE_SIZE * 4,
+      TEXT.OBJECTIVE,
+      {
+        fontFamily: 'Monogram',
+        fontSize: '24px',
+        wordWrap: { width: 400, useAdvancedWrap: true },
+        lineSpacing: 1.125,
+        align: 'center',
+      },
     )
-      .setScale(1.275, 1.275)
       .setOrigin(0.5, 0.5);
 
     this.add.text(
-      Number(width) / 2 + avatar.displayWidth / 2,
-      Number(height) / 2.125,
-      `x ${GameSettings.getInstance().difficulty}`,
+      Number(width) / 2 - MAP.TILE_SIZE * 4,
+      objective.y + MAP.TILE_SIZE * 7.5,
+      ['MAX. HEALTH', `${GameSettings.getInstance().difficulty}`],
       {
         fontFamily: 'Monogram',
-        fontSize: '32px',
+        fontSize: '16px',
+        wordWrap: { width: 400, useAdvancedWrap: true },
+        lineSpacing: 1.125,
+        align: 'center',
+      },
+    )
+      .setOrigin(0.5, 0.5);
+
+    this.add.text(
+      Number(width) / 2 + MAP.TILE_SIZE * 4,
+      objective.y + MAP.TILE_SIZE * 7.5,
+      ['DIFFICULTY', `${Difficulty[GameSettings.getInstance().difficulty]}`],
+      {
+        fontFamily: 'Monogram',
+        fontSize: '16px',
+        wordWrap: { width: 400, useAdvancedWrap: true },
+        lineSpacing: 1.125,
+        align: 'center',
       },
     )
       .setOrigin(0.5, 0.5);

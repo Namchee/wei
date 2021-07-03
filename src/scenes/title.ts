@@ -5,7 +5,7 @@ import { GameStorage } from '../state/storage';
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { Difficulty, MAP, SCENES, SOUND, TEXT, TITLE } from '../utils/const';
 
-import { injectSoundController } from '../utils/ui';
+import { injectUI } from '../utils/ui';
 
 export class TitleScene extends Phaser.Scene {
   private backgroundManager!: BackgroundManager;
@@ -189,7 +189,7 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private initializeBgm(): void {
-    this.soundController = injectSoundController(this);
+    this.soundController = injectUI(this);
   
     if (GameSettings.getInstance().bgm) {
       this.sound.play ('title', { volume: SOUND.BGM });

@@ -92,7 +92,6 @@ export class PreloaderScene extends Phaser.Scene {
   }
 
   private loadAssets(): void {
-    console.log(this);
     loadAssets(this);
   }
 }

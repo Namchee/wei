@@ -5,7 +5,7 @@ import { TitleScene } from '../scenes/title';
 
 import { MAP, SOUND } from './const';
 
-export function injectSoundController(
+export function injectUI(
   scene: Phaser.Scene,
 ): Phaser.GameObjects.Image[] {
   const { width, height } = scene.game.config;
@@ -19,13 +19,20 @@ export function injectSoundController(
     .setInteractive({ cursor: 'pointer' });
 
   const sfxButton = scene.add.image(
-    Number(width) * 0.9125 + MAP.TILE_SIZE,
+    bgmButton.x + MAP.TILE_SIZE * 1.5,
     Number(height) * 0.075,
     'sfx-on'
   )
     .setOrigin(0.5, 0.5)
     .setInteractive({ cursor: 'pointer' });
 
+  const fullScreenButton = scene.add.image( 
+    bgmButton.x - MAP.TILE_SIZE * 1.5,
+    Number(height) * 0.075,
+    'fullscreen',
+  )
+    .setOrigin(0.5, 0.5)
+    .setInteractive({ cursor: 'pointer' });
   
   sfxButton.on('pointerdown', () => {
     sfxButton.setTexture(`sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}-pressed`);
@@ -61,5 +68,19 @@ export function injectSoundController(
     }
   });
 
-  return [bgmButton, sfxButton];
+  fullScreenButton.on('pointerdown', () => {
+    fullScreenButton.setTexture('fullscreen-pressed');
+  });
+
+  fullScreenButton.on('pointerup', () => {
+    fullScreenButton.setTexture('fullscreen');
+
+    if (scene.game.scale.isFullscreen) {
+      scene.game.scale.stopFullscreen();
+    } else {
+      scene.game.scale.startFullscreen();
+    }
+  });
+
+  return [fullScreenButton, bgmButton, sfxButton];
 }

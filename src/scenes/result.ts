@@ -68,7 +68,7 @@ export class ResultScene extends Phaser.Scene {
     if (this.result.lives && GameStorage.getInstance().highScore < score) {
       this.scoreNotification = this.add.text(
         Number(width) / 2,
-        scoreText.y + MAP.TILE_SIZE * 3,
+        scoreText.y + MAP.TILE_SIZE * 4,
         'HIGH SCORE!',
         {
           fontFamily: 'Monogram',

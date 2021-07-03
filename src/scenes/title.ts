@@ -12,7 +12,7 @@ export class TitleScene extends Phaser.Scene {
 
   private playButton!: Phaser.GameObjects.Image;
   private helpButton!: Phaser.GameObjects.Image;
-  private soundController!: Phaser.GameObjects.Image[];
+  private uiButtons!: Phaser.GameObjects.Image[];
 
   private twitterButton!: Phaser.GameObjects.Image;
 
@@ -112,7 +112,7 @@ export class TitleScene extends Phaser.Scene {
     const { width, height } = this.game.config;
 
     this.helpButton = this.add.image(
-      this.soundController[0].x - MAP.TILE_SIZE * 1.5,
+      this.uiButtons[0].x - MAP.TILE_SIZE * 1.5,
       Number(height) * 0.075,
       'help'
     )
@@ -161,7 +161,7 @@ export class TitleScene extends Phaser.Scene {
 
     const closeButton = this.add.image(
       Number(width) * 0.95,
-      Number(height) * 0.05,
+      Number(height) * 0.075,
       'close',
     )
       .setOrigin(0.5, 0.5)
@@ -189,7 +189,7 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private initializeBgm(): void {
-    this.soundController = injectUI(this);
+    this.uiButtons = injectUI(this);
   
     if (GameSettings.getInstance().bgm) {
       this.sound.play ('title', { volume: SOUND.BGM });
@@ -198,9 +198,6 @@ export class TitleScene extends Phaser.Scene {
 
   private initializeShortcuts(): void {
     const keys = this.input.keyboard.addKeys('SPACE, ENTER');
-    const helpShortcut = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.H,
-    );
     const bg = this.helpOverlay.getChildren()[0] as Phaser.GameObjects.RenderTexture;
 
     Object.values(keys).forEach((key: Phaser.Input.Keyboard.Key) => {
@@ -232,22 +229,6 @@ export class TitleScene extends Phaser.Scene {
           listener.removeListener('up');
         }
       });
-    });
-
-    helpShortcut.on('down', () => {
-      this.helpButton.setTexture('help-pressed');
-    });
-
-    helpShortcut.on('up', () => {
-      this.helpButton.setTexture('help');
-    
-      bg.alpha ?
-        this.hideHelp() :
-        this.showHelp();
-
-      if (GameSettings.getInstance().sfx) {
-        this.sound.play('button', { volume: SOUND.SFX });
-      }
     });
   }
 
@@ -339,7 +320,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.playButton.removeInteractive();
     this.helpButton.removeInteractive();
-    this.soundController.forEach((button) => button.removeInteractive());
+    this.uiButtons.forEach((button) => button.removeInteractive());
     this.twitterButton.removeInteractive();
   }
 
@@ -353,7 +334,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.playButton.setInteractive({ cursor: 'pointer' });
     this.helpButton.setInteractive({ cursor: 'pointer' });
-    this.soundController.forEach((button) => button.setInteractive({ cursor: 'pointer' }));
+    this.uiButtons.forEach((button) => button.setInteractive({ cursor: 'pointer' }));
     this.twitterButton.setInteractive({ cursor: 'pointer' });
   }
 

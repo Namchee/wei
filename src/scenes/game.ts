@@ -12,6 +12,7 @@ import { GameSettings } from '../state/setting';
 
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { MAP, OBJECTS, SOUND } from '../utils/const';
+import { injectUI } from '../utils/ui';
 
 export class GameScene extends Phaser.Scene {
   private keys!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -438,9 +439,11 @@ export class GameScene extends Phaser.Scene {
       .setOrigin(0, 0.5)
       .setScrollFactor(0);
 
+    const uiButtons = injectUI(this);
+
     this.pauseButton = this.add.image(
-      Number(width) * 0.95,
-      Number(height) * 0.05,
+      uiButtons[0].x - MAP.TILE_SIZE * 1.5,
+      Number(height) * 0.075,
       'pause',
     )
       .setOrigin(0.5, 0.5)

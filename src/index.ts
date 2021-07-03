@@ -1,4 +1,5 @@
 import { Game, AUTO, Types } from 'phaser';
+import { registerSW } from 'virtual:pwa-register';
 
 import { PHYSICS } from './utils/const';
 

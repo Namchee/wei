@@ -499,17 +499,6 @@ export class GameScene extends Phaser.Scene {
         this.player.jump();
       });
     });
-
-    const pause = this.input.keyboard.addKey('P');
-
-    pause.on('down', () => {
-      this.pauseButton.setTexture('pause-pressed');
-    });
-
-    pause.on('up', () => {
-      this.pauseButton.setTexture('pause');
-      this.pauseGame();
-    });
   }
 
   private pauseGame(): void {

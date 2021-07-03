@@ -16,6 +16,7 @@ export function injectUI(
     'bgm-on',
   )
     .setOrigin(0.5, 0.5)
+    .setScrollFactor(0)
     .setInteractive({ cursor: 'pointer' });
 
   const sfxButton = scene.add.image(
@@ -24,6 +25,7 @@ export function injectUI(
     'sfx-on'
   )
     .setOrigin(0.5, 0.5)
+    .setScrollFactor(0)
     .setInteractive({ cursor: 'pointer' });
 
   const fullScreenButton = scene.add.image( 
@@ -32,6 +34,7 @@ export function injectUI(
     'fullscreen',
   )
     .setOrigin(0.5, 0.5)
+    .setScrollFactor(0)
     .setInteractive({ cursor: 'pointer' });
   
   sfxButton.on('pointerdown', () => {
@@ -56,12 +59,7 @@ export function injectUI(
     bgmButton.setTexture(`bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}`);
 
     const bgm = scene.sound.get(scene instanceof TitleScene ? 'title' : 'game');
-
-    if (GameSettings.getInstance().bgm) {
-      bgm.resume();
-    } else {
-      bgm.pause();
-    }
+    GameSettings.getInstance().bgm ? bgm.resume() : bgm.pause();
 
     if (GameSettings.getInstance().sfx) {
       scene.sound.play('button', { volume: SOUND.SFX });
@@ -74,6 +72,10 @@ export function injectUI(
 
   fullScreenButton.on('pointerup', () => {
     fullScreenButton.setTexture('fullscreen');
+
+    if (GameSettings.getInstance().sfx) {
+      scene.sound.play('button', { volume: SOUND.SFX });
+    }
 
     if (scene.game.scale.isFullscreen) {
       scene.game.scale.stopFullscreen();

@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
-  base: '/',
+  base: '',
   publicDir: './src/assets',
   plugins: [
     VitePWA({
@@ -14,7 +14,7 @@ export default defineConfig({
         '**/*.wav',
         '**/*.json',
       ],
-      base: '/',
+      base: '',
       manifest: {
         name: 'Wei',
         short_name: 'Wei',

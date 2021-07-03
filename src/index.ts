@@ -27,9 +27,23 @@ const config: Types.Core.GameConfig = {
       }
     },
   },
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    parent: 'game',
+    width: 640,
+    height: 384,
+  },
   pixelArt: true,
-  parent: '#game',
-  scene: [PreloaderScene, TitleScene, SplashScene,  GameScene, PauseScene, ResultScene],
+  parent: 'game',
+  scene: [
+    PreloaderScene,
+    TitleScene,
+    SplashScene,
+    GameScene,
+    PauseScene,
+    ResultScene,
+  ],
 };
 
 new Game(config);

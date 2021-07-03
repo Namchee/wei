@@ -97,6 +97,8 @@ export function loadAssets(scene: Phaser.Scene): void {
   scene.load.image('twitter', 'buttons/twitter.png');
   scene.load.image('pause', 'buttons/pause.png');
   scene.load.image('pause-pressed', 'buttons/pause-pressed.png');
+  scene.load.image('fullscreen', 'buttons/fullscreen.png');
+  scene.load.image('fullscreen-pressed', 'buttons/fullscreen-pressed.png');
 
   // load bgm
   scene.load.audio('title', 'bgm/title.mp3');

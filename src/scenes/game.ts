@@ -447,6 +447,7 @@ export class GameScene extends Phaser.Scene {
       .setScrollFactor(0)
       .setInteractive({ cursor: 'pointer' });
 
+
     this.pauseButton.on('pointerdown', () => {
       this.pauseButton.setTexture('pause-pressed');
     })

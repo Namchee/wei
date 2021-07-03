@@ -1,6 +1,8 @@
 # Wei
 
-Wei merupakan sebuah _game platformer_ sederhana tiruan [Mario](https://en.wikipedia.org/wiki/Super_Mario) yang dibuat menggunakan _engine_ Phaser 3.
+> _Game_ ini merupakan _prototype_, sehingga _stage_nya memang di desain untuk cukup sederhana dan sangat singkat.
+
+Wei merupakan sebuah _game platformer_ sederhana tiruan [Mario](https://en.wikipedia.org/wiki/Super_Mario) yang dibuat menggunakan _engine_ Phaser 3. Wei dapat diunduh dalam bentuk [PWA](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps).
 
 Dibuat oleh 2017730017 sebagai salah satu tugas mata kuliah Pemrograman Permainan Komputer.
 
@@ -17,7 +19,7 @@ Dibuat oleh 2017730017 sebagai salah satu tugas mata kuliah Pemrograman Permaina
 
 Karena projectnya sudah di_build_, cukup jalankan sebuah web server dengan `dist` sebagai root directory. Salah satu cara termudah untuk melakukannya adalah menggunakan `serve` melalui `npx serve dist`.
 
-## Fitur
+## Fitur Pengembangan
 
 1. _Hot-reloading_ menggunakan [`vite`](https://vitejs.dev/)
 2. _Package-manager_ yang _disk-efficient_ menggunakan [`pnpm`](https://pnpm.js.org/)

@@ -443,7 +443,7 @@ export class GameScene extends Phaser.Scene {
 
     this.pauseButton = this.add.image(
       uiButtons[0].x - MAP.TILE_SIZE * 1.5,
-      Number(height) * 0.05,
+      Number(height) * 0.0625,
       'pause',
     )
       .setOrigin(0.5, 0.5)

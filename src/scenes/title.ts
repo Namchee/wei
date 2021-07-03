@@ -82,7 +82,7 @@ export class TitleScene extends Phaser.Scene {
     if (GameStorage.getInstance().highScore) {
       this.add.text(
         Number(width) * 0.95,
-        Number(height) * 0.95,
+        Number(height) * 0.925,
         `HIGH SCORE: ${GameStorage.getInstance().highScore}`,
         {
           fontFamily: 'Monogram',
@@ -94,7 +94,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.twitterButton = this.add.image(
       Number(width) * 0.05,
-      Number(height) * 0.95,
+      Number(height) * 0.925,
       'twitter',
     )
       .setOrigin(0.5, 0.5)
@@ -114,7 +114,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.helpButton = this.add.image(
       this.uiButtons[0].x - MAP.TILE_SIZE * 1.5,
-      Number(height) * 0.075,
+      Number(height) * 0.05,
       'help'
     )
       .setOrigin(0.5, 0.5)

@@ -12,7 +12,7 @@ export function injectUI(
 
   const bgmButton = scene.add.image(
     Number(width) * 0.9,
-    Number(height) * 0.075,
+    Number(height) * 0.05,
     'bgm-on',
   )
     .setOrigin(0.5, 0.5)
@@ -21,7 +21,7 @@ export function injectUI(
 
   const sfxButton = scene.add.image(
     bgmButton.x + MAP.TILE_SIZE * 1.5,
-    Number(height) * 0.075,
+    Number(height) * 0.05,
     'sfx-on'
   )
     .setOrigin(0.5, 0.5)
@@ -30,7 +30,7 @@ export function injectUI(
 
   const fullScreenButton = scene.add.image( 
     bgmButton.x - MAP.TILE_SIZE * 1.5,
-    Number(height) * 0.075,
+    Number(height) * 0.05,
     'fullscreen',
   )
     .setOrigin(0.5, 0.5)

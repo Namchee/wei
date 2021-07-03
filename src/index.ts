@@ -12,6 +12,8 @@ import { ResultScene } from './scenes/result';
 
 import './assets/styles/style.css';
 
+registerSW(); // inject the service worker
+
 const config: Types.Core.GameConfig = {
   type: AUTO,
   width: 640,

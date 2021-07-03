@@ -67,8 +67,7 @@ export class TitleScene extends Phaser.Scene {
           fill: true,
         },
       }
-    )
-      .setOrigin(0.5, 0.5);
+    ).setOrigin(0.5, 0.5);
 
     this.playButton = this.add.image(
       Number(width) / 2,
@@ -81,8 +80,8 @@ export class TitleScene extends Phaser.Scene {
 
     if (GameStorage.getInstance().highScore) {
       this.add.text(
-        Number(width) * 0.95,
-        Number(height) * 0.925,
+        Number(width) * 0.975,
+        Number(height) * 0.95,
         `HIGH SCORE: ${GameStorage.getInstance().highScore}`,
         {
           fontFamily: 'Monogram',
@@ -114,7 +113,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.helpButton = this.add.image(
       this.uiButtons[0].x - MAP.TILE_SIZE * 1.5,
-      Number(height) * 0.05,
+      Number(height) * 0.0625,
       'help'
     )
       .setOrigin(0.5, 0.5)
@@ -162,7 +161,7 @@ export class TitleScene extends Phaser.Scene {
 
     const closeButton = this.add.image(
       Number(width) * 0.95,
-      Number(height) * 0.075,
+      Number(height) * 0.0625,
       'close',
     )
       .setOrigin(0.5, 0.5)
@@ -303,12 +302,6 @@ export class TitleScene extends Phaser.Scene {
 
       this.playButton.setTexture('play');
       this.showDifficultyScreen();
-    });
-
-    this.twitterButton.on('pointerdown', () => {
-      if (GameSettings.getInstance().sfx) {
-        this.sound.play('button', { volume: SOUND.SFX });
-      }
     });
 
     this.twitterButton.on('pointerup', () => {

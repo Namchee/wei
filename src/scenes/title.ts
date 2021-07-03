@@ -67,7 +67,8 @@ export class TitleScene extends Phaser.Scene {
           fill: true,
         },
       }
-    ).setOrigin(0.5, 0.5);
+    )
+      .setOrigin(0.5, 0.5);
 
     this.playButton = this.add.image(
       Number(width) / 2,
@@ -93,11 +94,11 @@ export class TitleScene extends Phaser.Scene {
 
     this.twitterButton = this.add.image(
       Number(width) * 0.05,
-      Number(height) * 0.925,
+      Number(height) * 0.95,
       'twitter',
     )
       .setOrigin(0.5, 0.5)
-      .setScale(0.065, 0.065)
+      .setScale(2.5, 2.5)
       .setInteractive({ cursor: 'pointer' });
 
     this.tweens.add({
@@ -302,6 +303,12 @@ export class TitleScene extends Phaser.Scene {
 
       this.playButton.setTexture('play');
       this.showDifficultyScreen();
+    });
+
+    this.twitterButton.on('pointerdown', () => {
+      if (GameSettings.getInstance().sfx) {
+        this.sound.play('button', { volume: SOUND.SFX });
+      }
     });
 
     this.twitterButton.on('pointerup', () => {

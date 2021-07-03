@@ -53,7 +53,7 @@ export class SplashScene extends Phaser.Scene {
       ['MAX. HEALTH', `${GameSettings.getInstance().difficulty}`],
       {
         fontFamily: 'Monogram',
-        fontSize: '16px',
+        fontSize: '18px',
         wordWrap: { width: 400, useAdvancedWrap: true },
         lineSpacing: 1.125,
         align: 'center',
@@ -67,7 +67,7 @@ export class SplashScene extends Phaser.Scene {
       ['DIFFICULTY', `${Difficulty[GameSettings.getInstance().difficulty]}`],
       {
         fontFamily: 'Monogram',
-        fontSize: '16px',
+        fontSize: '18px',
         wordWrap: { width: 400, useAdvancedWrap: true },
         lineSpacing: 1.125,
         align: 'center',

@@ -5,17 +5,16 @@ import { GameStorage } from '../state/storage';
 import { BackgroundManager, createBackgroundManager } from '../utils/background';
 import { Difficulty, MAP, SCENES, SOUND, TEXT, TITLE } from '../utils/const';
 
+import { injectSoundController } from '../utils/ui';
+
 export class TitleScene extends Phaser.Scene {
   private backgroundManager!: BackgroundManager;
 
   private playButton!: Phaser.GameObjects.Image;
   private helpButton!: Phaser.GameObjects.Image;
-  private bgmButton!: Phaser.GameObjects.Image;
-  private sfxButton!: Phaser.GameObjects.Image;
+  private soundController!: Phaser.GameObjects.Image[];
 
   private twitterButton!: Phaser.GameObjects.Image;
-
-  private titleBgm!: Phaser.Sound.BaseSound;
 
   private helpOverlay!: Phaser.GameObjects.Group;
   private difficultySelector!: Phaser.GameObjects.Group;
@@ -32,11 +31,10 @@ export class TitleScene extends Phaser.Scene {
   public create(): void {
     this.initializeBackground();
     this.initializeUi();
-    this.initializeAbout();
     this.initializeBgm();
+    this.initializeAbout();
     this.initializeShortcuts();
     this.initializeDifficulty();
-
     this.listenInputs();
   }
 
@@ -80,30 +78,6 @@ export class TitleScene extends Phaser.Scene {
       .setScale(2.125, 2.125)
       .setInteractive({ cursor: 'pointer' });
 
-    this.helpButton = this.add.image(
-      Number(width) * 0.8875 - MAP.TILE_SIZE,
-      Number(height) * 0.075,
-      'help'
-    )
-      .setOrigin(0.5, 0.5)
-      .setInteractive({ cursor: 'pointer' });
-
-    this.bgmButton = this.add.image(
-      Number(width) * 0.9,
-      Number(height) * 0.075,
-      'bgm-on',
-    )
-      .setOrigin(0.5, 0.5)
-      .setInteractive({ cursor: 'pointer' });
-
-    this.sfxButton = this.add.image(
-      Number(width) * 0.9125 + MAP.TILE_SIZE,
-      Number(height) * 0.075,
-      'sfx-on'
-    )
-      .setOrigin(0.5, 0.5)
-      .setInteractive({ cursor: 'pointer' });
-
     if (GameStorage.getInstance().highScore) {
       this.add.text(
         Number(width) * 0.95,
@@ -136,6 +110,14 @@ export class TitleScene extends Phaser.Scene {
 
   private initializeAbout(): void {
     const { width, height } = this.game.config;
+
+    this.helpButton = this.add.image(
+      this.soundController[0].x - MAP.TILE_SIZE * 1.5,
+      Number(height) * 0.075,
+      'help'
+    )
+      .setOrigin(0.5, 0.5)
+      .setInteractive({ cursor: 'pointer' });
 
     this.helpOverlay = this.add.group();
     const overlayBg = this.add.renderTexture(
@@ -207,10 +189,10 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private initializeBgm(): void {
-    this.titleBgm = this.sound.add('title', { volume: SOUND.BGM });
-
+    this.soundController = injectSoundController(this);
+  
     if (GameSettings.getInstance().bgm) {
-      this.titleBgm.play({ loop: true });
+      this.sound.play ('title', { volume: SOUND.BGM });
     }
   }
 
@@ -341,32 +323,6 @@ export class TitleScene extends Phaser.Scene {
       this.showDifficultyScreen();
     });
 
-    this.sfxButton.on('pointerdown', () => {
-      this.sfxButton.setTexture(`sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}-pressed`);
-    });
-
-    this.sfxButton.on('pointerup', () => {
-      GameSettings.getInstance().toggleSfx();
-      this.sfxButton.setTexture(`sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}`);
-
-      if (GameSettings.getInstance().sfx) {
-        this.sound.play('button', { volume: SOUND.SFX });
-      }
-    });
-
-    this.bgmButton.on('pointerdown', () => {
-      this.bgmButton.setTexture(`bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}-pressed`);
-    });
-
-    this.bgmButton.on('pointerup', () => {
-      this.toggleBgm();
-      this.bgmButton.setTexture(`bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}`);
-
-      if (GameSettings.getInstance().sfx) {
-        this.sound.play('button', { volume: SOUND.SFX });
-      }
-    });
-
     this.twitterButton.on('pointerup', () => {
       window.open(`https://twitter.com/intent/tweet?text=${TEXT.SHARE}`);
     });
@@ -383,8 +339,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.playButton.removeInteractive();
     this.helpButton.removeInteractive();
-    this.bgmButton.removeInteractive();
-    this.sfxButton.removeInteractive();
+    this.soundController.forEach((button) => button.removeInteractive());
     this.twitterButton.removeInteractive();
   }
 
@@ -398,17 +353,8 @@ export class TitleScene extends Phaser.Scene {
 
     this.playButton.setInteractive({ cursor: 'pointer' });
     this.helpButton.setInteractive({ cursor: 'pointer' });
-    this.bgmButton.setInteractive({ cursor: 'pointer' });
-    this.sfxButton.setInteractive({ cursor: 'pointer' });
+    this.soundController.forEach((button) => button.setInteractive({ cursor: 'pointer' }));
     this.twitterButton.setInteractive({ cursor: 'pointer' });
-  }
-
-  private toggleBgm(): void {
-    GameSettings.getInstance().toggleBgm();
-
-    GameSettings.getInstance().bgm ?
-      this.titleBgm.play({ loop: true }) :
-      this.titleBgm.pause();
   }
 
   private showDifficultyScreen(): void {
@@ -516,7 +462,7 @@ export class TitleScene extends Phaser.Scene {
     this.cameras.main.fadeOut(SCENES.TRANSITION, 0, 0, 0);
 
     this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-      this.titleBgm.pause();
+      this.sound.get('title').stop();
       this.scene.start('SplashScene');
     });
   }

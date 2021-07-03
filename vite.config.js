@@ -6,11 +6,19 @@ export default defineConfig({
   publicDir: './src/assets',
   plugins: [
     VitePWA({
+      registerType: 'autoUpdate',
+      injectRegister: true,
+      includeAssets: [
+        '**/*.png',
+        '**/*.mp3',
+        '**/*.wav',
+        '**/*.json',
+      ],
       base: '/',
       manifest: {
         name: 'Wei',
         short_name: 'Wei',
-        theme_color: '#FFFFFF',
+        theme_color: '#16161D',
         icons: [
           {
             src: 'icon-192.png',

@@ -478,6 +478,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private initializeBgm(): void {
+    this.keys = this.input.keyboard.createCursorKeys();
     this.gameBgm = this.sound.add('game', { volume: SOUND.BGM });
   
     if (GameSettings.getInstance().bgm) {
@@ -498,11 +499,14 @@ export class GameScene extends Phaser.Scene {
       });
     });
 
-    this.keys = this.input.keyboard.createCursorKeys();
-
     const pause = this.input.keyboard.addKey('P');
 
+    pause.on('down', () => {
+      this.pauseButton.setTexture('pause-pressed');
+    });
+
     pause.on('up', () => {
+      this.pauseButton.setTexture('pause');
       this.pauseGame();
     });
   }

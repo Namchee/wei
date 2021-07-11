@@ -3,6 +3,9 @@ import Phaser from 'phaser';
 const BASE_FRAME = { frameWidth: 32, frameHeight: 32 };
 
 export function loadAssets(scene: Phaser.Scene): void {
+  // load map
+  scene.load.tilemapTiledJSON('world', 'tilemap/wei.json');
+
   // load background assets
   scene.load.image('cloud', 'background/cloud.png');
   scene.load.image('cliff', 'background/cliff.png');
@@ -16,21 +19,18 @@ export function loadAssets(scene: Phaser.Scene): void {
   scene.load.spritesheet('char-jump', 'char/jump.png', BASE_FRAME);
   scene.load.spritesheet('char-fall', 'char/fall.png', BASE_FRAME);
 
-  // load terrain asset
+  // load platforms
   scene.load.image('terrain', 'terrain/terrain.png');
-  scene.load.image('spikes', 'platforms/spikes.png');
-  scene.load.tilemapTiledJSON('world', 'tilemap/wei.json');
+  scene.load.image('spikes', 'terrain/spikes.png');
+  scene.load.spritesheet(
+    'flyers',
+    'terrain/flyers.png',
+    { frameWidth: 32, frameHeight: 10 },
+  );
 
   // load collectibles
   scene.load.spritesheet('cherry', 'collectibles/cherry.png', BASE_FRAME);
   scene.load.spritesheet('collected', 'collectibles/collected.png', BASE_FRAME);
-
-  // load flyers
-  scene.load.spritesheet(
-    'flyers',
-    'platforms/flyers.png',
-    { frameWidth: 32, frameHeight: 10 },
-  );
 
   // load saw
   scene.load.spritesheet(
@@ -100,6 +100,20 @@ export function loadAssets(scene: Phaser.Scene): void {
   scene.load.image('fullscreen', 'buttons/fullscreen.png');
   scene.load.image('fullscreen-pressed', 'buttons/fullscreen-pressed.png');
 
+  // load cursor
+  scene.load.spritesheet(
+    'cursor',
+    'buttons/cursor.png',
+    { frameWidth: 16, frameHeight: 16 },
+  );
+  
+  // load hud
+  scene.load.spritesheet(
+    'hud',
+    'hud.png',
+    { frameWidth: 8, frameHeight: 8 },
+  );
+
   // load bgm
   scene.load.audio('title', 'bgm/title.mp3');
   scene.load.audio('game', 'bgm/game.mp3');
@@ -114,11 +128,4 @@ export function loadAssets(scene: Phaser.Scene): void {
   scene.load.audio('lose', 'sfx/lose.wav');
   scene.load.audio('win', 'sfx/win.wav');
   scene.load.audio('difficulty', 'sfx/difficulty.wav');
-
-  // load cursor
-  scene.load.spritesheet(
-    'cursor',
-    'buttons/cursor.png',
-    { frameWidth: 16, frameHeight: 16 },
-  );
 }

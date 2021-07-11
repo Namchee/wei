@@ -8,9 +8,9 @@ export class SplashScene extends Phaser.Scene {
     super('SplashScene');
   }
 
-  public create(): void {  
+  public create(): void {
     const { width, height } = this.game.config;
-  
+
     const texture = this.add.renderTexture(0, 0, Number(width), Number(height));
     texture.fill(0x121212, 1);
 

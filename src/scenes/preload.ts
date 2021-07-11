@@ -7,7 +7,7 @@ export class PreloaderScene extends Phaser.Scene {
     super('PreloaderScene');
   }
 
-  public preload() {
+  public preload(): void {
     this.initPreloader();
     this.loadAssets();
   }
@@ -28,7 +28,7 @@ export class PreloaderScene extends Phaser.Scene {
       {
         fontFamily: 'Monogram, Consolas, "Courier New"',
         fontSize: '36px',
-      },
+      }
     );
 
     loadingText.setOrigin(0.5, 0.5);
@@ -40,7 +40,7 @@ export class PreloaderScene extends Phaser.Scene {
       {
         fontFamily: 'Monogram, Consolas, "Courier New"',
         fontSize: '24px',
-      },
+      }
     );
 
     percentText.setOrigin(0.5, 0.5);
@@ -52,7 +52,7 @@ export class PreloaderScene extends Phaser.Scene {
       {
         fontFamily: 'Monogram, Consolas, "Courier New"',
         fontSize: '18px',
-      },
+      }
     );
 
     assetText.setOrigin(0.5, 0.5);
@@ -60,12 +60,12 @@ export class PreloaderScene extends Phaser.Scene {
     this.load.on('progress', (value: string) => {
       percentText.setText(`${(Number(value) * 100).toFixed(2)}%`);
       progressBar.clear();
-      progressBar.fillStyle(0xF4F4F5, 0.25);
+      progressBar.fillStyle(0xf4f4f5, 0.25);
       progressBar.fillRect(
         width / 3.825,
         height / 2.275,
         Number(value) * width * 0.4775,
-        height / 15,
+        height / 15
       );
     });
 
@@ -75,7 +75,13 @@ export class PreloaderScene extends Phaser.Scene {
 
     this.load.on('complete', () => {
       this.tweens.add({
-        targets: [progressBar, progressBox, loadingText, percentText, assetText],
+        targets: [
+          progressBar,
+          progressBox,
+          loadingText,
+          percentText,
+          assetText,
+        ],
         alpha: 0,
         duration: 250,
         onComplete: () => {

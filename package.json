@@ -6,10 +6,11 @@
   "private": true,
   "scripts": {
     "lint": "eslint src/**/*.ts",
+    "lint:fix": "yarn lint --fix",
     "dev": "vite",
     "build": "vite build",
     "serve": "vite preview",
-    "submit": "yarn run build && tar --exclude=node_modules --exclude=*.zip --exclude=*.tar.gz --exclude=.editorconfig --exclude=*.env -cvf 2017730017@$npm_package_name.zip ../$npm_package_name"
+    "submit": "yarn build && tar --exclude=node_modules --exclude=*.zip --exclude=*.tar.gz --exclude=.editorconfig --exclude=*.env -cvf 2017730017@$npm_package_name.zip ../$npm_package_name"
   },
   "repository": {
     "type": "git",

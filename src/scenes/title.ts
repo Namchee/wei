@@ -1,8 +1,11 @@
-import Phaser, { Game } from 'phaser';
+import Phaser from 'phaser';
 import { GameSettings } from '../state/setting';
 import { GameStorage } from '../state/storage';
 
-import { BackgroundManager, createBackgroundManager } from '../utils/background';
+import {
+  BackgroundManager,
+  createBackgroundManager,
+} from '../utils/background';
 import { Difficulty, MAP, SCENES, SOUND, TEXT, TITLE } from '../utils/const';
 
 import { injectUI } from '../utils/ui';
@@ -19,12 +22,16 @@ export class TitleScene extends Phaser.Scene {
   private helpOverlay!: Phaser.GameObjects.Group;
   private difficultySelector!: Phaser.GameObjects.Group;
 
-  private readonly difficulties = [Difficulty.EASY, Difficulty.NORMAL, Difficulty.HARD];
+  private readonly difficulties = [
+    Difficulty.EASY,
+    Difficulty.NORMAL,
+    Difficulty.HARD,
+  ];
   private selected: number;
 
   public constructor() {
     super('TitleScene');
-    
+
     this.selected = 1;
   }
 
@@ -41,21 +48,17 @@ export class TitleScene extends Phaser.Scene {
   private initializeBackground(): void {
     const { width, height } = this.game.config;
 
-    this.backgroundManager = createBackgroundManager(
-      this,
-      'Forest',
-      { width: Number(width), height: Number(height) },
-    );
+    this.backgroundManager = createBackgroundManager(this, 'Forest', {
+      width: Number(width),
+      height: Number(height),
+    });
   }
 
   private initializeUi(): void {
     const { width, height } = this.game.config;
 
-    const titleText = this.add.text(
-      Number(width) / 2,
-      -Number(height) / 4,
-      'Wei',
-      {
+    const titleText = this.add
+      .text(Number(width) / 2, -Number(height) / 4, 'Wei', {
         fontFamily: 'Matchup Pro',
         fontSize: '96px',
         stroke: 'black',
@@ -66,36 +69,31 @@ export class TitleScene extends Phaser.Scene {
           color: 'black',
           fill: true,
         },
-      }
-    ).setOrigin(0.5, 0.5);
+      })
+      .setOrigin(0.5, 0.5);
 
-    this.playButton = this.add.image(
-      Number(width) / 2,
-      Number(height) / 2,
-      'play',
-    )
+    this.playButton = this.add
+      .image(Number(width) / 2, Number(height) / 2, 'play')
       .setOrigin(0.5, 0.5)
       .setScale(2.125, 2.125)
       .setInteractive({ cursor: 'pointer' });
 
     if (GameStorage.getInstance().highScore) {
-      this.add.text(
-        Number(width) * 0.975,
-        Number(height) * 0.95,
-        `HIGH SCORE: ${GameStorage.getInstance().highScore}`,
-        {
-          fontFamily: 'Monogram',
-          fontSize: '20px',
-        },
-      )
-      .setOrigin(1, 0.5);
+      this.add
+        .text(
+          Number(width) * 0.975,
+          Number(height) * 0.95,
+          `HIGH SCORE: ${GameStorage.getInstance().highScore}`,
+          {
+            fontFamily: 'Monogram',
+            fontSize: '20px',
+          }
+        )
+        .setOrigin(1, 0.5);
     }
 
-    this.twitterButton = this.add.image(
-      Number(width) * 0.05,
-      Number(height) * 0.925,
-      'twitter',
-    )
+    this.twitterButton = this.add
+      .image(Number(width) * 0.05, Number(height) * 0.925, 'twitter')
       .setOrigin(0.5, 0.5)
       .setScale(2.5, 2.5)
       .setInteractive({ cursor: 'pointer' });
@@ -111,11 +109,12 @@ export class TitleScene extends Phaser.Scene {
   private initializeAbout(): void {
     const { width, height } = this.game.config;
 
-    this.helpButton = this.add.image(
-      this.uiButtons[0].x - MAP.TILE_SIZE * 1.5,
-      Number(height) * 0.0625,
-      'help'
-    )
+    this.helpButton = this.add
+      .image(
+        this.uiButtons[0].x - MAP.TILE_SIZE * 1.5,
+        Number(height) * 0.0625,
+        'help'
+      )
       .setOrigin(0.5, 0.5)
       .setInteractive({ cursor: 'pointer' });
 
@@ -124,15 +123,12 @@ export class TitleScene extends Phaser.Scene {
       0,
       0,
       Number(width),
-      Number(height),
+      Number(height)
     );
     overlayBg.fill(0x121212, 0.85);
 
-    const aboutText = this.add.text(
-      Number(width) / 2,
-      Number(height) * 0.1,
-      'About this game',
-      {
+    const aboutText = this.add
+      .text(Number(width) / 2, Number(height) * 0.1, 'About this game', {
         fontFamily: 'Matchup Pro',
         fontSize: '36px',
         stroke: 'black',
@@ -143,27 +139,21 @@ export class TitleScene extends Phaser.Scene {
           color: 'black',
           fill: true,
         },
-      },
-    ).setOrigin(0.5, 0.5);
+      })
+      .setOrigin(0.5, 0.5);
 
-    const helpText = this.add.text(
-      Number(width) / 2,
-      Number(height) / 2,
-      TEXT.HELP,
-      {
+    const helpText = this.add
+      .text(Number(width) / 2, Number(height) / 2, TEXT.HELP, {
         fontFamily: 'Monogram',
         fontSize: '20px',
         wordWrap: { width: 400, useAdvancedWrap: true },
         lineHeight: 1.25,
         align: 'center',
-      }
-    ).setOrigin(0.5, 0.5);
+      })
+      .setOrigin(0.5, 0.5);
 
-    const closeButton = this.add.image(
-      Number(width) * 0.95,
-      Number(height) * 0.0625,
-      'close',
-    )
+    const closeButton = this.add
+      .image(Number(width) * 0.95, Number(height) * 0.0625, 'close')
       .setOrigin(0.5, 0.5)
       .setInteractive({ cursor: 'pointer' });
 
@@ -190,15 +180,16 @@ export class TitleScene extends Phaser.Scene {
 
   private initializeBgm(): void {
     this.uiButtons = injectUI(this);
-  
+
     if (GameSettings.getInstance().bgm) {
-      this.sound.play ('title', { volume: SOUND.BGM });
+      this.sound.play('title', { volume: SOUND.BGM });
     }
   }
 
   private initializeShortcuts(): void {
     const keys = this.input.keyboard.addKeys('SPACE, ENTER');
-    const bg = this.helpOverlay.getChildren()[0] as Phaser.GameObjects.RenderTexture;
+    const bg =
+      this.helpOverlay.getChildren()[0] as Phaser.GameObjects.RenderTexture;
 
     Object.values(keys).forEach((key: Phaser.Input.Keyboard.Key) => {
       key.on('down', () => {
@@ -235,39 +226,42 @@ export class TitleScene extends Phaser.Scene {
   private initializeDifficulty(): void {
     const { width, height } = this.game.config;
     this.difficultySelector = this.add.group();
-  
-    const easy = this.add.text(
-      Number(width) / 2.15,
-      Number(height) / 2.25 - MAP.TILE_SIZE / 2,
-      'EASY',
-      {
-        fontSize: '32px',
-        fontFamily: 'Monogram',
-      },
-    )
+
+    const easy = this.add
+      .text(
+        Number(width) / 2.15,
+        Number(height) / 2.25 - MAP.TILE_SIZE / 2,
+        'EASY',
+        {
+          fontSize: '32px',
+          fontFamily: 'Monogram',
+        }
+      )
       .setOrigin(0, 0.5);
 
-    const normal = this.add.text(
-      Number(width) / 2.15,
-      // for some reason, perfect spacing is skewed to top, so reduced it a bit
-      Number(height) / 1.975,
-      'NORMAL',
-      {
-        fontSize: '32px',
-        fontFamily: 'Monogram',
-      },
-    )
+    const normal = this.add
+      .text(
+        Number(width) / 2.15,
+        // for some reason, perfect spacing is skewed to top, so reduce it a bit
+        Number(height) / 1.975,
+        'NORMAL',
+        {
+          fontSize: '32px',
+          fontFamily: 'Monogram',
+        }
+      )
       .setOrigin(0, 0.5);
 
-    const hard = this.add.text(
-      Number(width) / 2.15,
-      Number(height) / 1.75 + MAP.TILE_SIZE / 2,
-      'HARD',
-      {
-        fontSize: '32px',
-        fontFamily: 'Monogram',
-      },
-    )
+    const hard = this.add
+      .text(
+        Number(width) / 2.15,
+        Number(height) / 1.75 + MAP.TILE_SIZE / 2,
+        'HARD',
+        {
+          fontSize: '32px',
+          fontFamily: 'Monogram',
+        }
+      )
       .setOrigin(0, 0.5);
 
     this.difficultySelector.add(easy);
@@ -310,7 +304,9 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private showHelp(): void {
-    this.helpOverlay.getChildren().forEach((child) => this.children.bringToTop(child));
+    this.helpOverlay
+      .getChildren()
+      .forEach(child => this.children.bringToTop(child));
     this.add.tween({
       targets: this.helpOverlay.getChildren(),
       alpha: 1,
@@ -320,7 +316,7 @@ export class TitleScene extends Phaser.Scene {
 
     this.playButton.removeInteractive();
     this.helpButton.removeInteractive();
-    this.uiButtons.forEach((button) => button.removeInteractive());
+    this.uiButtons.forEach(button => button.removeInteractive());
     this.twitterButton.removeInteractive();
   }
 
@@ -334,7 +330,9 @@ export class TitleScene extends Phaser.Scene {
 
     this.playButton.setInteractive({ cursor: 'pointer' });
     this.helpButton.setInteractive({ cursor: 'pointer' });
-    this.uiButtons.forEach((button) => button.setInteractive({ cursor: 'pointer' }));
+    this.uiButtons.forEach((button: Phaser.GameObjects.Image) =>
+      button.setInteractive({ cursor: 'pointer' })
+    );
     this.twitterButton.setInteractive({ cursor: 'pointer' });
   }
 
@@ -364,28 +362,29 @@ export class TitleScene extends Phaser.Scene {
   private enableDifficultySelection(): void {
     const { width } = this.game.config;
 
-    const up = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.UP,
-    );
+    const up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
 
     const down = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.DOWN,
+      Phaser.Input.Keyboard.KeyCodes.DOWN
     );
 
-    const cursor = this.add.image(
-      Number(width) / 2.275,
-      (this.difficultySelector.getChildren()[this.selected] as Phaser.GameObjects.Image).y + 5,
-      'cursor',
-      33,
-    )
+    const cursor = this.add
+      .image(
+        Number(width) / 2.275,
+        (
+          this.difficultySelector.getChildren()[
+            this.selected
+          ] as Phaser.GameObjects.Image
+        ).y + 5,
+        'cursor',
+        33
+      )
       .setOrigin(0.5, 0.5);
 
     const buttons = this.difficultySelector.getChildren();
 
     const resetCursor = () => {
-      cursor.setY(
-        (buttons[this.selected] as Phaser.GameObjects.Image).y + 5,
-      );
+      cursor.setY((buttons[this.selected] as Phaser.GameObjects.Image).y + 5);
     };
 
     up.on('down', () => {
@@ -396,7 +395,9 @@ export class TitleScene extends Phaser.Scene {
       }
 
       resetCursor();
-      GameSettings.getInstance().setDifficulty(this.difficulties[this.selected]);
+      GameSettings.getInstance().setDifficulty(
+        this.difficulties[this.selected]
+      );
       if (GameSettings.getInstance().sfx) {
         this.sound.play('difficulty', { volume: SOUND.SFX });
       }
@@ -410,7 +411,9 @@ export class TitleScene extends Phaser.Scene {
       }
 
       resetCursor();
-      GameSettings.getInstance().setDifficulty(this.difficulties[this.selected]);
+      GameSettings.getInstance().setDifficulty(
+        this.difficulties[this.selected]
+      );
       if (GameSettings.getInstance().sfx) {
         this.sound.play('difficulty', { volume: SOUND.SFX });
       }
@@ -421,9 +424,11 @@ export class TitleScene extends Phaser.Scene {
 
       obj.on('pointerover', () => {
         this.selected = idx;
-    
+
         resetCursor();
-        GameSettings.getInstance().setDifficulty(this.difficulties[this.selected]);
+        GameSettings.getInstance().setDifficulty(
+          this.difficulties[this.selected]
+        );
         if (GameSettings.getInstance().sfx) {
           this.sound.play('difficulty', { volume: SOUND.SFX });
         }
@@ -435,17 +440,20 @@ export class TitleScene extends Phaser.Scene {
         }
 
         this.startGame();
-      })
+      });
     });
   }
 
   private startGame(): void {
     this.cameras.main.fadeOut(SCENES.TRANSITION, 0, 0, 0);
 
-    this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-      this.sound.get('title').stop();
-      this.scene.start('SplashScene');
-    });
+    this.cameras.main.once(
+      Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE,
+      () => {
+        this.sound.get('title').stop();
+        this.scene.start('SplashScene');
+      }
+    );
   }
 
   public update(): void {

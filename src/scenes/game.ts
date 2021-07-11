@@ -1,4 +1,4 @@
-import Phaser, { Game } from 'phaser';
+import Phaser from 'phaser';
 
 import { Cherry } from '../objects/cherry';
 import { Flyer } from '../objects/flyer';
@@ -10,7 +10,10 @@ import { Trophy } from '../objects/trophy';
 import { GameState } from '../state/game';
 import { GameSettings } from '../state/setting';
 
-import { BackgroundManager, createBackgroundManager } from '../utils/background';
+import {
+  BackgroundManager,
+  createBackgroundManager,
+} from '../utils/background';
 import { MAP, OBJECTS, SOUND } from '../utils/const';
 import { injectUI } from '../utils/ui';
 
@@ -43,7 +46,7 @@ export class GameScene extends Phaser.Scene {
     super('GameScene');
   }
 
-  public create() {
+  public create(): void {
     this.gameState = new GameState();
 
     this.initializeBackground();
@@ -68,49 +71,46 @@ export class GameScene extends Phaser.Scene {
     this.initializeHooks();
   }
 
-  public update() {
+  public update(): void {
     if (this.gameState.isRunning) {
       this.controllerLoop();
       this.player.update();
     } else {
       this.countdown.destroy();
     }
-    
+
     this.backgroundManager.idle();
-  
+
     const mushroomBounds = new Phaser.Geom.Rectangle(
       this.cameras.main.worldView.x - OBJECTS.MUSHROOMS.RADIUS,
       this.cameras.main.worldView.y - OBJECTS.MUSHROOMS.RADIUS,
       this.cameras.main.worldView.width + OBJECTS.MUSHROOMS.RADIUS * 2,
-      this.cameras.main.worldView.height + OBJECTS.MUSHROOMS.RADIUS * 2,
+      this.cameras.main.worldView.height + OBJECTS.MUSHROOMS.RADIUS * 2
     );
 
     const sawBounds = new Phaser.Geom.Rectangle(
       this.cameras.main.worldView.x - OBJECTS.SAW.RADIUS,
       this.cameras.main.worldView.y - OBJECTS.SAW.RADIUS,
       this.cameras.main.worldView.width + OBJECTS.SAW.RADIUS * 2,
-      this.cameras.main.worldView.height + OBJECTS.SAW.RADIUS * 2,
+      this.cameras.main.worldView.height + OBJECTS.SAW.RADIUS * 2
     );
 
     this.mushrooms.forEach((mushroom: Mushroom) => {
-      mushroomBounds.contains(mushroom.x, mushroom.y) ?
-        mushroom.startPatrol() :
-        mushroom.stopPatrol();
+      mushroomBounds.contains(mushroom.x, mushroom.y)
+        ? mushroom.startPatrol()
+        : mushroom.stopPatrol();
     });
 
     this.saws.forEach((saw: Saw) => {
-      sawBounds.contains(saw.x, saw.y) ?
-        saw.startPatrol() :
-        saw.stopPatrol();
+      sawBounds.contains(saw.x, saw.y) ? saw.startPatrol() : saw.stopPatrol();
     });
   }
 
   private initializeBackground(): void {
-    this.backgroundManager = createBackgroundManager(
-      this,
-      'Forest',
-      { width: MAP.WIDTH, height: MAP.HEIGHT },
-    );
+    this.backgroundManager = createBackgroundManager(this, 'Forest', {
+      width: MAP.WIDTH,
+      height: MAP.HEIGHT,
+    });
   }
 
   private initializePlayer(): void {
@@ -122,19 +122,17 @@ export class GameScene extends Phaser.Scene {
 
     this.player = new Player(this, x, y, GameSettings.getInstance().difficulty);
 
-    layer.forEach((sprite) => sprite.destroy());
+    layer.forEach(sprite => sprite.destroy());
   }
 
   private initializeCamera(): void {
     this.cameras.main.startFollow(this.player, true);
-    this.cameras.main.setFollowOffset(
-      -this.player.displayWidth / 2,
-    );
+    this.cameras.main.setFollowOffset(-this.player.displayWidth / 2);
     this.cameras.main.setBounds(
       0,
       -this.map.heightInPixels / 2,
       this.map.widthInPixels,
-      this.map.heightInPixels * 1.5,
+      this.map.heightInPixels * 1.5
     );
   }
 
@@ -145,7 +143,7 @@ export class GameScene extends Phaser.Scene {
       0,
       -this.map.heightInPixels / 2,
       this.map.widthInPixels,
-      this.map.heightInPixels * 1.5 + MAP.HELLHOLE,
+      this.map.heightInPixels * 1.5 + MAP.HELLHOLE
     );
   }
 
@@ -255,9 +253,9 @@ export class GameScene extends Phaser.Scene {
       const [prop, id] = customProps[0].split('_');
       const position = new Phaser.Math.Vector2(pointSprite.x, pointSprite.y);
 
-      prop === 'start' ?
-        startPoints.set(Number(id), position) :
-        endPoints.set(Number(id), position);
+      prop === 'start'
+        ? startPoints.set(Number(id), position)
+        : endPoints.set(Number(id), position);
     });
 
     startPoints.forEach((position, id) => {
@@ -268,7 +266,7 @@ export class GameScene extends Phaser.Scene {
       this.saws.push(saw);
     });
 
-    sawRoutes.forEach((emptySprite) => emptySprite.destroy(true));
+    sawRoutes.forEach(emptySprite => emptySprite.destroy(true));
   }
 
   private initializeMushrooms(): void {
@@ -286,9 +284,9 @@ export class GameScene extends Phaser.Scene {
       const [prop, id] = customProps[0].split('_');
       const position = new Phaser.Math.Vector2(pointSprite.x, pointSprite.y);
 
-      prop === 'start' ?
-        startPoints.set(Number(id), position) :
-        endPoints.set(Number(id), position);
+      prop === 'start'
+        ? startPoints.set(Number(id), position)
+        : endPoints.set(Number(id), position);
     });
 
     startPoints.forEach((position, id) => {
@@ -299,7 +297,7 @@ export class GameScene extends Phaser.Scene {
       this.mushrooms.push(mushroom);
     });
 
-    mushroomRoutes.forEach((emptySprite) => emptySprite.destroy(true));
+    mushroomRoutes.forEach(emptySprite => emptySprite.destroy(true));
   }
 
   private initializeEndpoint(): void {
@@ -330,7 +328,7 @@ export class GameScene extends Phaser.Scene {
     const spikeCollider = this.physics.add.collider(
       this.spikes,
       this.player,
-      () => this.handlePlayerHit(),
+      () => this.handlePlayerHit()
     );
     spikeCollider.setName('spike');
 
@@ -338,9 +336,7 @@ export class GameScene extends Phaser.Scene {
       const collider = this.physics.add.overlap(cherry, this.player, () => {
         (cherry as Cherry).collect();
         this.gameState.collectCherry();
-        this.score.setText(
-          [`CHERRY: ${this.gameState.cherries}`],
-        );
+        this.score.setText([`CHERRY: ${this.gameState.cherries}`]);
 
         this.physics.world.removeCollider(collider);
 
@@ -355,16 +351,15 @@ export class GameScene extends Phaser.Scene {
     this.flyers.forEach((flyer: Flyer) => {
       const collider = this.physics.add.collider(flyer, this.player, () => {
         if (flyer.body.touching.up) {
-          flyer.getHit()
+          flyer
+            .getHit()
             .then(() => this.physics.world.removeCollider(collider));
         }
       });
     });
 
-    const sawCollider = this.physics.add.collider(
-      this.saws,
-      this.player,
-      () => this.handlePlayerHit(),
+    const sawCollider = this.physics.add.collider(this.saws, this.player, () =>
+      this.handlePlayerHit()
     );
     sawCollider.setName('saw');
 
@@ -391,16 +386,20 @@ export class GameScene extends Phaser.Scene {
       collider.setName('mushroom');
     });
 
-    const overlapper = this.physics.add.overlap(this.player, this.trophy, () => {
-      if (GameSettings.getInstance().sfx) {
-        this.sound.play('trophy', { volume: SOUND.SFX });
+    const overlapper = this.physics.add.overlap(
+      this.player,
+      this.trophy,
+      () => {
+        if (GameSettings.getInstance().sfx) {
+          this.sound.play('trophy', { volume: SOUND.SFX });
+        }
+
+        this.physics.world.removeCollider(overlapper);
+        this.gameState.stopGame();
+
+        this.win();
       }
-
-      this.physics.world.removeCollider(overlapper);
-      this.gameState.stopGame();
-
-      this.win();
-    });
+    );
   }
 
   private initializeUi(): void {
@@ -412,58 +411,63 @@ export class GameScene extends Phaser.Scene {
       align: 'center',
     };
 
-    this.lives = this.add.text(
-      Number(width) * 0.025,
-      Number(height) * 0.05,
-      [`HEALTH: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
-      style,
-    )
+    this.lives = this.add
+      .text(
+        Number(width) * 0.025,
+        Number(height) * 0.05,
+        `HEALTH: ${this.player.lives} / ${
+          GameSettings.getInstance().difficulty
+        }`,
+        style
+      )
       .setOrigin(0, 0.5)
       .setScrollFactor(0);
 
-    this.score = this.add.text(
-      Number(width) * 0.025,
-      Number(height) * 0.1,
-      [`CHERRY: ${this.gameState.cherries}`],
-      style,
-    )
+    this.score = this.add
+      .text(
+        Number(width) * 0.025,
+        Number(height) * 0.1,
+        [`CHERRY: ${this.gameState.cherries}`],
+        style
+      )
       .setOrigin(0, 0.5)
       .setScrollFactor(0);
 
-    this.times = this.add.text(
-      Number(width) * 0.025,
-      Number(height) * 0.15,
-      [`TIME: ${OBJECTS.TIME}`],
-      style,
-    )
+    this.times = this.add
+      .text(
+        Number(width) * 0.025,
+        Number(height) * 0.15,
+        [`TIME: ${OBJECTS.TIME}`],
+        style
+      )
       .setOrigin(0, 0.5)
       .setScrollFactor(0);
 
     const uiButtons = injectUI(this);
 
-    this.pauseButton = this.add.image(
-      uiButtons[0].x - MAP.TILE_SIZE * 1.5,
-      Number(height) * 0.0625,
-      'pause',
-    )
+    this.pauseButton = this.add
+      .image(
+        uiButtons[0].x - MAP.TILE_SIZE * 1.5,
+        Number(height) * 0.0625,
+        'pause'
+      )
       .setOrigin(0.5, 0.5)
       .setScrollFactor(0)
       .setInteractive({ cursor: 'pointer' });
 
-
     this.pauseButton.on('pointerdown', () => {
       this.pauseButton.setTexture('pause-pressed');
-    })
+    });
 
     this.pauseButton.on('pointerup', () => {
       this.pauseButton.setTexture('pause');
-      
+
       if (GameSettings.getInstance().sfx) {
         this.sound.play('button', { volume: SOUND.SFX });
       }
 
       this.pauseGame();
-    })
+    });
 
     this.countdown = this.time.addEvent({
       delay: 1000,
@@ -474,17 +478,17 @@ export class GameScene extends Phaser.Scene {
           this.countdown.destroy();
         }
 
-        this.times.setText(
-          [`TIME: ${(currentTime - 1).toString().padStart(3)}`],
-        );
+        this.times.setText([
+          `TIME: ${(currentTime - 1).toString().padStart(3)}`,
+        ]);
       },
-    })
+    });
   }
 
   private initializeBgm(): void {
     this.keys = this.input.keyboard.createCursorKeys();
     this.gameBgm = this.sound.add('game', { volume: SOUND.BGM });
-  
+
     if (GameSettings.getInstance().bgm) {
       this.gameBgm.play('', { loop: true });
     }
@@ -522,14 +526,16 @@ export class GameScene extends Phaser.Scene {
           (gameObject as Flyer).remove();
           break;
         }
-        case Mushroom : {
+        case Mushroom: {
           (gameObject as Mushroom).remove();
           break;
         }
         default: {
           this.player.die();
           this.lives.setText(
-            [`HEALTH: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
+            `HEALTH: ${this.player.lives} / ${
+              GameSettings.getInstance().difficulty
+            }`
           );
           this.lose();
           break;
@@ -554,7 +560,7 @@ export class GameScene extends Phaser.Scene {
         }
       });
     };
-  
+
     if (this.player.isInvicible) {
       return;
     }
@@ -567,22 +573,21 @@ export class GameScene extends Phaser.Scene {
 
     this.player.decrementLives();
     this.lives.setText(
-      [`HEALTH: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`],
+      `HEALTH: ${this.player.lives} / ${GameSettings.getInstance().difficulty}`
     );
 
     if (this.player.isAlive) {
-      this.player.getHit()
-        .then(() => enablePlayerCollision());
+      this.player.getHit().then(() => enablePlayerCollision());
 
       return;
     } else {
-      this.physics.world.colliders.getActive().forEach(
-        (collider: Phaser.Physics.Arcade.Collider) => {
+      this.physics.world.colliders
+        .getActive()
+        .forEach((collider: Phaser.Physics.Arcade.Collider) => {
           if (['map', 'spike', 'cherry'].includes(collider.name)) {
             this.physics.world.removeCollider(collider);
           }
-        },
-      );
+        });
 
       this.cameras.main.stopFollow();
       this.player.ragdoll();
@@ -594,31 +599,25 @@ export class GameScene extends Phaser.Scene {
     this.player.idle();
     this.trophy.collect();
 
-    this.scene.launch(
-      'ResultScene',
-      {
-        result: {
-          difficulty: GameSettings.getInstance().difficulty,
-          lives: this.player.lives,
-          time: Number(this.times.text.match(/\d+/)),
-          cherries: this.gameState.cherries,
-        },
+    this.scene.launch('ResultScene', {
+      result: {
+        difficulty: GameSettings.getInstance().difficulty,
+        lives: this.player.lives,
+        time: Number(this.times.text.match(/\d+/)),
+        cherries: this.gameState.cherries,
       },
-    );
+    });
   }
 
   private lose(): void {
     this.gameState.stopGame();
     this.gameBgm.pause();
 
-    this.scene.launch(
-      'ResultScene',
-      {
-        result: {
-          lives: 0,
-        },
+    this.scene.launch('ResultScene', {
+      result: {
+        lives: 0,
       },
-    );
+    });
   }
 
   private controllerLoop(): void {
@@ -635,9 +634,9 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    this.keys.right.isDown ?
-      this.player.move(Movement.Right) :
-      this.player.move(Movement.Left);
+    this.keys.right.isDown
+      ? this.player.move(Movement.Right)
+      : this.player.move(Movement.Left);
   }
 
   private initializeHooks(): void {

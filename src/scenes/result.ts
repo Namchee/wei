@@ -17,86 +17,98 @@ export class ResultScene extends Phaser.Scene {
     super('ResultScene');
   }
 
-  public init(data: any): void {
+  public init(data: Record<string, any>): void {
     this.result = data.result as GameResult;
   }
 
   public create(): void {
     this.scene.bringToTop();
-  
+
     const { width, height } = this.game.config;
 
     const group = this.add.group();
 
-    const background = this.add.renderTexture(0, 0, Number(width), Number(height));
+    const background = this.add.renderTexture(
+      0,
+      0,
+      Number(width),
+      Number(height)
+    );
     background.fill(COLORS.GRAY[900], 0.9);
 
-    const titleText = this.add.text(
-      Number(width) / 2,
-      Number(height) / 4,
-      this.result.lives ? TEXT.WIN.TITLE : TEXT.LOSE.TITLE,
-      {
-        fontFamily: 'Matchup Pro',
-        fontSize: '48px',
-        stroke: 'black',
-        strokeThickness: 3.5,
-        shadow: {
-          offsetX: 0,
-          offsetY: 5,
-          color: 'black',
-          fill: true,
-        },
-      },
-    )
+    const titleText = this.add
+      .text(
+        Number(width) / 2,
+        Number(height) / 4,
+        this.result.lives ? TEXT.WIN.TITLE : TEXT.LOSE.TITLE,
+        {
+          fontFamily: 'Matchup Pro',
+          fontSize: '48px',
+          stroke: 'black',
+          strokeThickness: 3.5,
+          shadow: {
+            offsetX: 0,
+            offsetY: 5,
+            color: 'black',
+            fill: true,
+          },
+        }
+      )
       .setOrigin(0.5, 0.5);
 
     const score = this.calculateScore();
 
-    const scoreText = this.add.text(
-      Number(width) / 2,
-      titleText.y + MAP.TILE_SIZE * 5,
-      this.result.lives ? ['SCORE', `${score}`] : TEXT.LOSE.DESC,
-      {
-        fontFamily: 'Monogram',
-        fontSize: this.result.lives ? '36px': '24px',
-        wordWrap: { width: 400, useAdvancedWrap: true },
-        align: 'center',
-      }
-    )
+    const scoreText = this.add
+      .text(
+        Number(width) / 2,
+        titleText.y + MAP.TILE_SIZE * 5,
+        this.result.lives ? ['SCORE', `${score}`] : TEXT.LOSE.DESC,
+        {
+          fontFamily: 'Monogram',
+          fontSize: this.result.lives ? '36px' : '24px',
+          wordWrap: { width: 400, useAdvancedWrap: true },
+          align: 'center',
+        }
+      )
       .setOrigin(0.5, 0.5);
 
     if (this.result.lives && GameStorage.getInstance().highScore < score) {
-      this.scoreNotification = this.add.text(
-        Number(width) / 2,
-        scoreText.y + MAP.TILE_SIZE * 4,
-        'HIGH SCORE!',
-        {
-          fontFamily: 'Monogram',
-          fontSize: '24px',
-          wordWrap: { width: 300, useAdvancedWrap: true },
-          align: 'center',
-        },
-      )
+      this.scoreNotification = this.add
+        .text(
+          Number(width) / 2,
+          scoreText.y + MAP.TILE_SIZE * 4,
+          'HIGH SCORE!',
+          {
+            fontFamily: 'Monogram',
+            fontSize: '24px',
+            wordWrap: { width: 300, useAdvancedWrap: true },
+            align: 'center',
+          }
+        )
         .setOrigin(0.5, 0.5);
 
       this.blinkHighScore();
       GameStorage.getInstance().setHighScore(score);
     }
 
-    this.homeButton = this.add.image(
-      Number(width) / 2 - MAP.TILE_SIZE * 1.5,
-      (this.scoreNotification ? this.scoreNotification.y : scoreText.y) + MAP.TILE_SIZE * 5,
-      'home',
-    )
+    this.homeButton = this.add
+      .image(
+        Number(width) / 2 - MAP.TILE_SIZE * 1.5,
+        (this.scoreNotification ? this.scoreNotification.y : scoreText.y) +
+          MAP.TILE_SIZE * 5,
+        'home'
+      )
       .setOrigin(0.5, 0.5)
       .setScale(1.5, 1.5)
       .setInteractive({ cursor: 'pointer' });
 
-    this.retryButton = this.add.image(
-      Number(width) / 2 + MAP.TILE_SIZE * 1.5,
-      (this.scoreNotification ? this.scoreNotification.y : scoreText.y) + MAP.TILE_SIZE * 5,
-      'retry',
-    )
+    this.retryButton = this.add
+      .image(
+        Number(width) / 2 + MAP.TILE_SIZE * 1.5,
+        (this.scoreNotification ? this.scoreNotification.y : scoreText.y) +
+          MAP.TILE_SIZE * 5,
+        'retry'
+      )
       .setOrigin(0.5, 0.5)
       .setScale(1.5, 1.5)
       .setInteractive({ cursor: 'pointer' });
@@ -117,8 +129,10 @@ export class ResultScene extends Phaser.Scene {
       duration: SCENES.RESULT,
       onComplete: () => {
         if (GameSettings.getInstance().sfx) {
-          this.sound.play(this.result.lives ? 'win' : 'lose', { volume: SOUND.SFX });
-        }    
+          this.sound.play(this.result.lives ? 'win' : 'lose', {
+            volume: SOUND.SFX,
+          });
+        }
       },
     });
   }
@@ -146,9 +160,10 @@ export class ResultScene extends Phaser.Scene {
   }
 
   private calculateScore(): number {
-    let baseScore = (SCORE.LIVES * this.result.lives +
+    let baseScore =
+      SCORE.LIVES * this.result.lives +
       SCORE.CHERRY * this.result.cherries +
-      Math.floor(SCORE.TIME * this.result.time));
+      Math.floor(SCORE.TIME * this.result.time);
 
     Object.entries(SCORE.DIFFICULTY).forEach((val) => {
       if (Number(val[0]) === this.result.difficulty) {

@@ -34,7 +34,7 @@ export class Cherry extends Phaser.Physics.Arcade.Sprite {
     });
   }
 
-  public collect() {
+  public collect(): void {
     this.anims.play('collected');
 
     this.once('animationcomplete', () => {

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { COLORS, MAP, SCENES, SCORE } from '../utils/const';
+import { COLORS, MAP, SCENES } from '../utils/const';
 
 export class PauseScene extends Phaser.Scene {
   private components!: Phaser.GameObjects.Group;
@@ -15,19 +15,11 @@ export class PauseScene extends Phaser.Scene {
     this.scene.bringToTop('PauseScene');
     this.components = this.add.group();
 
-    const texture = this.add.renderTexture(
-      0,
-      0,
-      Number(width),
-      Number(height),
-    );
+    const texture = this.add.renderTexture(0, 0, Number(width), Number(height));
     texture.fill(COLORS.GRAY[900], 0.9);
 
-    const titleText = this.add.text(
-      Number(width) / 2,
-      Number(height) / 3,
-      'PAUSED',
-      {
+    const titleText = this.add
+      .text(Number(width) / 2, Number(height) / 3, 'PAUSED', {
         fontFamily: 'Matchup Pro',
         fontSize: '36px',
         stroke: 'black',
@@ -39,20 +31,20 @@ export class PauseScene extends Phaser.Scene {
           color: 'black',
           fill: true,
         },
-      },
-    )
+      })
       .setOrigin(0.5, 0.5);
 
-    const flashingText = this.add.text(
-      Number(width) / 2,
-      titleText.y + MAP.TILE_SIZE * 3,
-      'Click anywhere to continue',
-      {
-        fontFamily: 'Monogram',
-        fontSize: '24px',
-        align: 'center',
-      },
-    )
+    const flashingText = this.add
+      .text(
+        Number(width) / 2,
+        titleText.y + MAP.TILE_SIZE * 3,
+        'Click anywhere to continue',
+        {
+          fontFamily: 'Monogram',
+          fontSize: '24px',
+          align: 'center',
+        }
+      )
       .setOrigin(0.5, 0.5);
 
     this.components.add(titleText);
@@ -71,7 +63,7 @@ export class PauseScene extends Phaser.Scene {
   }
 
   private initializeHooks(): void {
-    this.events.on('pause', () => {    
+    this.events.on('pause', () => {
       this.tweens.add({
         targets: this.components.getChildren(),
         alpha: 0,

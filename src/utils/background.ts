@@ -50,7 +50,7 @@ export class ForestBackgroundManager implements BackgroundManager {
 
   private applyLayers({ width, height }: Dimension): void {
     const scene = this.layerGroup.scene;
-  
+
     const cloud = scene.add.tileSprite(
       0,
       height - (1.25 * BACKGROUND.HEIGHT),
@@ -91,7 +91,7 @@ export class ForestBackgroundManager implements BackgroundManager {
       let scrollAmount = 0;
 
       switch (layer.name) {
-        case 'cloud': 
+        case 'cloud':
           scrollAmount = BACKGROUND.CLOUD_SPEED;
           break;
         case 'cliff':
@@ -101,7 +101,7 @@ export class ForestBackgroundManager implements BackgroundManager {
           scrollAmount = BACKGROUND.GROUND_SPEED;
           break;
       }
-    
+
       layer.tilePositionX -= scrollAmount;
     });
   }
@@ -122,7 +122,7 @@ export class ForestBackgroundManager implements BackgroundManager {
           scrollAmount = BACKGROUND.GROUND_SPEED;
           break;
       }
-    
+
       layer.tilePositionX += scrollAmount;
     });
   }
@@ -130,7 +130,7 @@ export class ForestBackgroundManager implements BackgroundManager {
   public idle(): void {
     this.layerGroup.children.iterate((child) => {
       const layer = child as Phaser.GameObjects.TileSprite;
-      
+
       if (layer.name === 'cloud') {
         layer.tilePositionX += BACKGROUND.CLOUD_IDLE;
       }

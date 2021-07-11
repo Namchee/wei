@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 import { GameSettings } from '../state/setting';
-import { ANIMS, MAP, PHYSICS, SOUND } from '../utils/const';
+import { ANIMS, PHYSICS, SOUND } from '../utils/const';
 
 export enum Movement {
   Left = -1,
@@ -178,7 +178,7 @@ export class Player extends Phaser.Physics.Arcade.Sprite {
 
       this.isFlinching = true;
       this.invicible = true;
-    
+
       this.setVelocityX(this.flipX ? PHYSICS.HIT_BACK.X : -PHYSICS.HIT_BACK.X);
       this.setVelocityY(-PHYSICS.HIT_BACK.Y);
 

@@ -6,7 +6,7 @@ export class GameSettings {
   private _difficulty: Difficulty;
 
   private static instance: GameSettings;
-  
+
   private constructor() {
     this._sfx = true;
     this._bgm = true;

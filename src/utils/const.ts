@@ -89,8 +89,11 @@ export const SOUND = {
 };
 
 export enum Difficulty {
+  // eslint-disable-next-line no-unused-vars
   EASY = 5,
+  // eslint-disable-next-line no-unused-vars
   NORMAL = 3,
+  // eslint-disable-next-line no-unused-vars
   HARD = 1,
 };
 
@@ -110,6 +113,7 @@ export const SCORE = {
 
 export const TEXT = {
   HELP: [
+    // eslint-disable-next-line max-len
     'There\'s an ancient tale of a legendary hero named Wei. This story marks the beginning of his heroic journey.',
     '',
     '',
@@ -122,14 +126,19 @@ export const TEXT = {
     '',
     'May fortune be with you, o heroes!',
   ],
+  // eslint-disable-next-line max-len
   OBJECTIVE: 'Get as fast as possible to the endpoint while keeping Wei healthy.',
   LOSE: {
     TITLE: 'You Lose!',
-    DESC: ['Wei has taken too much hit and fainted!', 'Better luck next time, o heroes!'],
+    DESC: [
+      'Wei has taken too much hit and fainted!',
+      'Better luck next time, o heroes!',
+    ],
   },
   WIN: {
     TITLE: 'You Win!',
   },
+  // eslint-disable-next-line max-len
   SHARE: 'Hey!%20I%27m%20having%20a%20blast%20after%20playing%20a%20new-and-exciting%20platformer%20game%20%27Wei%27!%0A%0ACome%20and%20try%20it%20out%20now!%20https%3A%2F%2Fwei.vercel.app%2F',
 }
 
@@ -143,4 +152,16 @@ export const COLORS = {
   }
 }
 
-export default { BACKGROUND, COLORS, PHYSICS, ANIMS, MAP, OBJECTS, SOUND, TEXT, TITLE, SCORE, Difficulty };
+export default {
+  BACKGROUND,
+  COLORS,
+  PHYSICS,
+  ANIMS,
+  MAP,
+  OBJECTS,
+  SOUND,
+  TEXT,
+  TITLE,
+  SCORE,
+  Difficulty,
+};

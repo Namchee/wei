@@ -107,12 +107,15 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
 
     this.scene.tweens.add({
       targets: this,
-      angle: randomizer < 0.5 ? -OBJECTS.MUSHROOMS.ANGLE : OBJECTS.MUSHROOMS.ANGLE,
+      angle: randomizer < 0.5 ?
+        -OBJECTS.MUSHROOMS.ANGLE :
+        OBJECTS.MUSHROOMS.ANGLE,
       duration: OBJECTS.MUSHROOMS.ANGLE_DURATION,
     });
 
     (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
-    (this.body as Phaser.Physics.Arcade.Body).setGravityY(OBJECTS.MUSHROOMS.GRAVITY);
+    (this.body as Phaser.Physics.Arcade.Body)
+      .setGravityY(OBJECTS.MUSHROOMS.GRAVITY);
   }
 
   public remove(): void {

@@ -13,7 +13,11 @@ export function loadAssets(scene: Phaser.Scene): void {
 
   // load main character assets
   scene.load.spritesheet('char-idle', 'char/idle.png', BASE_FRAME);
-  scene.load.spritesheet('char-double-jump', 'char/double-jump.png', BASE_FRAME);
+  scene.load.spritesheet(
+    'char-double-jump',
+    'char/double-jump.png',
+    BASE_FRAME,
+  );
   scene.load.spritesheet('char-hit', 'char/hit.png', BASE_FRAME);
   scene.load.spritesheet('char-run', 'char/run.png', BASE_FRAME);
   scene.load.spritesheet('char-jump', 'char/jump.png', BASE_FRAME);
@@ -106,7 +110,7 @@ export function loadAssets(scene: Phaser.Scene): void {
     'buttons/cursor.png',
     { frameWidth: 16, frameHeight: 16 },
   );
-  
+
   // load hud
   scene.load.spritesheet(
     'hud',

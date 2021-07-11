@@ -28,7 +28,7 @@ export function injectUI(
     .setScrollFactor(0)
     .setInteractive({ cursor: 'pointer' });
 
-  const fullScreenButton = scene.add.image( 
+  const fullScreenButton = scene.add.image(
     bgmButton.x - MAP.TILE_SIZE * 1.5,
     Number(height) * 0.0625,
     'fullscreen',
@@ -36,14 +36,18 @@ export function injectUI(
     .setOrigin(0.5, 0.5)
     .setScrollFactor(0)
     .setInteractive({ cursor: 'pointer' });
-  
+
   sfxButton.on('pointerdown', () => {
-    sfxButton.setTexture(`sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}-pressed`);
+    sfxButton.setTexture(
+      `sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}-pressed`,
+    );
   });
 
   sfxButton.on('pointerup', () => {
     GameSettings.getInstance().toggleSfx();
-    sfxButton.setTexture(`sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}`);
+    sfxButton.setTexture(
+      `sfx-${GameSettings.getInstance().sfx ? 'on' : 'off'}`,
+    );
 
     if (GameSettings.getInstance().sfx) {
       scene.sound.play('button', { volume: SOUND.SFX });
@@ -51,12 +55,16 @@ export function injectUI(
   });
 
   bgmButton.on('pointerdown', () => {
-    bgmButton.setTexture(`bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}-pressed`);
+    bgmButton.setTexture(
+      `bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}-pressed`,
+    );
   });
 
   bgmButton.on('pointerup', () => {
     GameSettings.getInstance().toggleBgm();
-    bgmButton.setTexture(`bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}`);
+    bgmButton.setTexture(
+      `bgm-${GameSettings.getInstance().bgm ? 'on' : 'off'}`,
+    );
 
     const bgm = scene.sound.get(scene instanceof TitleScene ? 'title' : 'game');
     GameSettings.getInstance().bgm ? bgm.resume() : bgm.pause();

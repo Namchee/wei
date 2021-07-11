@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { ANIMS, MAP, OBJECTS } from '../utils/const';
+import { ANIMS, OBJECTS } from '../utils/const';
 export class Flyer extends Phaser.Physics.Arcade.Sprite {
   private idleTween!: Phaser.Tweens.Tween;
 
@@ -60,7 +60,7 @@ export class Flyer extends Phaser.Physics.Arcade.Sprite {
 
   public getHit(): Promise<void> {
     // stop the default idle tween
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const dropEvent = this.scene.time.addEvent({
         delay: 500,
         repeat: 0,

@@ -12,9 +12,9 @@ export class Cherry extends Phaser.Physics.Arcade.Sprite {
 
     scene.add.existing(this);
     scene.physics.world.enable(this, Phaser.Physics.Arcade.STATIC_BODY);
-    
+
     this.setSize(MAP.TILE_SIZE, MAP.TILE_SIZE);
-  
+
     this.initializeAnimations();
     this.anims.play('cherry-idle');
   }

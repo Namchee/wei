@@ -111,13 +111,6 @@ export function loadAssets(scene: Phaser.Scene): void {
     { frameWidth: 16, frameHeight: 16 },
   );
 
-  // load hud
-  scene.load.spritesheet(
-    'hud',
-    'hud.png',
-    { frameWidth: 8, frameHeight: 8 },
-  );
-
   // load bgm
   scene.load.audio('title', 'bgm/title.mp3');
   scene.load.audio('game', 'bgm/game.mp3');

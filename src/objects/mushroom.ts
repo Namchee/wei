@@ -113,7 +113,8 @@ export class Mushroom extends Phaser.Physics.Arcade.Sprite {
       duration: OBJECTS.MUSHROOMS.ANGLE_DURATION,
     });
 
-    (this.body as Phaser.Physics.Arcade.Body).setAllowGravity(true);
+    (this.body as Phaser.Physics.Arcade.Body)
+      .setAllowGravity(true);
     (this.body as Phaser.Physics.Arcade.Body)
       .setGravityY(OBJECTS.MUSHROOMS.GRAVITY);
   }

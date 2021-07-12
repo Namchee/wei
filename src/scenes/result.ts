@@ -3,6 +3,7 @@ import Phaser from 'phaser';
 import { GameResult } from '../state/result';
 import { GameSettings } from '../state/setting';
 import { GameStorage } from '../state/storage';
+
 import { COLORS, MAP, SCENES, SCORE, SOUND, TEXT } from '../utils/const';
 
 export class ResultScene extends Phaser.Scene {
@@ -14,6 +15,8 @@ export class ResultScene extends Phaser.Scene {
   private scoreNotification!: Phaser.GameObjects.Text;
   private titleText!: Phaser.GameObjects.Text;
   private contentText!: Phaser.GameObjects.Group;
+
+  private contentTransition!: Phaser.Tweens.Timeline;
 
   public constructor() {
     super('ResultScene');
@@ -66,9 +69,12 @@ export class ResultScene extends Phaser.Scene {
       this.showLoseResult();
     }
 
-    const lastItem = (
-      this.contentText.getChildren().pop() as Phaser.GameObjects.Text
-    );
+    this.contentText.setAlpha(0);
+
+    const contentChildren = this.contentText.getChildren();
+    const lastItem = contentChildren[
+      contentChildren.length - 1
+    ] as Phaser.GameObjects.Text;
 
     this.homeButton = this.add
       .image(
@@ -92,8 +98,8 @@ export class ResultScene extends Phaser.Scene {
 
     this.listenInputs();
 
-    group.add(this.titleText);
     group.add(background);
+    group.add(this.titleText);
     group.add(this.homeButton);
     group.add(this.retryButton);
 
@@ -109,6 +115,16 @@ export class ResultScene extends Phaser.Scene {
             volume: SOUND.SFX,
           });
         }
+
+        this.tweens.add({
+          targets: this.contentText.getChildren(),
+          alpha: 1,
+          duration: SCENES.TRANSITION,
+          ease: Phaser.Math.Easing.Quadratic.Out,
+          onComplete: () => {
+            this.blinkHighScore();
+          },
+        });
       },
     });
   }
@@ -230,6 +246,7 @@ export class ResultScene extends Phaser.Scene {
       )
       .setOrigin(0.5, 0.5);
 
+    this.contentText.add(scoreTitleText);
     this.contentText.add(cherryText);
     this.contentText.add(cherryScore);
     this.contentText.add(livesText);
@@ -250,9 +267,7 @@ export class ResultScene extends Phaser.Scene {
         )
         .setOrigin(0.5, 0.5);
 
-      this.blinkHighScore();
       GameStorage.getInstance().setHighScore(score);
-
       this.contentText.add(this.scoreNotification);
     }
   }
@@ -260,8 +275,8 @@ export class ResultScene extends Phaser.Scene {
   private showLoseResult(): void {
     const { width } = this.game.config;
 
-    this.contentText.add(
-      this.add.text(
+    const loseText = this.add
+      .text(
         Number(width) / 2,
         this.titleText.y + MAP.TILE_SIZE * 7,
         TEXT.LOSE.DESC,
@@ -270,9 +285,11 @@ export class ResultScene extends Phaser.Scene {
           fontSize: '32px',
           align: 'center',
           wordWrap: { width: 400, useAdvancedWrap: true },
-        },
-      ).setOrigin(0.5, 0.5),
-    );
+        }
+      )
+      .setOrigin(0.5, 0.5);
+
+    this.contentText.add(loseText);
   }
 
   private listenInputs(): void {
@@ -313,12 +330,14 @@ export class ResultScene extends Phaser.Scene {
   }
 
   private blinkHighScore(): void {
-    this.tweens.add({
-      targets: this.scoreNotification,
-      alpha: 0,
-      yoyo: true,
-      duration: SCORE.HIGH_SCORE_BLINK.DURATION,
-      repeat: -1,
-    });
+    if (this.scoreNotification) {
+      this.tweens.add({
+        targets: this.scoreNotification,
+        alpha: 0,
+        yoyo: true,
+        duration: SCORE.HIGH_SCORE_BLINK.DURATION,
+        repeat: -1,
+      });
+    }
   }
 }

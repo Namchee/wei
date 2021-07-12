@@ -91,7 +91,7 @@ export class PreloaderScene extends Phaser.Scene {
           percentText.destroy();
           assetText.destroy();
 
-          this.scene.start('TitleScene');
+          this.scene.start('GameScene');
         },
       });
     });

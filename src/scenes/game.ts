@@ -62,7 +62,7 @@ export class GameScene extends Phaser.Scene {
     this.initializeEndpoint();
 
     this.initializeCollisions();
-    this.initializeUi();
+    this.initializeHUD();
     this.initializeBgm();
     this.initializeBottomBounds();
 
@@ -386,7 +386,7 @@ export class GameScene extends Phaser.Scene {
       collider.setName('mushroom');
     });
 
-    const overlapper = this.physics.add.overlap(
+    const trophyOverlapper = this.physics.add.overlap(
       this.player,
       this.trophy,
       () => {
@@ -394,7 +394,7 @@ export class GameScene extends Phaser.Scene {
           this.sound.play('trophy', { volume: SOUND.SFX });
         }
 
-        this.physics.world.removeCollider(overlapper);
+        this.physics.world.removeCollider(trophyOverlapper);
         this.gameState.stopGame();
 
         this.win();
@@ -402,7 +402,7 @@ export class GameScene extends Phaser.Scene {
     );
   }
 
-  private initializeUi(): void {
+  private initializeHUD(): void {
     const { width, height } = this.game.config;
     const style = {
       fontFamily: 'Monogram',
@@ -427,7 +427,7 @@ export class GameScene extends Phaser.Scene {
       .text(
         Number(width) * 0.025,
         Number(height) * 0.1,
-        [`CHERRY: ${this.gameState.cherries}`],
+        `CHERRY: ${this.gameState.cherries}`,
         style
       )
       .setOrigin(0, 0.5)
@@ -437,7 +437,7 @@ export class GameScene extends Phaser.Scene {
       .text(
         Number(width) * 0.025,
         Number(height) * 0.15,
-        [`TIME: ${OBJECTS.TIME}`],
+        `TIME: ${OBJECTS.TIME}`,
         style
       )
       .setOrigin(0, 0.5)
@@ -595,6 +595,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   private win(): void {
+    this.gameState.stopGame();
     this.gameBgm.pause();
     this.player.idle();
     this.trophy.collect();

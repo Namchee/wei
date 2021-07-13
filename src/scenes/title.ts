@@ -419,7 +419,7 @@ export class TitleScene extends Phaser.Scene {
 
       resetCursor();
       GameSettings.getInstance().setDifficulty(
-        this.difficulties[this.selected]
+        this.difficulties[this.selected],
       );
       if (GameSettings.getInstance().sfx) {
         this.sound.play('difficulty', { volume: SOUND.SFX });
@@ -433,9 +433,6 @@ export class TitleScene extends Phaser.Scene {
         this.selected = idx;
 
         resetCursor();
-        GameSettings.getInstance().setDifficulty(
-          this.difficulties[this.selected]
-        );
         if (GameSettings.getInstance().sfx) {
           this.sound.play('difficulty', { volume: SOUND.SFX });
         }
@@ -445,6 +442,10 @@ export class TitleScene extends Phaser.Scene {
         if (GameSettings.getInstance().sfx) {
           this.sound.play('button', { volume: SOUND.SFX });
         }
+
+        GameSettings.getInstance().setDifficulty(
+          this.difficulties[this.selected],
+        );
 
         this.startGame();
       });

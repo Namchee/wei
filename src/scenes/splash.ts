@@ -47,17 +47,19 @@ export class SplashScene extends Phaser.Scene {
     )
       .setOrigin(0.5, 0.5);
 
+    const helperTextStyle = {
+      fontFamily: 'Monogram',
+      fontSize: '24px',
+      wordWrap: { width: 400, useAdvancedWrap: true },
+      lineSpacing: 1.125,
+      align: 'center',
+    };
+
     this.add.text(
       Number(width) / 2 - MAP.TILE_SIZE * 5,
       objective.y + MAP.TILE_SIZE * 8,
       ['MAX. HEALTH', `${GameSettings.getInstance().difficulty}`],
-      {
-        fontFamily: 'Monogram',
-        fontSize: '24px',
-        wordWrap: { width: 400, useAdvancedWrap: true },
-        lineSpacing: 1.125,
-        align: 'center',
-      },
+      helperTextStyle,
     )
       .setOrigin(0.5, 0.5);
 
@@ -65,13 +67,7 @@ export class SplashScene extends Phaser.Scene {
       Number(width) / 2 + MAP.TILE_SIZE * 5,
       objective.y + MAP.TILE_SIZE * 8,
       ['DIFFICULTY', `${Difficulty[GameSettings.getInstance().difficulty]}`],
-      {
-        fontFamily: 'Monogram',
-        fontSize: '24px',
-        wordWrap: { width: 400, useAdvancedWrap: true },
-        lineSpacing: 1.125,
-        align: 'center',
-      },
+      helperTextStyle,
     )
       .setOrigin(0.5, 0.5);
 

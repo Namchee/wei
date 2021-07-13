@@ -16,8 +16,6 @@ export class ResultScene extends Phaser.Scene {
   private titleText!: Phaser.GameObjects.Text;
   private contentText!: Phaser.GameObjects.Group;
 
-  private contentTransition!: Phaser.Tweens.Timeline;
-
   public constructor() {
     super('ResultScene');
   }
@@ -208,7 +206,7 @@ export class ResultScene extends Phaser.Scene {
       .text(
         (Number(width) * 2) / 3,
         timeText.y,
-        `${this.result.time * SCORE.TIME}`,
+        `${Math.floor(this.result.time * SCORE.TIME)}`,
         style
       )
       .setOrigin(1, 0.5);
@@ -226,7 +224,7 @@ export class ResultScene extends Phaser.Scene {
       .text(
         (Number(width) * 2) / 3,
         difficultyText.y,
-        `x ${this.result.difficulty}`,
+        `x ${SCORE.DIFFICULTY[this.result.difficulty]}`,
         style
       )
       .setOrigin(1, 0.5);
@@ -257,7 +255,7 @@ export class ResultScene extends Phaser.Scene {
     this.contentText.add(difficultyScore);
     this.contentText.add(scoreText);
 
-    if (GameStorage.getInstance().highScore < score || score > 0) {
+    if (GameStorage.getInstance().highScore < score) {
       this.scoreNotification = this.add
         .text(
           Number(width) / 2,

@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 
 import { UnimplementedFeatureException } from '../exceptions/unimplemented';
-import { BACKGROUND, COLORS } from './const';
+import { BACKGROUND, COLORS_HEX } from './const';
 
 export interface BackgroundManager {
   scrollLeft: () => void;
@@ -45,7 +45,7 @@ export class ForestBackgroundManager implements BackgroundManager {
 
     bg.setScrollFactor(0);
     bg.setAlpha(1);
-    bg.fill(COLORS.BLUE[400]);
+    bg.fill(COLORS_HEX.BLUE[400]);
   }
 
   private applyLayers({ width, height }: Dimension): void {

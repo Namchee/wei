@@ -16,8 +16,8 @@ registerSW(); // inject the service worker
 
 const config: Types.Core.GameConfig = {
   type: AUTO,
-  width: 640,
-  height: 384,
+  width: 854,
+  height: 480,
   antialias: true,
   antialiasGL: true,
   backgroundColor: 'transparent',
@@ -34,8 +34,8 @@ const config: Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
     parent: 'game',
-    width: 640,
-    height: 384,
+    width: 858,
+    height: 480,
   },
   pixelArt: true,
   parent: 'game',

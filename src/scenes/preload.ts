@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import { loadAssets } from '../utils/assets';
-
-import theme from '../utils/const';
+import { COLORS_HEX } from '../utils/const';
 export class PreloaderScene extends Phaser.Scene {
   public constructor() {
     super('PreloaderScene');
@@ -18,7 +17,7 @@ export class PreloaderScene extends Phaser.Scene {
     const progressBox = this.add.graphics();
     const progressBar = this.add.graphics();
 
-    progressBox.fillStyle(theme.COLORS.GRAY[600], 0.75);
+    progressBox.fillStyle(COLORS_HEX.GRAY[600], 0.75);
     progressBox.fillRect(width / 4, height / 2.375, width / 2, height / 10);
 
     const loadingText = this.add.text(
@@ -27,7 +26,7 @@ export class PreloaderScene extends Phaser.Scene {
       'Loading Game',
       {
         fontFamily: 'Monogram, Consolas, "Courier New"',
-        fontSize: '36px',
+        fontSize: '48px',
       }
     );
 
@@ -47,11 +46,11 @@ export class PreloaderScene extends Phaser.Scene {
 
     const assetText = this.add.text(
       Number(width) / 2,
-      Number(height) / 1.8,
+      Number(height) / 1.75,
       '',
       {
         fontFamily: 'Monogram, Consolas, "Courier New"',
-        fontSize: '18px',
+        fontSize: '24px',
       }
     );
 
@@ -91,7 +90,7 @@ export class PreloaderScene extends Phaser.Scene {
           percentText.destroy();
           assetText.destroy();
 
-          this.scene.start('GameScene');
+          this.scene.start('TitleScene');
         },
       });
     });

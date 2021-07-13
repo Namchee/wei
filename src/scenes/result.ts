@@ -4,7 +4,7 @@ import { GameResult } from '../state/result';
 import { GameSettings } from '../state/setting';
 import { GameStorage } from '../state/storage';
 
-import { COLORS, MAP, SCENES, SCORE, SOUND, TEXT } from '../utils/const';
+import { COLORS_HEX, MAP, SCENES, SCORE, SOUND, TEXT } from '../utils/const';
 
 export class ResultScene extends Phaser.Scene {
   private result!: GameResult;
@@ -39,7 +39,7 @@ export class ResultScene extends Phaser.Scene {
       Number(width),
       Number(height)
     );
-    background.fill(COLORS.GRAY[900], 0.9);
+    background.fill(COLORS_HEX.GRAY[900], 0.9);
 
     this.titleText = this.add
       .text(

@@ -6,7 +6,15 @@ import {
   BackgroundManager,
   createBackgroundManager,
 } from '../utils/background';
-import { Difficulty, MAP, SCENES, SOUND, TEXT, TITLE } from '../utils/const';
+import {
+  COLORS,
+  Difficulty,
+  MAP,
+  SCENES,
+  SOUND,
+  TEXT,
+  TITLE,
+} from '../utils/const';
 
 import { injectUI } from '../utils/ui';
 
@@ -46,11 +54,9 @@ export class TitleScene extends Phaser.Scene {
   }
 
   private initializeBackground(): void {
-    const { width, height } = this.game.config;
-
     this.backgroundManager = createBackgroundManager(this, 'Forest', {
-      width: Number(width),
-      height: Number(height),
+      width: MAP.WIDTH,
+      height: MAP.HEIGHT,
     });
   }
 
@@ -60,7 +66,7 @@ export class TitleScene extends Phaser.Scene {
     const titleText = this.add
       .text(Number(width) / 2, -Number(height) / 4, 'Wei', {
         fontFamily: 'Matchup Pro',
-        fontSize: '96px',
+        fontSize: '128px',
         stroke: 'black',
         strokeThickness: 3.5,
         shadow: {
@@ -145,9 +151,9 @@ export class TitleScene extends Phaser.Scene {
     const helpText = this.add
       .text(Number(width) / 2, Number(height) / 2, TEXT.HELP, {
         fontFamily: 'Monogram',
-        fontSize: '20px',
+        fontSize: '24px',
         wordWrap: { width: 400, useAdvancedWrap: true },
-        lineHeight: 1.25,
+        lineSpacing: 1.25,
         align: 'center',
       })
       .setOrigin(0.5, 0.5);
@@ -233,7 +239,7 @@ export class TitleScene extends Phaser.Scene {
         Number(height) / 2.25 - MAP.TILE_SIZE / 2,
         'EASY',
         {
-          fontSize: '32px',
+          fontSize: '36px',
           fontFamily: 'Monogram',
         }
       )
@@ -246,7 +252,7 @@ export class TitleScene extends Phaser.Scene {
         Number(height) / 1.975,
         'NORMAL',
         {
-          fontSize: '32px',
+          fontSize: '36px',
           fontFamily: 'Monogram',
         }
       )
@@ -258,8 +264,9 @@ export class TitleScene extends Phaser.Scene {
         Number(height) / 1.75 + MAP.TILE_SIZE / 2,
         'HARD',
         {
-          fontSize: '32px',
+          fontSize: '36px',
           fontFamily: 'Monogram',
+          color: COLORS.RED[500],
         }
       )
       .setOrigin(0, 0.5);

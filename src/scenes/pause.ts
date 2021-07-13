@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 
-import { COLORS, MAP, SCENES } from '../utils/const';
+import { COLORS_HEX, MAP, SCENES } from '../utils/const';
 
 export class PauseScene extends Phaser.Scene {
   private components!: Phaser.GameObjects.Group;
@@ -16,7 +16,7 @@ export class PauseScene extends Phaser.Scene {
     this.components = this.add.group();
 
     const texture = this.add.renderTexture(0, 0, Number(width), Number(height));
-    texture.fill(COLORS.GRAY[900], 0.9);
+    texture.fill(COLORS_HEX.GRAY[900], 0.9);
 
     const titleText = this.add
       .text(Number(width) / 2, Number(height) / 3, 'PAUSED', {

@@ -124,6 +124,7 @@ export const TEXT = {
     'Avoid obstacles like mushrooms, saws, and spikes as much as possible.',
     '',
     '',
+    '',
     'May fortune be with you, o heroes!',
   ],
   // eslint-disable-next-line max-len
@@ -142,18 +143,26 @@ export const TEXT = {
   SHARE: 'Hey!%20I%27m%20having%20a%20blast%20after%20playing%20a%20new-and-exciting%20platformer%20game%20%27Wei%27!%0A%0ACome%20and%20try%20it%20out%20now!%20https%3A%2F%2Fwei.vercel.app%2F',
 }
 
-export const COLORS = {
+// stolen from tailwind pallete
+export const COLORS_HEX = {
   GRAY: {
     600: 0x313131,
     900: 0x121212,
   },
   BLUE: {
     400: 0x5BC2E7,
-  }
-}
+  },
+};
+
+export const COLORS = {
+  RED: {
+    500: '#EF4444',
+  },
+};
 
 export default {
   BACKGROUND,
+  COLORS_HEX,
   COLORS,
   PHYSICS,
   ANIMS,

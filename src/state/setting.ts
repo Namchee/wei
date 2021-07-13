@@ -10,7 +10,7 @@ export class GameSettings {
   private constructor() {
     this._sfx = true;
     this._bgm = true;
-    this._difficulty = Difficulty.NORMAL;
+    this._difficulty = Difficulty.NORMAL; // normal by default
   }
 
   public static getInstance(): GameSettings {

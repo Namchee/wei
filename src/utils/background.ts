@@ -53,32 +53,35 @@ export class ForestBackgroundManager implements BackgroundManager {
 
     const cloud = scene.add.tileSprite(
       0,
-      height - (1.25 * BACKGROUND.HEIGHT),
+      height - BACKGROUND.HEIGHT / 1.35,
       width,
       BACKGROUND.HEIGHT,
       'cloud',
     )
-      .setOrigin(0, 0)
+      .setScale(1.25, 1.5)
+      .setOrigin(0.5, 0.5)
       .setScrollFactor(BACKGROUND.CLOUD_SCROLL, 1)
       .setName('cloud');
     const cliff = scene.add.tileSprite(
       0,
-      height - (1.1 * BACKGROUND.HEIGHT),
+      height - BACKGROUND.HEIGHT / 1.5,
       width,
       BACKGROUND.HEIGHT,
       'cliff',
     )
-      .setOrigin(0, 0)
+      .setScale(1.25, 2)
+      .setOrigin(0.5, 0.5)
       .setScrollFactor(BACKGROUND.CLIFF_SCROLL, 1)
       .setName('cliff');
     const ground = scene.add.tileSprite(
       0,
-      height - BACKGROUND.HEIGHT,
+      height - BACKGROUND.HEIGHT / 2.5,
       width,
       BACKGROUND.HEIGHT,
       'ground',
     )
-      .setOrigin(0, 0)
+      .setScale(1, 2)
+      .setOrigin(0.5, 0.5)
       .setScrollFactor(BACKGROUND.GROUND_SCROLL, 1)
       .setName('ground');
 

@@ -42,7 +42,7 @@ export class ResultScene extends Phaser.Scene {
     this.titleText = this.add
       .text(
         Number(width) / 2,
-        Number(height) / 6,
+        Number(height) / 5,
         this.result.lives ? TEXT.WIN.TITLE : TEXT.LOSE.TITLE,
         {
           fontFamily: 'Matchup Pro',
@@ -77,21 +77,21 @@ export class ResultScene extends Phaser.Scene {
     this.homeButton = this.add
       .image(
         Number(width) / 2 - MAP.TILE_SIZE * 1.5,
-        lastItem.y + MAP.TILE_SIZE * (this.result.lives ? 2.5 : 6),
+        lastItem.y + MAP.TILE_SIZE * (this.result.lives ? 4 : 6),
         'home'
       )
       .setOrigin(0.5, 0.5)
-      .setScale(1.25, 1.25)
+      .setScale(1.5, 1.5)
       .setInteractive({ cursor: 'pointer' });
 
     this.retryButton = this.add
       .image(
         Number(width) / 2 + MAP.TILE_SIZE * 1.5,
-        lastItem.y + MAP.TILE_SIZE * (this.result.lives ? 2.5 : 6),
+        lastItem.y + MAP.TILE_SIZE * (this.result.lives ? 4 : 6),
         'retry'
       )
       .setOrigin(0.5, 0.5)
-      .setScale(1.25, 1.25)
+      .setScale(1.5, 1.5)
       .setInteractive({ cursor: 'pointer' });
 
     this.listenInputs();

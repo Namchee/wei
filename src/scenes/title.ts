@@ -451,7 +451,7 @@ export class TitleScene extends Phaser.Scene {
       }
     });
 
-    this.difficultySelector.getChildren().forEach((obj, idx: number) => {
+    difficulties.forEach((obj, idx: number) => {
       obj.setInteractive({ cursor: 'pointer' });
 
       obj.on('pointerover', () => {

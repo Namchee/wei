@@ -69,7 +69,6 @@ export class GameScene extends Phaser.Scene {
     this.registerInputs();
 
     this.initializeHooks();
-    this.win();
   }
 
   public update(): void {

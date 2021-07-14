@@ -335,6 +335,9 @@ export class TitleScene extends Phaser.Scene {
       duration: SCENES.TRANSITION,
     });
 
+    this.difficultySelector.getChildren().forEach(
+      child => child.removeInteractive(),
+    );
     this.playButton.removeInteractive();
     this.helpButton.removeInteractive();
     this.uiButtons.forEach(button => button.removeInteractive());
@@ -349,7 +352,19 @@ export class TitleScene extends Phaser.Scene {
       duration: SCENES.TRANSITION,
     });
 
-    this.playButton.setInteractive({ cursor: 'pointer' });
+    if (this.playButton.alpha) {
+      this.playButton.setInteractive({ cursor: 'pointer' });
+    } else {
+      const difficulties = this.difficultySelector.getChildren().slice(
+        0,
+        this.difficultySelector.getLength() - 1,
+      );
+
+      difficulties.forEach(
+        child => child.setInteractive({ cursor: 'pointer' }),
+      );
+    }
+
     this.helpButton.setInteractive({ cursor: 'pointer' });
     this.uiButtons.forEach((button: Phaser.GameObjects.Image) =>
       button.setInteractive({ cursor: 'pointer' })
@@ -419,7 +434,14 @@ export class TitleScene extends Phaser.Scene {
 
     resetCursor();
 
+    const isHelpActive = () =>
+      !!(this.helpOverlay.getChildren()[0] as Phaser.GameObjects.Text).alpha;
+
     up.on('down', () => {
+      if (isHelpActive()) {
+        return;
+      }
+
       this.selected = (this.selected - 1) % this.difficulties.length;
 
       if (this.selected < 0) {
@@ -436,6 +458,10 @@ export class TitleScene extends Phaser.Scene {
     });
 
     down.on('down', () => {
+      if (isHelpActive()) {
+        return;
+      }
+
       this.selected++;
 
       if (this.selected >= this.difficulties.length) {

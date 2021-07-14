@@ -30,6 +30,8 @@ export class TitleScene extends Phaser.Scene {
   private helpOverlay!: Phaser.GameObjects.Group;
   private difficultySelector!: Phaser.GameObjects.Group;
 
+  private difficultyExplanation!: Phaser.GameObjects.Text;
+
   private readonly difficulties = [
     Difficulty.EASY,
     Difficulty.NORMAL,
@@ -233,15 +235,17 @@ export class TitleScene extends Phaser.Scene {
     const { width, height } = this.game.config;
     this.difficultySelector = this.add.group();
 
+    const style = {
+      fontSize: '36px',
+      fontFamily: 'Monogram',
+    };
+
     const easy = this.add
       .text(
         Number(width) / 2.15,
         Number(height) / 2.25 - MAP.TILE_SIZE / 2,
         'EASY',
-        {
-          fontSize: '36px',
-          fontFamily: 'Monogram',
-        }
+        style,
       )
       .setOrigin(0, 0.5);
 
@@ -251,10 +255,7 @@ export class TitleScene extends Phaser.Scene {
         // for some reason, perfect spacing is skewed to top, so reduce it a bit
         Number(height) / 1.975,
         'NORMAL',
-        {
-          fontSize: '36px',
-          fontFamily: 'Monogram',
-        }
+        style,
       )
       .setOrigin(0, 0.5);
 
@@ -264,16 +265,29 @@ export class TitleScene extends Phaser.Scene {
         Number(height) / 1.75 + MAP.TILE_SIZE / 2,
         'HARD',
         {
-          fontSize: '36px',
-          fontFamily: 'Monogram',
+          ...style,
           color: COLORS.RED[500],
         }
       )
       .setOrigin(0, 0.5);
 
+    this.difficultyExplanation = this.add.text(
+      Number(width) / 2,
+      Number(height) * 0.925,
+      '',
+      {
+        fontFamily: 'Monogram',
+        fontSize: '24px',
+        wordWrap: { width: 300, useAdvancedWrap: true },
+        align: 'center',
+      },
+    )
+      .setOrigin(0.5, 0.5);
+
     this.difficultySelector.add(easy);
     this.difficultySelector.add(normal);
     this.difficultySelector.add(hard);
+    this.difficultySelector.add(this.difficultyExplanation);
 
     this.difficultySelector.setAlpha(0);
   }
@@ -375,24 +389,35 @@ export class TitleScene extends Phaser.Scene {
       Phaser.Input.Keyboard.KeyCodes.DOWN
     );
 
+    const difficulties = this.difficultySelector.getChildren().slice(
+      0,
+      this.difficultySelector.getLength() - 1,
+    );
+
     const cursor = this.add
       .image(
         Number(width) / 2.275,
         (
-          this.difficultySelector.getChildren()[
-            this.selected
-          ] as Phaser.GameObjects.Image
+          difficulties[this.selected] as Phaser.GameObjects.Image
         ).y + 5,
         'cursor',
         33
       )
       .setOrigin(0.5, 0.5);
 
-    const buttons = this.difficultySelector.getChildren();
-
     const resetCursor = () => {
-      cursor.setY((buttons[this.selected] as Phaser.GameObjects.Image).y + 5);
+      this.difficultyExplanation.setText(
+        (TEXT.DIFFICULTY as Record<string, string>)[
+          Difficulty[this.difficulties[this.selected]]
+        ],
+      );
+
+      cursor.setY(
+        (difficulties[this.selected] as Phaser.GameObjects.Image).y + 5
+      );
     };
+
+    resetCursor();
 
     up.on('down', () => {
       this.selected = (this.selected - 1) % this.difficulties.length;

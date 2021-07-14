@@ -127,6 +127,11 @@ export const TEXT = {
     '',
     'May fortune be with you, o heroes!',
   ],
+  DIFFICULTY: {
+    EASY: 'Starts with 5 health points. Recommended for new players.',
+    NORMAL: 'Starts with 3 health points. Recommended for most players.',
+    HARD: 'Starts with 1 health points. Recommended for veterans.',
+  },
   // eslint-disable-next-line max-len
   OBJECTIVE: 'Get as fast as possible to the endpoint while keeping Wei healthy.',
   LOSE: {

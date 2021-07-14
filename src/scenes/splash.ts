@@ -58,7 +58,7 @@ export class SplashScene extends Phaser.Scene {
     this.add.text(
       Number(width) / 2 - MAP.TILE_SIZE * 5,
       objective.y + MAP.TILE_SIZE * 8,
-      ['MAX. HEALTH', `${GameSettings.getInstance().difficulty}`],
+      ['HEALTH', `${GameSettings.getInstance().difficulty}`],
       helperTextStyle,
     )
       .setOrigin(0.5, 0.5);
